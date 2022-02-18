@@ -25,8 +25,7 @@ const SignInPage = () => {
     >
       <h1>Test Login</h1>
       <p>Please sign in:</p>
-      <button onClick={() => login()}>Login</button>
-      <button onClick={() => logout()}>Logout</button>
+      <button onClick={() => login()}>Sign in with google</button>
     </div>
   );
 };
