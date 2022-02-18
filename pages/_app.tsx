@@ -6,12 +6,12 @@ import Header from '../components/Header';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AuthProvider>
-      <ChakraProvider>
+    <ChakraProvider>
+      <AuthProvider>
         <Header />
         <Component {...pageProps} />
-      </ChakraProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ChakraProvider>
   );
 }
 

@@ -1,9 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-
-import { useAuth } from '../contexts/AuthContext';
-import styles from '../styles/Home.module.css';
+import { useEffect, ReactElement } from 'react';
 
 import {
   Container,
@@ -18,6 +15,8 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { IoAnalyticsSharp, IoLogoBitcoin, IoSearchSharp } from 'react-icons/io5';
+import { useAuth } from '../contexts/AuthContext';
+import styles from '../styles/Home.module.css';
 
 interface FeatureProps {
   text: string;
@@ -35,8 +34,6 @@ const Feature = ({ text, icon, iconBg }: FeatureProps) => {
     </Stack>
   );
 };
-
-import { ReactElement } from 'react';
 
 export default function Home() {
   const { user, logout } = useAuth();

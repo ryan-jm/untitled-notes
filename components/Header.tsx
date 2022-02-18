@@ -17,8 +17,9 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
-import { useAuth } from '../contexts/AuthContext';
 import { ReactNode } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import NextLink from 'next/link';
 
 const Links = [
   { name: 'Home', url: '/' },
@@ -35,7 +36,6 @@ const NavLink = ({ children }: { children: ReactNode }) => (
       textDecoration: 'none',
       bg: useColorModeValue('gray.200', 'gray.700'),
     }}
-    href={'#'}
   >
     {children}
   </Link>
@@ -71,7 +71,9 @@ const Header = () => {
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
               {Links.map((link) => (
                 <NavLink key={link.name}>
-                  <Link href={link.url}>{link.name}</Link>
+                  <NextLink href={link.url} passHref>
+                    <Link>{link.name}</Link>
+                  </NextLink>
                 </NavLink>
               ))}
             </HStack>
@@ -99,7 +101,9 @@ const Header = () => {
             <Stack as={'nav'} spacing={4}>
               {Links.map((link) => (
                 <NavLink key={link.name}>
-                  <Link href={link.url}>{link.name}</Link>
+                  <NextLink href={link.url} passHref>
+                    <Link>{link.name}</Link>
+                  </NextLink>
                 </NavLink>
               ))}
             </Stack>
