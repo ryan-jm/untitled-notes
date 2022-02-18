@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
 import {
   Box,
   Flex,
@@ -19,8 +18,14 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { useAuth } from '../contexts/AuthContext';
+import { ReactNode } from 'react';
 
-const Links = ['Dashboard', 'Projects', 'Team'];
+const Links = [
+  { name: 'Home', url: '/' },
+  { name: 'Create New', url: '/create' },
+  { name: 'Dashboard', url: '/dashboard' },
+];
+
 const NavLink = ({ children }: { children: ReactNode }) => (
   <Link
     px={2}
@@ -45,18 +50,62 @@ const Header = () => {
     if (!user?.accessToken) router.push('/auth');
     else logout();
   }
-  //    console.log(Object.keys(user?));
+
   console.log(user, 'userrrrrr');
 
   return (
     <>
-      <h1>Headerrrrrr</h1>
-      <button onClick={goToAuth}>{!user?.accessToken ? 'Login' : 'Logout'}</button>
-      <p>
-        {user?.accessToken ? 'User:' : ''} {user?.displayName}
-      </p>
-      <img src={user?.photoURL} />
-      <br /> <br />
+      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+          <IconButton
+            size={'md'}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={'Open Menu'}
+            display={{ md: 'none' }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+          <HStack spacing={8} alignItems={'center'}>
+            <Box>
+              <h2>Untitled Notes</h2>
+            </Box>
+            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
+              {Links.map((link) => (
+                <NavLink key={link.name}>
+                  <Link href={link.url}>{link.name}</Link>
+                </NavLink>
+              ))}
+            </HStack>
+          </HStack>
+          <Flex alignItems={'center'}>
+            <Button onClick={goToAuth} variant={'solid'} colorScheme={'teal'} size={'sm'} mr={4} leftIcon={<AddIcon />}>
+              {!user?.accessToken ? 'Login' : 'Logout'}
+            </Button>
+            <Menu>
+              <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0}>
+                <Avatar size={'sm'} src={user?.photoURL} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem>Link 1</MenuItem>
+                <MenuItem>Link 2</MenuItem>
+                <MenuDivider />
+                <MenuItem>Link 3</MenuItem>
+              </MenuList>
+            </Menu>
+          </Flex>
+        </Flex>
+
+        {isOpen ? (
+          <Box pb={4} display={{ md: 'none' }}>
+            <Stack as={'nav'} spacing={4}>
+              {Links.map((link) => (
+                <NavLink key={link.name}>
+                  <Link href={link.url}>{link.name}</Link>
+                </NavLink>
+              ))}
+            </Stack>
+          </Box>
+        ) : null}
+      </Box>
     </>
   );
 };
