@@ -9,7 +9,7 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (user?.accessToken) {
-      router.push('/');
+      router.push('/create');
     }
   }, [router, user]);
 
