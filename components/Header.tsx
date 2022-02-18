@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useAuth } from '../contexts/AuthContext';
 import { ReactNode } from 'react';
 import {
   Box,
@@ -19,6 +18,8 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+import { useAuth } from '../contexts/AuthContext';
+
 const Links = ['Dashboard', 'Projects', 'Team'];
 const NavLink = ({ children }: { children: ReactNode }) => (
   <Link
