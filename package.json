@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "private": true,
+  "private": false,
   "browserslist": [
     "since 2017"
   ],
