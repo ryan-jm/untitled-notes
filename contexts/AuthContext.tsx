@@ -40,11 +40,7 @@ const AuthProvider = ({ children }: any) => {
     console.log('Logged out.');
   };
 
-  return (
-    <UserContext.Provider value={{ user, login, logout }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
 };
 
 export const useAuth = () => useContext(UserContext);

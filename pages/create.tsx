@@ -13,11 +13,7 @@ const Create = () => {
   const { user } = useAuth();
 
   const { manager, state, setState } = useRemirror({
-    extensions: () => [
-      new BoldExtension({}),
-      new ItalicExtension({}),
-      new CalloutExtension({ defaultType: 'warn' }),
-    ],
+    extensions: () => [new BoldExtension({}), new ItalicExtension({}), new CalloutExtension({ defaultType: 'warn' })],
   });
 
   const handleSave = () => {
