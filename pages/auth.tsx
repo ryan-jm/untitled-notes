@@ -51,22 +51,22 @@ const SignInPage = () => {
       router.push('/create');
     }
   }, [router, user]);
+  
+<!--   <div
+      style={{
+        maxWidth: '320px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <h1>Test Login</h1>
+      <p>Please sign in:</p>
+      <button onClick={() => login()}>Sign in with google</button>
+    </div> -->
 
   return (
-    // <div
-    //   style={{
-    //     maxWidth: '320px',
-    //     display: 'flex',
-    //     flexDirection: 'column',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //   }}
-    // >
-    //   <h1>Test Login</h1>
-    //   <p>Please sign in:</p>
-    //   <button onClick={() => login()}>Login</button>
-    //   <button onClick={() => logout()}>Logout</button>
-    // </div>
     <>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
@@ -120,8 +120,8 @@ const SignInPage = () => {
       </Box>
 
       <Box p={4}>Main Content Here</Box>
-    </>
-  );
+    </>        
+ );
 };
 
 export default SignInPage;
