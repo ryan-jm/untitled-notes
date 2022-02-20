@@ -14,15 +14,7 @@ const SignInPage = () => {
   }, [router, user]);
 
   return (
-    <div
-      style={{
-        maxWidth: '320px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <div>
       <h1>Test Login</h1>
       <p>Please sign in:</p>
       <button onClick={() => login()}>Sign in with google</button>
