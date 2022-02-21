@@ -2,12 +2,10 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+// fatima & gabby
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+//
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -19,8 +17,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const storage = getStorage(app);
+export const storageRef = ref(storage, 'test.png');
+//test.png can be a folder in our storage
 
-export const db = getFirestore(app);
+export const db = getFirestore();
 
 export const auth = getAuth(app);
 export default firebaseConfig;
