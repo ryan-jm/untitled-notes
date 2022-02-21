@@ -21,7 +21,7 @@ export const storage = getStorage(app);
 export const storageRef = ref(storage, 'test.png');
 //test.png can be a folder in our storage
 
-export const db = getFirestore(app);
+export const db = getFirestore();
 
 export const auth = getAuth(app);
 export default firebaseConfig;
