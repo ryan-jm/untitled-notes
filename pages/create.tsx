@@ -18,6 +18,7 @@ import {
 } from 'remirror/extensions';
 
 import Editor from '../components/Editor';
+import NotesList from '../components/NoteList';
 
 const Create = () => {
   const { manager, state, setState } = useRemirror({
@@ -39,7 +40,9 @@ const Create = () => {
   return (
     <Flex justifyContent="center" mt={2} width="100%">
       <Grid width="100%" templateColumns="10% 90%" mx="auto">
-        <GridItem>List</GridItem>
+        <GridItem>
+          <NotesList />
+        </GridItem>
         <GridItem>
           <div className="remirror-theme">
             <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
