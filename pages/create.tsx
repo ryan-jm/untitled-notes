@@ -7,14 +7,14 @@ import {
   BoldExtension,
   ItalicExtension,
   UnderlineExtension,
-  CodeExtension,
+  StrikeExtension,
   HeadingExtension,
   BlockquoteExtension,
-  CalloutExtension,
+  CodeExtension,
   HistoryExtension,
+  CalloutExtension,
   ImageExtension,
   ListItemExtension,
-  StrikeExtension,
 } from 'remirror/extensions';
 
 import Editor from '../components/Editor';
