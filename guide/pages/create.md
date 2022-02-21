@@ -24,3 +24,5 @@ _...Probably some others_
 - Each entry in the `Note List` component should be able to be swiped upon (from right-to-left) to delete the note, similar to iOS – when the note is deleted, it is then removed from the database with optimistic rendering.
 
 - The `first` line on the markdown editor should be defaulted to the title of the note; with an enforced `H1` on whatever text is entered.
+
+- There should be a `plus-icon` icon button at the top of the `Note List` component which allows a user to create a new note by saving the current state of the editor to the database, and then wiping it clear.
