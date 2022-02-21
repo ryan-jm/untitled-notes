@@ -2,6 +2,7 @@ import { DownloadIcon } from '@chakra-ui/icons';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { storageRef, storage } from '../firebase/clientApp';
 import File from '../components/File';
+
 export default function Dashboard() {
   function download() {
     getDownloadURL(storageRef)
