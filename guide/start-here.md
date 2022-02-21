@@ -17,7 +17,7 @@ The overall style guide for Untitled Notes is simplistic and minimal, using brig
 
 - **Headers/large:**
   - [Prompt](https://fonts.google.com/specimen/Prompt?query=prompt)
-  - `400-700` font weight
+  - `400-800` font weight
 - **Main/body:**
   - [Inter](https://fonts.google.com/specimen/Inter?query=inter)
   - `200-400` font weight

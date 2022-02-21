@@ -7,11 +7,11 @@
 
 #### No authentication
 
-![Navbar-no-auth](images/navbar-no-auth.png)
+![Navbar-no-auth](../images/navbar-no-auth.png)
 
 #### User signed in / authenticated
 
-![Navbar-with-auth](images/navbar-authed.png)
+![Navbar-with-auth](../images/navbar-authed.png)
 
 ---
 
