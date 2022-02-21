@@ -3,7 +3,13 @@ import 'remirror/styles/all.css';
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
 import { Remirror, useRemirror } from '@remirror/react';
 import React from 'react';
-import { BoldExtension, CalloutExtension, ImageExtension, ItalicExtension, ListItemExtension } from 'remirror/extensions';
+import {
+  BoldExtension,
+  CalloutExtension,
+  ImageExtension,
+  ItalicExtension,
+  ListItemExtension,
+} from 'remirror/extensions';
 
 import Editor from '../components/Editor';
 

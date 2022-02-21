@@ -18,8 +18,8 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { ReactNode } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import NextLink from 'next/link';
+import { useAuth } from '../contexts/AuthContext';
 
 const Links = [
   { name: 'Home', url: '/' },

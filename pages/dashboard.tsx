@@ -35,7 +35,7 @@ export default function Dashboard() {
       <button id="but" onClick={() => download()}>
         Download
       </button>
-      <img src="" id="image" />
+      <image src="" id="image" />
       <br />
     </h1>
   );
