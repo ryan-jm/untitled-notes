@@ -1,6 +1,6 @@
 import { useCommands } from '@remirror/react';
 
-import { Box, Button, ButtonGroup, Menu, MenuButton, MenuList, MenuItem, Tooltip, Divider } from '@chakra-ui/react';
+import { Button, ButtonGroup, Menu, MenuButton, MenuList, MenuItem, Tooltip } from '@chakra-ui/react';
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
@@ -25,28 +25,6 @@ const ItalicButton = () => {
     <Tooltip label="Italic | Ctrl + I">
       <Button onMouseDown={(event) => event.preventDefault()} onClick={() => commands.toggleItalic()}>
         <i>I</i>
-      </Button>
-    </Tooltip>
-  );
-};
-
-const UnderlineButton = () => {
-  const commands = useCommands();
-  return (
-    <Tooltip label="Underline | Ctrl + U">
-      <Button onMouseDown={(event) => event.preventDefault()} onClick={() => commands.toggleUnderline()}>
-        <u>U</u>
-      </Button>
-    </Tooltip>
-  );
-};
-
-const StrikeButton = () => {
-  const commands = useCommands();
-  return (
-    <Tooltip label="Strikethrough | Ctrl + D">
-      <Button onMouseDown={(event) => event.preventDefault()} onClick={() => commands.toggleStrike()}>
-        <s>S</s>
       </Button>
     </Tooltip>
   );
@@ -123,8 +101,6 @@ const EditorButtons = () => {
       <ButtonGroup size="sm" isAttached variant="solid">
         <BoldButton />
         <ItalicButton />
-        <UnderlineButton />
-        <StrikeButton />
       </ButtonGroup>
       &nbsp;
       <ButtonGroup size="sm" isAttached variant="solid">
@@ -133,6 +109,9 @@ const EditorButtons = () => {
       &nbsp;
       <ButtonGroup size="sm" isAttached variant="solid">
         <BlockquoteButton />
+      </ButtonGroup>
+      &nbsp;
+      <ButtonGroup size="sm" isAttached variant="solid">
         <CodeButton />
       </ButtonGroup>
       &nbsp;
