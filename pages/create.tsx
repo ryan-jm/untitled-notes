@@ -3,7 +3,19 @@ import 'remirror/styles/all.css';
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
 import { Remirror, useRemirror } from '@remirror/react';
 import React from 'react';
-import { BoldExtension, CalloutExtension, ImageExtension, ItalicExtension, ListItemExtension } from 'remirror/extensions';
+import {
+  BoldExtension,
+  ItalicExtension,
+  UnderlineExtension,
+  CodeExtension,
+  HeadingExtension,
+  BlockquoteExtension,
+  CalloutExtension,
+  HistoryExtension,
+  ImageExtension,
+  ListItemExtension,
+  StrikeExtension,
+} from 'remirror/extensions';
 
 import Editor from '../components/Editor';
 
@@ -12,8 +24,14 @@ const Create = () => {
     extensions: () => [
       new BoldExtension({}),
       new ItalicExtension({}),
-      new CalloutExtension({ defaultType: 'warn' }),
+      new UnderlineExtension({}),
+      new StrikeExtension({}),
+      new CodeExtension({}),
+      new HeadingExtension({}),
+      new BlockquoteExtension({}),
+      new HistoryExtension({}),
       new ImageExtension(),
+      new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
     ],
   });
