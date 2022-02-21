@@ -1,38 +1,36 @@
 import 'remirror/styles/all.css';
 
+import { Flex, Grid, GridItem } from '@chakra-ui/react';
 import { Remirror, useRemirror } from '@remirror/react';
-import { collection, Timestamp } from 'firebase/firestore';
 import React from 'react';
-import { BoldExtension, CalloutExtension, ItalicExtension } from 'remirror/extensions';
+import { BoldExtension, CalloutExtension, ImageExtension, ItalicExtension, ListItemExtension } from 'remirror/extensions';
 
 import Editor from '../components/Editor';
-import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase/clientApp';
 
 const Create = () => {
-  const { user } = useAuth();
-
   const { manager, state, setState } = useRemirror({
-    extensions: () => [new BoldExtension({}), new ItalicExtension({}), new CalloutExtension({ defaultType: 'warn' })],
+    extensions: () => [
+      new BoldExtension({}),
+      new ItalicExtension({}),
+      new CalloutExtension({ defaultType: 'warn' }),
+      new ImageExtension(),
+      new ListItemExtension({ enableCollapsible: true }),
+    ],
   });
 
-  const handleSave = () => {
-    const collectionRef = collection(db, 'notes');
-    const content = getJSON(state);
-    const dbEntry = {
-      created_at: Timestamp.fromDate(new Date(Date.now())),
-      content,
-      user: null,
-    };
-    console.log(user);
-  };
-
   return (
-    <div className="remirror-theme">
-      <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
-        <Editor />
-      </Remirror>
-    </div>
+    <Flex justifyContent="center" mt={2} width="100%">
+      <Grid width="100%" templateColumns="10% 90%" mx="auto">
+        <GridItem>List</GridItem>
+        <GridItem>
+          <div className="remirror-theme">
+            <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
+              <Editor state={state} manager={manager} />
+            </Remirror>
+          </div>
+        </GridItem>
+      </Grid>
+    </Flex>
   );
 };
 
