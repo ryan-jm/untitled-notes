@@ -5,9 +5,15 @@ import { Remirror, useRemirror } from '@remirror/react';
 import React from 'react';
 import {
   BoldExtension,
+  ItalicExtension,
+  UnderlineExtension,
+  StrikeExtension,
+  HeadingExtension,
+  BlockquoteExtension,
+  CodeExtension,
+  HistoryExtension,
   CalloutExtension,
   ImageExtension,
-  ItalicExtension,
   ListItemExtension,
 } from 'remirror/extensions';
 
@@ -18,8 +24,14 @@ const Create = () => {
     extensions: () => [
       new BoldExtension({}),
       new ItalicExtension({}),
-      new CalloutExtension({ defaultType: 'warn' }),
+      new UnderlineExtension({}),
+      new StrikeExtension({}),
+      new CodeExtension({}),
+      new HeadingExtension({}),
+      new BlockquoteExtension({}),
+      new HistoryExtension({}),
       new ImageExtension(),
+      new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
     ],
   });
