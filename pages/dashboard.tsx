@@ -7,7 +7,6 @@ export default function Dashboard() {
   function download() {
     getDownloadURL(storageRef)
       .then((url) => {
-        console.log(url);
 
         // const xhr = new XMLHttpRequest();
 
@@ -26,8 +25,8 @@ export default function Dashboard() {
         console.log(error);
       });
   }
-  const name = ref(storage, 'Name');
-  const sparkyRef = ref(storage, '');
+  // const name = ref(storage, 'Name');
+  // const sparkyRef = ref(storage, '');
 
   return (
     <h1>

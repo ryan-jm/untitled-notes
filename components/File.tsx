@@ -6,49 +6,6 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { log } from 'console';
 import { storage } from '../firebase/clientApp';
 
-// const File = () =>{
-// // Create a root reference
-// const storage = getStorage();
-
-// // Create a reference to 'mountains.jpg'
-// const mountainsRef = ref(storage, 'pi.jpg');
-
-// // Create a reference to 'images/mountains.jpg'
-// const mountainImagesRef = ref(storage, 'images/pi.jpg');
-
-// //State
-// const [file , setFile] = useState(null);
-// // While the file names are the same, the references point to different files
-// mountainsRef.name === mountainImagesRef.name;           // true
-// mountainsRef.fullPath === mountainImagesRef.fullPath;   // false
-
-// const storageRef = ref(storage, 'some-child');
-
-// // 'file' comes from the Blob or File API
-// uploadBytes(storageRef, file).then((snapshot) => {
-//   console.log('Uploaded a blob or file!');
-// });
-
-//     function changeHandler(event){
-//     setFile(event.target.files[0]);
-
-//     }
-//     function submitHandler(){
-//     //      const uploadTask = storage.ref(`images/${image.name}`)
-//     //    .put(image);
-
-//     }
-//     // console.log(image,"immmmmmmmm");
-
-//     return(
-//         <>
-//             <input type="file" onChange={changeHandler}></input>
-//         <button onClick={submitHandler}>submit</button>
-//         </>
-//     )
-// }
-
-// export default File;
 
 const File = () => {
   // const [file , setFile] = useState(null);
@@ -74,7 +31,7 @@ const File = () => {
       },
       (err) => console.log(err, 'here is the err'),
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url, '<><><><><><<<<<<<<<<<dhjdhjdhdhhnd'));
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
       }
     );
   }
