@@ -4,19 +4,20 @@ import { Flex, Grid, GridItem } from '@chakra-ui/react';
 import { Remirror, useRemirror } from '@remirror/react';
 import React from 'react';
 import {
-  BoldExtension,
-  ItalicExtension,
-  HeadingExtension,
   BlockquoteExtension,
+  BoldExtension,
+  CalloutExtension,
   CodeExtension,
+  HeadingExtension,
   HistoryExtension,
   ImageExtension,
-  MarkdownExtension,
-  CalloutExtension,
+  ItalicExtension,
+  LinkExtension,
   ListItemExtension,
+  MarkdownExtension,
 } from 'remirror/extensions';
 
-import Editor from '../components/Editor';
+import Editor from '../components/Editor/Editor';
 
 const Create = () => {
   const { manager, state, setState } = useRemirror({
@@ -31,6 +32,7 @@ const Create = () => {
       new MarkdownExtension({}),
       new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
+      new LinkExtension({ autoLink: true }),
     ],
   });
 
