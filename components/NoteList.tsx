@@ -1,66 +1,102 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, getDocsFromServer, query, where, orderBy, limit } from 'firebase/firestore';
+
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase/clientApp';
-import { addDoc, collection, getDocsFromServer, query, Timestamp, where, orderBy, limit } from 'firebase/firestore';
-import { useState, useEffect } from 'react';
-import { Box, Heading, Text, VStack, StackDivider, Button } from '@chakra-ui/react';
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Button,
+  useDisclosure,
+  Box,
+  Text,
+  Input,
+  Heading,
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 const NotesList = () => {
-  const [displayName, SetDisplayName] = useState('');
-  const [note, setNote] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [notes, setNotes] = useState<any>(undefined);
   const { user } = useAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
+  const router = useRouter();
 
-  const loadNote = async () => {
-    // Currently loads the most recent note, but queries will remain useful for loading a list of all user-added notes.
-    const totalNotes = [];
-    const loadQuery = query(collection(db, 'notes'), where('user', '==', user.uid));
-    const noteSnapshot = await getDocsFromServer(loadQuery);
-    noteSnapshot.forEach((doc) => totalNotes.unshift(doc.data()));
-    const doc = {
-      type: 'doc',
-      content: totalNotes[0].content.content,
-    };
-
-    const lastNoteQuery = query(
-      collection(db, 'notes'),
-      where('user', '==', user.uid),
-      orderBy('created_at', 'desc'),
-      limit(1)
-    );
-
-    const getLastNote = await getDocsFromServer(lastNoteQuery);
-    const lastNote = getLastNote.docs[0].data();
-
-    console.log('from notes list ', lastNote.content);
-
-    console.table('from loadNote (prop)', doc.content[0].content[0].text);
-    console.log('from loadNote (ob keys)', Object.keys(doc.content[0]));
-
-    SetDisplayName(user.displayName);
-    setNote(doc.content[0].content[0].text);
-  };
-
-  loadNote();
+  useEffect(() => {
+    if (!user?.accessToken) {
+      router.push('/auth');
+    } else {
+      if (!notes) {
+        const listUserNotes = query(
+          collection(db, 'notes'),
+          where('user', '==', user.uid),
+          orderBy('created_at', 'desc'),
+          limit(10)
+        );
+        getDocsFromServer(listUserNotes).then((data) => {
+          console.log('data : ', data);
+          const notesArr = [];
+          data.forEach((doc) => {
+            notesArr.push(doc.data());
+          });
+          setNotes(notesArr);
+        });
+      }
+    }
+  }, []);
+  console.log('notes: ', notes);
 
   return (
-    <div>
-      <VStack divider={<StackDivider borderColor="teal.800" />} spacing={4} align="stretch">
-        <Box bgGradient={'linear(to-t, blue.200, teal.500)'} m="1" p="2" borderRadius="lg" h={80}>
-          <Heading size="sm" p="1" mb="2">
-            {displayName}'s Notes
-          </Heading>
-          <Text fontSize="sm" ml="1">
-            <Button bg="teal.600" width="90%" size="sm">
-              {note}
-            </Button>
-            <p>Some notes</p>
-            <p>Some notes</p>
-            <p>Some notes</p>
-            <p>Some notes</p>
-          </Text>
-        </Box>
-      </VStack>
-    </div>
+    <>
+      <>
+        <Button display={{ md: 'none' }} mb="1" ref={btnRef} colorScheme="teal" onClick={onOpen}>
+          Open
+        </Button>
+        <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>{displayName}s Notes</DrawerHeader>
+            <DrawerBody>
+              {notes
+                ? notes.map((note) => {
+                    if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
+                      return <p>{note.content.content[0].content[0].text}</p>;
+                    } else {
+                      return 'untitled';
+                    }
+                  })
+                : 'untitled'}
+            </DrawerBody>
+
+            <DrawerFooter></DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </>
+      <Box width="30" bg="gray" borderRadius="lg" p="5">
+        <div>
+          {notes
+            ? notes.map((note) => {
+                if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
+                  return (
+                    <Heading size="sm" isTruncated>
+                      {note.content.content[0].content[0].text}
+                    </Heading>
+                  );
+                } else {
+                  return 'untitled';
+                }
+              })
+            : 'untitled'}
+        </div>
+      </Box>
+    </>
   );
 };
 

@@ -51,8 +51,6 @@ const Header = () => {
     else logout();
   }
 
-  console.log(user, 'userrrrrr');
-
   return (
     <>
       <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
