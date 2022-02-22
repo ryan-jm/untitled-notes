@@ -10,7 +10,7 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (user?.accessToken) {
-      router.push('/create');
+      router.push('/dashboard');
     }
   }, [router, user]);
 

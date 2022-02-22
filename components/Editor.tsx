@@ -1,6 +1,11 @@
-import { EditorComponent, useHelpers } from '@remirror/react';
-import { addDoc, collection, getDocsFromServer, query, Timestamp, where, orderBy, limit } from 'firebase/firestore';
 import React from 'react';
+
+import { EditorComponent, useHelpers } from '@remirror/react';
+
+import { addDoc, collection, getDocsFromServer, query, Timestamp, where, orderBy, limit } from 'firebase/firestore';
+
+// FileSaver.js library
+import { saveAs } from 'file-saver';
 
 import { Button, ButtonGroup } from '@chakra-ui/react';
 
@@ -11,7 +16,7 @@ import EditorButtons from './editor-buttons/EditorButtons';
 
 const Editor = ({ state, manager }: any) => {
   const { user } = useAuth();
-  const { getJSON } = useHelpers();
+  const { getJSON, getText, getHTML, getMarkdown } = useHelpers();
 
   const handleSave = () => {
     const collectionRef = collection(db, 'notes');
@@ -28,7 +33,6 @@ const Editor = ({ state, manager }: any) => {
     // Currently loads the most recent note, but queries will remain useful for loading a list of all user-added notes.
     const totalNotes = [];
     const loadQuery = query(collection(db, 'notes'), where('user', '==', user.uid));
-
     const noteSnapshot = await getDocsFromServer(loadQuery);
 
     // queries the db for the last created note, based on created_at timestamp.
@@ -50,13 +54,22 @@ const Editor = ({ state, manager }: any) => {
     manager.view.updateState(manager.createState({ content: doc }));
   };
 
+  const localSave = () => {
+    const inputState = getMarkdown(state);
+    console.log(inputState);
+
+    const blob = new Blob([inputState], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, 'UntitledNote.md');
+  };
+
   return (
     <>
       <EditorButtons />
       <EditorComponent />
       <ButtonGroup isAttached size="sm">
         <Button onClick={handleSave}>Save</Button>
-        <Button onClick={loadNote}>Load</Button>
+        <Button onClick={localSave}>Save Locally</Button>
+        <Button onClick={loadNote}>Load Last Saved Note</Button>
       </ButtonGroup>
     </>
   );
