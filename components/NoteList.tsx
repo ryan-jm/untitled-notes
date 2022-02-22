@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocsFromServer, query, where, orderBy, limit } from 'firebase/firestore';
 
-import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase/clientApp';
 import {
   Drawer,
   DrawerBody,
@@ -17,8 +15,11 @@ import {
   Text,
   Input,
   Heading,
+  HStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { useAuth } from '../contexts/AuthContext';
+import { db } from '../firebase/clientApp';
 
 const NotesList = () => {
   const [displayName, setDisplayName] = useState('');
@@ -79,15 +80,27 @@ const NotesList = () => {
           </DrawerContent>
         </Drawer>
       </>
-      <Box width="30" bg="gray" borderRadius="lg" p="5">
+
+      <Box w="100%" h={80} borderWidth={1} borderRadius="lg" p="3" isTruncated>
         <div>
+          <Heading
+            fontWeight="bold"
+            textTransform="uppercase"
+            fontSize="md"
+            letterSpacing="wide"
+            color="teal.600"
+            pb={3}
+          >
+            Your notes
+          </Heading>
           {notes
             ? notes.map((note) => {
                 if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
                   return (
-                    <Heading size="sm" isTruncated>
+                    <Text fontSize="sm" isTruncated>
                       {note.content.content[0].content[0].text}
-                    </Heading>
+                      <hr></hr>
+                    </Text>
                   );
                 } else {
                   return 'untitled';
