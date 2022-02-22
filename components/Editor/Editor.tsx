@@ -6,7 +6,7 @@ import React from 'react';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../firebase/clientApp';
-import EditorButtons from '../editor-buttons/EditorButtons';
+import EditorButtons from './EditorButtons';
 
 // FileSaver.js library
 const Editor = ({ state, manager }: any) => {
