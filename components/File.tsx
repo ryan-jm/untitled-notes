@@ -6,7 +6,6 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { log } from 'console';
 import { storage } from '../firebase/clientApp';
 
-
 const File = () => {
   // const [file , setFile] = useState(null);
   const [progress, setProgress] = useState(0);

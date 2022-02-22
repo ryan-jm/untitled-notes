@@ -7,7 +7,6 @@ export default function Dashboard() {
   function download() {
     getDownloadURL(storageRef)
       .then((url) => {
-
         // const xhr = new XMLHttpRequest();
 
         // xhr.responseType = 'blob';
