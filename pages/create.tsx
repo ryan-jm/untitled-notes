@@ -28,7 +28,7 @@ const Create = () => {
       new BlockquoteExtension({}),
       new HistoryExtension({}),
       new ImageExtension(),
-      new MarkdownExtension(),
+      new MarkdownExtension({}),
       new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
     ],

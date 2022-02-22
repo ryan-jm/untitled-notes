@@ -14,24 +14,6 @@ import { db } from '../firebase/clientApp';
 
 import EditorButtons from './editor-buttons/EditorButtons';
 
-// const hooks = [
-//   () => {
-//     const { getJSON } = useHelpers();
-
-//     const handleSaveShortcut = useCallback(
-//       ({ state }) => {
-//         console.log(`Save to backend: ${JSON.stringify(getJSON(state))}`);
-
-//         return true; // Prevents any further key handlers from being run.
-//       },
-//       [getJSON]
-//     );
-
-//     // "Mod" means platform agnostic modifier key - i.e. Ctrl on Windows, or Cmd on MacOS
-//     useKeymap('Mod-s', handleSaveShortcut);
-//   },
-// ];
-
 const Editor = ({ state, manager }: any) => {
   const { user } = useAuth();
   const { getJSON, getText, getHTML, getMarkdown } = useHelpers();
@@ -79,13 +61,6 @@ const Editor = ({ state, manager }: any) => {
     const blob = new Blob([inputState], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, 'UntitledNote.md');
   };
-
-  // function saveDynamicDataToFile() {
-  //   var userInput = document.getElementById('myText').value;
-
-  //   var blob = new Blob([userInput], { type: 'text/plain;charset=utf-8' });
-  //   saveAs(blob, 'dynamic.txt');
-  // }
 
   return (
     <>
