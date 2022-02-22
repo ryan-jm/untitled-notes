@@ -1,22 +1,18 @@
+import { Button, ButtonGroup } from '@chakra-ui/react';
+import { EditorComponent, useHelpers } from '@remirror/react';
+import { saveAs } from 'file-saver';
+import { addDoc, collection, getDocsFromServer, limit, orderBy, query, Timestamp, where } from 'firebase/firestore';
 import React from 'react';
 
-import { EditorComponent, useHelpers } from '@remirror/react';
-
-import { addDoc, collection, getDocsFromServer, query, Timestamp, where, orderBy, limit } from 'firebase/firestore';
+import { useAuth } from '../../contexts/AuthContext';
+import { db } from '../../firebase/clientApp';
+import EditorButtons from './EditorButtons';
+import HyperlinkToolbar from './HyperlinkToolbar';
 
 // FileSaver.js library
-import { saveAs } from 'file-saver';
-
-import { Button, ButtonGroup } from '@chakra-ui/react';
-
-import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase/clientApp';
-
-import EditorButtons from './editor-buttons/EditorButtons';
-
 const Editor = ({ state, manager }: any) => {
   const { user } = useAuth();
-  const { getJSON, getText, getHTML, getMarkdown } = useHelpers();
+  const { getJSON, getMarkdown } = useHelpers();
 
   const handleSave = () => {
     const collectionRef = collection(db, 'notes');
@@ -66,6 +62,7 @@ const Editor = ({ state, manager }: any) => {
     <>
       <EditorButtons />
       <EditorComponent />
+      <HyperlinkToolbar />
       <ButtonGroup isAttached size="sm">
         <Button onClick={handleSave}>Save</Button>
         <Button onClick={localSave}>Save Locally</Button>

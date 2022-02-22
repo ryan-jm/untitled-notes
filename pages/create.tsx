@@ -1,22 +1,25 @@
 import 'remirror/styles/all.css';
 
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
-import { Remirror, useRemirror } from '@remirror/react';
-import React from 'react';
+import { ReactSsrExtension } from '@remirror/extension-react-ssr';
+import { Remirror, ThemeProvider, useRemirror } from '@remirror/react';
+import React, { useMemo } from 'react';
 import {
-  BoldExtension,
-  ItalicExtension,
-  HeadingExtension,
   BlockquoteExtension,
+  BoldExtension,
+  CalloutExtension,
   CodeExtension,
+  HeadingExtension,
   HistoryExtension,
   ImageExtension,
-  MarkdownExtension,
-  CalloutExtension,
+  ItalicExtension,
   ListItemExtension,
+  MarkdownExtension,
+  UnderlineExtension,
 } from 'remirror/extensions';
 
-import Editor from '../components/Editor';
+import Editor from '../components/Editor/Editor';
+import { HyperlinkExtension } from '../components/Editor/extensions';
 
 const Create = () => {
   const { manager, state, setState } = useRemirror({
@@ -31,22 +34,34 @@ const Create = () => {
       new MarkdownExtension({}),
       new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
+      HyperlinkExtension(),
+      new UnderlineExtension(),
+      new ReactSsrExtension({}),
     ],
   });
 
   return (
-    <Flex justifyContent="center" mt={2} width="100%">
-      <Grid width="100%" templateColumns="10% 90%" mx="auto">
-        <GridItem>List</GridItem>
-        <GridItem>
-          <div className="remirror-theme">
-            <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
-              <Editor state={state} manager={manager} />
-            </Remirror>
-          </div>
-        </GridItem>
-      </Grid>
-    </Flex>
+    <ThemeProvider>
+      <Flex justifyContent="center" mt={2} width="100%">
+        <Grid width="100%" templateColumns="10% 90%" mx="auto">
+          <GridItem>List</GridItem>
+          <GridItem>
+            <div className="remirror-theme">
+              <Remirror
+                manager={manager}
+                state={state}
+                onChange={(p) => {
+                  setState(p.state);
+                  console.log(p.state);
+                }}
+              >
+                <Editor state={state} manager={manager} />
+              </Remirror>
+            </div>
+          </GridItem>
+        </Grid>
+      </Flex>
+    </ThemeProvider>
   );
 };
 
