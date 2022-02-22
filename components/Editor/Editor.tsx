@@ -7,11 +7,12 @@ import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../firebase/clientApp';
 import EditorButtons from './EditorButtons';
+import HyperlinkToolbar from './HyperlinkToolbar';
 
 // FileSaver.js library
 const Editor = ({ state, manager }: any) => {
   const { user } = useAuth();
-  const { getJSON, getText, getHTML, getMarkdown } = useHelpers();
+  const { getJSON, getMarkdown } = useHelpers();
 
   const handleSave = () => {
     const collectionRef = collection(db, 'notes');
@@ -61,6 +62,7 @@ const Editor = ({ state, manager }: any) => {
     <>
       <EditorButtons />
       <EditorComponent />
+      <HyperlinkToolbar />
       <ButtonGroup isAttached size="sm">
         <Button onClick={handleSave}>Save</Button>
         <Button onClick={localSave}>Save Locally</Button>
