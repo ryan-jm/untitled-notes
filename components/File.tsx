@@ -3,22 +3,24 @@
 import { useState } from 'react';
 
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { log } from 'console';
 import { storage } from '../firebase/clientApp';
 
 const File = () => {
   // const [file , setFile] = useState(null);
   const [progress, setProgress] = useState(0);
 
+
+
+  // console.log(file);
   function submitHandler(event) {
     event.preventDefault();
     const file = event.target[0].files[0];
-    changeHandler(file);
+    changeHandler(file)
   }
 
-  // console.log(file);
-
-  function changeHandler(file) {
+function changeHandler  (file){
+  console.log(file,"<><>");
+  
     if (!file) return;
     const storageRef = ref(storage, `/files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -27,13 +29,20 @@ const File = () => {
       (snapshot) => {
         const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
         setProgress(prog);
+        
+        
       },
+      
       (err) => console.log(err, 'here is the err'),
       () => {
+        console.log(uploadTask.snapshot,"abcfd");
+        
         getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
+        console.log(progress);
       }
     );
   }
+ 
   return (
     <>
       <form onSubmit={submitHandler}>
@@ -45,3 +54,4 @@ const File = () => {
 };
 
 export default File;
+
