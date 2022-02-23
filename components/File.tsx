@@ -31,7 +31,6 @@ const File = () => {
 
       (err) => console.log(err, 'here is the err'),
       () => {
-
         getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
         console.log(progress);
       }

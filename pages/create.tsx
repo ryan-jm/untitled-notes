@@ -50,16 +50,13 @@ const Create = () => {
   //   return files;
 
   const handleChange = (p) => {
-   
     for (let i = 0; i < p.state.doc.content.content.length; i++) {
       const len = p.state.doc.content.content[i].content.content.length;
       for (let j = 0; j < len; j++) {
         if (p.state.doc.content.content[i].content.content[j].attrs.fileName) {
           const file = p.state.doc.content.content[i].content.content[j].attrs;
           changeHandler(file);
-        } 
-          
-        
+        }
       }
     }
     setState(p.state);
