@@ -21,7 +21,7 @@ import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { ReactNode } from 'react';
 import NextLink from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
-import DarkModeSwitch from '../components/DarkModeSwitch';
+import DarkModeSwitch from './DarkModeSwitch';
 
 const Links = [
   { name: 'Home', url: '/' },
