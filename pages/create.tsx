@@ -18,7 +18,8 @@ import {
   UnderlineExtension,
 } from 'remirror/extensions';
 
-import Editor from '../components/Editor/Editor';
+import Editor from '../components/Editor';
+import NotesList from '../components/NoteList';
 import { HyperlinkExtension } from '../components/Editor/extensions';
 
 const Create = () => {
@@ -41,27 +42,20 @@ const Create = () => {
   });
 
   return (
-    <ThemeProvider>
-      <Flex justifyContent="center" mt={2} width="100%">
-        <Grid width="100%" templateColumns="10% 90%" mx="auto">
-          <GridItem>List</GridItem>
-          <GridItem>
-            <div className="remirror-theme">
-              <Remirror
-                manager={manager}
-                state={state}
-                onChange={(p) => {
-                  setState(p.state);
-                  console.log(p.state);
-                }}
-              >
-                <Editor state={state} manager={manager} />
-              </Remirror>
-            </div>
-          </GridItem>
-        </Grid>
-      </Flex>
-    </ThemeProvider>
+    <Flex justifyContent="center" mt={2} width="100%">
+      <Grid width="100%" templateColumns="10% 90%" mx="auto">
+        <GridItem>
+          <NotesList />
+        </GridItem>
+        <GridItem>
+          <div className="remirror-theme">
+            <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
+              <Editor state={state} manager={manager} />
+            </Remirror>
+          </div>
+        </GridItem>
+      </Grid>
+    </Flex>
   );
 };
 
