@@ -18,7 +18,7 @@ import {
   UnderlineExtension,
 } from 'remirror/extensions';
 
-import Editor from '../components/Editor';
+import Editor from '../components/Editor/Editor';
 import NotesList from '../components/NoteList';
 import { HyperlinkExtension } from '../components/Editor/extensions';
 
