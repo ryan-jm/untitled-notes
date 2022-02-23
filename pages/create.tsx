@@ -2,7 +2,7 @@ import 'remirror/styles/all.css';
 
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
 import { ReactSsrExtension } from '@remirror/extension-react-ssr';
-import { Remirror, ThemeProvider, useRemirror } from '@remirror/react';
+import { Remirror, useRemirror } from '@remirror/react';
 import React, { useMemo } from 'react';
 import {
   BlockquoteExtension,
@@ -19,8 +19,8 @@ import {
 } from 'remirror/extensions';
 
 import Editor from '../components/Editor/Editor';
-import NotesList from '../components/NoteList';
 import { HyperlinkExtension } from '../components/Editor/extensions';
+import NotesList from '../components/NoteList';
 
 const Create = () => {
   const { manager, state, setState } = useRemirror({
@@ -39,6 +39,8 @@ const Create = () => {
       new UnderlineExtension(),
       new ReactSsrExtension({}),
     ],
+    content: '<h1>Untitled...</h1>',
+    stringHandler: 'html',
   });
 
   return (
@@ -49,7 +51,7 @@ const Create = () => {
         </GridItem>
         <GridItem>
           <div className="remirror-theme">
-            <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
+            <Remirror manager={manager} state={state} onChange={({ state }) => setState(state)}>
               <Editor state={state} manager={manager} />
             </Remirror>
           </div>
