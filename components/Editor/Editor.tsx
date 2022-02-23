@@ -1,8 +1,8 @@
 import { Button, ButtonGroup } from '@chakra-ui/react';
-import { EditorComponent, useHelpers } from '@remirror/react';
+import { EditorComponent, useCommands, useHelpers, useRemirrorContext } from '@remirror/react';
 import { saveAs } from 'file-saver';
 import { addDoc, collection, getDocsFromServer, limit, orderBy, query, Timestamp, where } from 'firebase/firestore';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../firebase/clientApp';
@@ -13,6 +13,8 @@ import HyperlinkToolbar from './HyperlinkToolbar';
 const Editor = ({ state, manager }: any) => {
   const { user } = useAuth();
   const { getJSON, getMarkdown } = useHelpers();
+  const { setContent } = useRemirrorContext();
+  const commands = useCommands();
 
   const handleSave = () => {
     const collectionRef = collection(db, 'notes');
@@ -57,6 +59,29 @@ const Editor = ({ state, manager }: any) => {
     const blob = new Blob([inputState], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, 'UntitledNote.md');
   };
+
+  const enforceTitle = (state) => {
+    let checkState = state;
+    const firstNode = checkState?.doc?.content?.content[0];
+    const titleEmpty = checkState?.doc?.content?.content.length > 1 && firstNode?.content?.size === 0;
+    if (firstNode?.type.name !== 'heading') {
+      /* If no H1 is found at the first node, replace the first node with a H1 node */
+      commands.toggleHeading({ level: 1 });
+    }
+
+    if (titleEmpty) {
+      /* H1 is present on first node but has no text; will clone state schema and apply a default 'Untitled' title */
+      console.log(titleEmpty);
+      checkState = state.applyTransaction(state.tr.insertText('Untitled...', 0, 1)).state;
+      const nodeSchema = getJSON(checkState);
+      nodeSchema.content[0].type = 'heading';
+      setContent(nodeSchema);
+    }
+  };
+
+  useEffect(() => {
+    enforceTitle(state);
+  }, [state]);
 
   return (
     <>
