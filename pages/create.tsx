@@ -1,39 +1,43 @@
 import 'remirror/styles/all.css';
 
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
-import { Remirror, useRemirror } from '@remirror/react';
-import React from 'react';
+import { ReactSsrExtension } from '@remirror/extension-react-ssr';
+import { Remirror, ThemeProvider, useRemirror } from '@remirror/react';
+import React, { useMemo } from 'react';
 import {
-  BoldExtension,
-  ItalicExtension,
-  UnderlineExtension,
-  StrikeExtension,
-  HeadingExtension,
   BlockquoteExtension,
-  CodeExtension,
-  HistoryExtension,
+  BoldExtension,
   CalloutExtension,
+  CodeExtension,
+  HeadingExtension,
+  HistoryExtension,
   ImageExtension,
+  ItalicExtension,
   ListItemExtension,
+  MarkdownExtension,
+  UnderlineExtension,
 } from 'remirror/extensions';
 
 import Editor from '../components/Editor';
 import NotesList from '../components/NoteList';
+import { HyperlinkExtension } from '../components/Editor/extensions';
 
 const Create = () => {
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
       new ItalicExtension({}),
-      new UnderlineExtension({}),
-      new StrikeExtension({}),
       new CodeExtension({}),
       new HeadingExtension({}),
       new BlockquoteExtension({}),
       new HistoryExtension({}),
       new ImageExtension(),
+      new MarkdownExtension({}),
       new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
+      HyperlinkExtension(),
+      new UnderlineExtension(),
+      new ReactSsrExtension({}),
     ],
   });
 
