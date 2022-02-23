@@ -98,24 +98,24 @@ const RedoButton = () => {
 const EditorButtons = () => {
   return (
     <>
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <BoldButton />
         <ItalicButton />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <HeadingButtons />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <BlockquoteButton />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <CodeButton />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <UndoButton />
         <RedoButton />
       </ButtonGroup>

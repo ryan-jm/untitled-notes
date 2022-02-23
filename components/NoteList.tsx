@@ -15,7 +15,10 @@ import {
   Text,
   Input,
   Heading,
+  Divider,
   HStack,
+  VStack,
+  Flex,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
@@ -51,13 +54,12 @@ const NotesList = () => {
       }
     }
   }, []);
-  console.log('notes: ', notes);
 
   return (
     <>
       <>
-        <Button display={{ md: 'none' }} mb="1" ref={btnRef} colorScheme="teal" onClick={onOpen}>
-          Open
+        <Button display={{ md: 'none' }} mb="1" ref={btnRef} onClick={onOpen}>
+          Notes List
         </Button>
         <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
           <DrawerOverlay />
@@ -81,33 +83,46 @@ const NotesList = () => {
         </Drawer>
       </>
 
-      <Box w="100%" h={80} borderWidth={1} borderRadius="lg" p="3" isTruncated>
-        <div>
-          <Heading
-            fontWeight="bold"
-            textTransform="uppercase"
-            fontSize="md"
-            letterSpacing="wide"
-            color="teal.600"
-            pb={3}
-          >
-            Your notes
-          </Heading>
-          {notes
-            ? notes.map((note) => {
-                if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
-                  return (
-                    <Text fontSize="sm" isTruncated>
-                      {note.content.content[0].content[0].text}
-                      <hr></hr>
-                    </Text>
-                  );
-                } else {
-                  return 'untitled';
-                }
-              })
-            : 'untitled'}
-        </div>
+      <Box
+        display={{ base: 'none', md: 'grid' }}
+        w="250px"
+        h={80}
+        borderWidth={1}
+        borderRadius="lg"
+        p="3"
+        mr="20px"
+        overflow="hidden"
+      >
+        <Heading
+          isTruncated
+          fontWeight="bold"
+          textTransform="uppercase"
+          fontSize="md"
+          letterSpacing="wide"
+          color="teal.600"
+          pb={3}
+        >
+          Your notes
+        </Heading>
+        {notes
+          ? notes.map((note) => {
+              if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
+                return (
+                  <Heading isTruncated fontSize="sm">
+                    {note.content.content[0].content[0].text}
+                    <Divider />
+                  </Heading>
+                );
+              } else {
+                return (
+                  <Heading fontSize="sm">
+                    untitled
+                    <Divider />
+                  </Heading>
+                );
+              }
+            })
+          : undefined}
       </Box>
     </>
   );

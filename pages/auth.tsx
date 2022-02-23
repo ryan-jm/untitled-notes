@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
+import { FcGoogle } from 'react-icons/fc';
+import { Button } from '@chakra-ui/react';
+
 import { useAuth } from '../contexts/AuthContext';
-import GoogleButton from '../components/GoogleButton';
 
 const SignInPage = () => {
   const { user, login, logout } = useAuth();
@@ -17,9 +19,9 @@ const SignInPage = () => {
   return (
     <div>
       <p>Please sign in:</p>
-      <button onClick={() => login()}>
-        <GoogleButton />
-      </button>
+      <Button onClick={() => login()} variant={'primary'} leftIcon={<FcGoogle />}>
+        Sign in with Google
+      </Button>
     </div>
   );
 };

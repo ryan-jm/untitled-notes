@@ -63,10 +63,16 @@ const Editor = ({ state, manager }: any) => {
       <EditorButtons />
       <EditorComponent />
       <HyperlinkToolbar />
-      <ButtonGroup isAttached size="sm">
-        <Button onClick={handleSave}>Save</Button>
-        <Button onClick={localSave}>Save Locally</Button>
-        <Button onClick={loadNote}>Load Last Saved Note</Button>
+      <ButtonGroup isAttached size="sm" mt="10px">
+        <Button onClick={handleSave} variant="toolbar">
+          Save
+        </Button>
+        <Button onClick={localSave} variant="toolbar">
+          Save Locally
+        </Button>
+        <Button onClick={loadNote} variant="toolbar">
+          Load Last Saved Note
+        </Button>
       </ButtonGroup>
     </>
   );

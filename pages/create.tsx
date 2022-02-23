@@ -42,8 +42,21 @@ const Create = () => {
   });
 
   return (
-    <Flex justifyContent="center" mt={2} width="100%">
-      <Grid width="100%" templateColumns="10% 90%" mx="auto">
+    <Flex justifyContent="flex-start" flexWrap="wrap" mt={2} width="100%">
+      <NotesList />
+      <div className="remirror-theme">
+        <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
+          <Editor state={state} manager={manager} />
+        </Remirror>
+      </div>
+    </Flex>
+  );
+};
+
+export default Create;
+
+{
+  /* <Grid display={{ base: 'flex' }} width="100%" templateColumns="10% 90%" mx="auto">
         <GridItem>
           <NotesList />
         </GridItem>
@@ -54,9 +67,5 @@ const Create = () => {
             </Remirror>
           </div>
         </GridItem>
-      </Grid>
-    </Flex>
-  );
-};
-
-export default Create;
+      </Grid> */
+}
