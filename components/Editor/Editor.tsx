@@ -19,8 +19,10 @@ const Editor = ({ state, manager }: any) => {
   const handleSave = () => {
     const collectionRef = collection(db, 'notes');
     const content = getJSON(state);
+    const title = content.content[0].text;
     const dbEntry = {
       created_at: Timestamp.fromDate(new Date(Date.now())),
+      title,
       content,
       user: user.uid,
     };
