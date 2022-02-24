@@ -1,7 +1,7 @@
 import { EditorComponent, useHelpers } from '@remirror/react';
 import { addDoc, collection, getDocsFromServer, query, Timestamp, where, orderBy, limit } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable,uploadString } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable, uploadString } from 'firebase/storage';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { storage, db } from '../firebase/clientApp';
 import { useAuth } from '../contexts/AuthContext';

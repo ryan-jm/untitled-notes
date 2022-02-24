@@ -27,7 +27,6 @@ import { storage } from '../firebase/clientApp';
 import Editor from '../components/Editor';
 
 const Create = () => {
-
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
@@ -50,19 +49,19 @@ const Create = () => {
   //   return files;
 
   const handleChange = (p) => {
-    for ( let i = 0;i < p.state.doc.content.content.length; i++) {
+    for (let i = 0; i < p.state.doc.content.content.length; i++) {
       const len = p.state.doc.content.content[i].content.content.length;
-      for ( let j = 0; j < len; j++) {
+      for (let j = 0; j < len; j++) {
         if (p.state.doc.content.content[i].content.content[j].attrs.fileName) {
           const file = p.state.doc.content.content[i].content.content[j].attrs;
-          changeHandler(file,i,j,p.state);
+          changeHandler(file, i, j, p.state);
         }
       }
     }
     setState(p.state);
   };
 
-  function changeHandler(file,i,j,state) {
+  function changeHandler(file, i, j, state) {
     if (!file) return;
     console.log('in side of function');
 
@@ -76,8 +75,8 @@ const Create = () => {
 
         newState.doc.content.content[i].content.content[j].attrs.src = url;
         setState(newState);
-        console.log(newState,"newstate");
-        
+        console.log(newState, 'newstate');
+
         // console.log(newState.doc.content.content,"lasttt<<<<<<>>>>>>>>>");
       });
     });
