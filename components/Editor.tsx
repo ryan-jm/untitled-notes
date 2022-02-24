@@ -1,10 +1,9 @@
 import { EditorComponent, useHelpers } from '@remirror/react';
 import { addDoc, collection, getDocsFromServer, query, Timestamp, where, orderBy, limit } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable,uploadString } from 'firebase/storage';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { storage, db } from '../firebase/clientApp';
-
 import { useAuth } from '../contexts/AuthContext';
 
 import EditorButtons from './editor-buttons/EditorButtons';
@@ -27,19 +26,20 @@ const Editor = ({ state, manager }: any) => {
 
   function changeHandler(file) {
     if (!file) return;
-    const storageRef = ref(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setProgress(prog);
-      },
-      (err) => console.log(err, 'here is the err'),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => console.log(url));
-      }
-    );
+    console.log('in side of function');
+
+    const storageRef = ref(storage, `/files2/${file.fileName}`);
+    const uploadTask = uploadString(storageRef, file.src, 'data_url');
+
+    uploadTask.then((snapshot) => {
+      const newState = state;
+      getDownloadURL(snapshot.ref).then((url) => {
+        console.log(url, 'url of snapshot');
+
+        // newState.doc.content.content[i].content.content[j].attrs.src = url
+        // console.log(newState.doc.content.content,"lasttt<<<<<<>>>>>>>>>");
+      });
+    });
   }
 
   const loadNote = async () => {
