@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocsFromServer, query, where, orderBy, limit } from 'firebase/firestore';
 
-import { Box, Heading, Divider, useStyleConfig } from '@chakra-ui/react';
+import {
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Button,
+  useDisclosure,
+  Box,
+  Heading,
+  Divider,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase/clientApp';
@@ -9,6 +21,8 @@ import { db } from '../firebase/clientApp';
 const NotesList = () => {
   const { user } = useAuth();
   const [notes, setNotes] = useState<any>(undefined);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
   const router = useRouter();
 
   useEffect(() => {
@@ -33,12 +47,6 @@ const NotesList = () => {
       }
     }
   }, []);
-
-  function NotesListBox(props) {
-    const { size, variant, ...rest } = props;
-    const styles = useStyleConfig('NotesListBox', { size, variant });
-    return <Box as="span" sx={styles} {...rest} />;
-  }
 
   function populateNotesList() {
     return notes
@@ -67,15 +75,23 @@ const NotesList = () => {
   }
 
   return (
-    <NotesListBox isTruncated>
-      <Box h="min-content" isTruncated pr="20px" mr="20px">
-        <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
-          Your Latest Notes
-        </Heading>
-
-        {populateNotesList()}
-      </Box>
-    </NotesListBox>
+    <>
+      <Button ref={btnRef} onClick={onOpen}>
+        Your Notes
+      </Button>
+      <Drawer size="full" isOpen={isOpen} placement="bottom" onClose={onClose} finalFocusRef={btnRef}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader pb="0">
+            <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
+              Your Latest Notes
+            </Heading>
+          </DrawerHeader>
+          <DrawerBody>{populateNotesList()}</DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 

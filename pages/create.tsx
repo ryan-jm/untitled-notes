@@ -1,9 +1,7 @@
-import 'remirror/styles/all.css';
-
-import { Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { ReactSsrExtension } from '@remirror/extension-react-ssr';
-import { Remirror, ThemeProvider, useRemirror } from '@remirror/react';
-import React, { useMemo } from 'react';
+import { Remirror, useRemirror } from '@remirror/react';
+import React from 'react';
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -20,6 +18,7 @@ import {
 
 import Editor from '../components/Editor/Editor';
 import NotesList from '../components/NoteList';
+import NotesListDrawer from '../components/NoteListDrawer';
 import { HyperlinkExtension } from '../components/Editor/extensions';
 
 const Create = () => {
@@ -42,30 +41,33 @@ const Create = () => {
   });
 
   return (
-    <Flex justifyContent="flex-start" flexWrap="wrap" mt={2} width="100%">
-      <NotesList />
-      <div className="remirror-theme">
-        <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
-          <Editor state={state} manager={manager} />
-        </Remirror>
-      </div>
-    </Flex>
-  );
-};
-
-export default Create;
-
-{
-  /* <Grid display={{ base: 'flex' }} width="100%" templateColumns="10% 90%" mx="auto">
-        <GridItem>
+    <>
+      <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
+        <NotesListDrawer />
+      </Box>
+      <Flex justify={'center'}>
+        <Box
+          w="250px"
+          minW="250px"
+          h="min-content"
+          ml={'40px'}
+          mt={'47px'}
+          display={{ base: 'none', md: 'flex' }}
+          overflow="hidden"
+          isTruncated
+        >
           <NotesList />
-        </GridItem>
-        <GridItem>
+        </Box>
+        <Box w="100%" ml="40px" mr="40px">
           <div className="remirror-theme">
             <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
               <Editor state={state} manager={manager} />
             </Remirror>
           </div>
-        </GridItem>
-      </Grid> */
-}
+        </Box>
+      </Flex>
+    </>
+  );
+};
+
+export default Create;

@@ -1,7 +1,10 @@
-import '../styles/globals.css';
-
 import { ChakraProvider } from '@chakra-ui/react';
+
 import theme from '../styles/theme';
+
+import '../styles/all.css';
+
+import '../styles/globals.css';
 
 import Header from '../components/Header';
 

@@ -14,20 +14,34 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
-  Divider,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from '@chakra-ui/react';
+import { FcGoogle } from 'react-icons/fc';
+
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeSwitch from './DarkModeSwitch';
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const { user, login, logout } = useAuth();
   const router = useRouter();
 
-  function goToAuth() {
-    router.push('/auth');
-  }
+  useEffect(() => {
+    if (user?.accessToken) {
+      router.push('/create');
+    }
+  }, [user?.accessToken, router]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
@@ -36,20 +50,37 @@ const Header = () => {
           <Heading color="text" size="sm">
             <NextLink href={'/'} passHref>
               <Link>
-                <Heading size="lg">Untitled Notes</Heading>
+                <Heading size="lg">
+                  <span id="untitled">Untitled Notes</span>
+                </Heading>
               </Link>
             </NextLink>
           </Heading>
         </Center>
         <Box>
           <HStack>
+            {/* Auth Modal */}
             {!user?.accessToken ? (
-              <Button onClick={goToAuth} variant={'primary'} size="md" mr="10px" leftIcon={<ChevronRightIcon />}>
+              <Button onClick={onOpen} variant={'primary'} size="md" mr="10px" leftIcon={<ChevronRightIcon />}>
                 Get Started
               </Button>
             ) : (
               ''
             )}
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Please sign in...</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Button onClick={() => login()} variant={'primary'} leftIcon={<FcGoogle />}>
+                    Sign in with Google
+                  </Button>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            {/* End Auth Modal */}
 
             {user?.accessToken ? (
               <>

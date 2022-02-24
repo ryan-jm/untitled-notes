@@ -4,8 +4,6 @@ import { Button, ButtonGroup, Menu, MenuButton, MenuList, MenuItem, Tooltip } fr
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
-import 'remirror/styles/all.css';
-
 const BoldButton = () => {
   const commands = useCommands();
 

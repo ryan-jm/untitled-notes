@@ -1,6 +1,19 @@
 import { extendTheme } from '@chakra-ui/react';
 import { mode, darken, whiten } from '@chakra-ui/theme-tools';
-import { NodeNextRequest } from 'next/dist/server/base-http';
+
+const NotesListBox = {
+  baseStyle: ({ colorMode }) => ({
+    borderRight: '1px solid',
+    borderColor: colorMode === 'dark' ? 'gray.200' : 'gray.800',
+  }),
+};
+
+const Divider = {
+  baseStyle: ({ colorMode }) => ({
+    borderRight: '1px solid',
+    borderColor: colorMode === 'dark' ? 'gray.200' : 'gray.800',
+  }),
+};
 
 const Button = {
   // Styles for the base style
@@ -55,6 +68,29 @@ const Button = {
   },
 };
 
+const Link = {
+  // Styles for the base style
+  baseStyle: {},
+  // Styles for the size variations
+  sizes: {},
+  // Styles for the visual style variations
+  variants: {
+    primary: (props) => ({
+      _hover: {
+        textDecoration: 'none',
+      },
+      _focus: {
+        boxShadow: '0',
+      },
+    }),
+  },
+  // The default `size` or `variant` values
+  defaultProps: {
+    size: 'md',
+    variant: 'primary',
+  },
+};
+
 const theme = extendTheme({
   colors: {
     fuschia: {
@@ -87,47 +123,19 @@ const theme = extendTheme({
         _hover: {
           textDecoration: 'underline',
         },
+        _focus: {
+          boxShadow: '0',
+        },
       },
     }),
   },
 
   components: {
     Button,
+    Link,
+    NotesListBox,
+    Divider,
   },
 });
 
 export default extendTheme(theme);
-
-// Colour-scheme:
-// Primary:
-// fuschia-main: #F178B6
-// fuschia-darkmode: #FCDDEC
-// fuschia-lightmode: #EF5DA8
-// Secondary:
-// iris-main: #7879F1
-// iris-darkmode: #5D5FEF
-// iris-lightmode: #A5A6F6
-// Fonts:
-// Headers/large:
-// Prompt
-// 400-800 font weight
-// Main/body:
-// Inter
-// 200-400 font weight
-
-// styles: {
-//   global: (props) => ({
-//     // styles for the `body`
-//     body: {
-//       bg: props.colorMode === 'dark' ? 'gray.900' : 'gray.100',
-//       color: props.colorMode !== 'dark' ? 'gray.900' : 'gray.100',
-//     },
-//     // styles for the `a`
-//     a: {
-//       color: 'red.500',
-//       _hover: {
-//         textDecoration: 'underline',
-//       },
-//     },
-//   }),
-// },

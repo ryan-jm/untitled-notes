@@ -1,6 +1,5 @@
-import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 import { Button, Flex, Text, Box, Stack, Center, Heading, VStack } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc';
@@ -48,7 +47,7 @@ export default function Home() {
           >
             <Box>
               <Heading fontSize={{ base: '24px', md: '40px', lg: '56px' }}>
-                Make capturing your thoughts <span id="gradient">easy</span>
+                Make capturing your thoughts <span id="easy">easy</span>
               </Heading>
             </Box>
           </Flex>
@@ -81,45 +80,5 @@ export default function Home() {
         </Flex>
       </VStack>
     </Center>
-
-    // <SimpleGrid columns={{ base: 1, md: 2 }} p={'10%'} pt="20vh" spacing={'50px'} backgroundColor={'transparent'}>
-    //   <Center
-    //     alignContent={'center'}
-    //     pb="200px"
-    //     m={'auto'}
-    //     bgColor={'transparent'}
-    //     width={'40vw'}
-    //     height={'30vh'}
-    //     minW="200px"
-    //     minH="150px"
-    //   >
-    //     <Heading size="2xl">Make capturing your thoughts easy</Heading>
-    //   </Center>
-    //   <Center>
-    //     <Box
-    //       m={'auto'}
-    //       width={'40vw'}
-    //       height={'30vh'}
-    //       bgColor={'transparent'}
-    //       borderRadius={'35px'}
-    //       boxShadow={'-50px 80px 4500px #7879F1'}
-    //       minW="200px"
-    //       minH="150px"
-    //       zIndex={-1}
-    //       position="absolute"
-    //     ></Box>
-    //     <Box
-    //       m={'auto'}
-    //       width={'40vw'}
-    //       height={'30vh'}
-    //       bgColor={'transparent'}
-    //       borderRadius={'35px'}
-    //       minW="200px"
-    //       minH="150px"
-    //       boxShadow={'30px -30px 4500px #F178B6'}
-    //       position="absolute"
-    //     ></Box>
-    //   </Center>
-    // </SimpleGrid>
   );
 }

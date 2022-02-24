@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { EditorComponent, useHelpers } from '@remirror/react';
 import { saveAs } from 'file-saver';
 import { addDoc, collection, getDocsFromServer, limit, orderBy, query, Timestamp, where } from 'firebase/firestore';
@@ -26,11 +26,6 @@ const Editor = ({ state, manager }: any) => {
   };
 
   const loadNote = async () => {
-    // Currently loads the most recent note, but queries will remain useful for loading a list of all user-added notes.
-    const totalNotes = [];
-    const loadQuery = query(collection(db, 'notes'), where('user', '==', user.uid));
-    const noteSnapshot = await getDocsFromServer(loadQuery);
-
     // queries the db for the last created note, based on created_at timestamp.
     const lastNoteQuery = query(
       collection(db, 'notes'),
@@ -41,7 +36,6 @@ const Editor = ({ state, manager }: any) => {
     const getLastNote = await getDocsFromServer(lastNoteQuery);
     const lastNote = getLastNote.docs[0].data();
 
-    noteSnapshot.forEach((doc) => totalNotes.unshift(doc.data()));
     const doc = {
       type: 'doc',
       content: lastNote.content.content,
@@ -60,20 +54,24 @@ const Editor = ({ state, manager }: any) => {
 
   return (
     <>
-      <EditorButtons />
+      <Box textAlign="center">
+        <EditorButtons />
+      </Box>
       <EditorComponent />
       <HyperlinkToolbar />
-      <ButtonGroup isAttached size="sm" mt="10px">
-        <Button onClick={handleSave} variant="toolbar">
+      <Box mt="20px" textAlign="center">
+        <Button onClick={handleSave} size="sm" variant="toolbar">
           Save
         </Button>
-        <Button onClick={localSave} variant="toolbar">
+        &nbsp;
+        <Button onClick={localSave} size="sm" variant="toolbar">
           Save Locally
         </Button>
-        <Button onClick={loadNote} variant="toolbar">
+        &nbsp;
+        <Button onClick={loadNote} size="sm" variant="toolbar">
           Load Last Saved Note
         </Button>
-      </ButtonGroup>
+      </Box>
     </>
   );
 };
