@@ -15,18 +15,21 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalBody,
   ModalCloseButton,
+  IconButton,
+  Box,
 } from '@chakra-ui/react';
 import { ChevronRightIcon, EditIcon } from '@chakra-ui/icons';
-import { FcGoogle } from 'react-icons/fc';
 
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeSwitch from './DarkModeSwitch';
+
+import Illustration from './svgs/illustration';
+import GoogleLogo from './svgs/google-svgrepo-com';
 
 const Header = () => {
   const { user, login, logout } = useAuth();
@@ -58,7 +61,7 @@ const Header = () => {
         </GridItem>
 
         <GridItem textAlign={'center'}>
-          {/* Auth Modal, ternary logic to only show when not logged in */}
+          {/* Auth Modal, ternary logic to only show button when not logged in */}
           {!user?.accessToken ? (
             <Button onClick={onOpen} variant={'primary'} size="md" mr="10px" leftIcon={<ChevronRightIcon />}>
               Get Started
@@ -67,15 +70,39 @@ const Header = () => {
             ''
           )}
 
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
+          <Modal size={'3xl'} isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay backdropFilter="auto" backdropInvert="20%" backdropBlur="5px" />
             <ModalContent>
-              <ModalHeader>Please sign in...</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Button onClick={() => handleSignIn()} variant={'primary'} leftIcon={<FcGoogle />}>
-                  Sign in with Google
-                </Button>
+                <Flex>
+                  <Flex display={{ base: 'none', md: 'flex' }} p="0">
+                    <Illustration w="400px" h="400px" p="0" />
+                  </Flex>
+                  <Flex textAlign="left" mt="50px" direction={'column'}>
+                    <Heading mb="4px" size={'md'}>
+                      Create Account Or Sign In
+                    </Heading>
+                    <Heading size={'xs'} color="gray.400">
+                      Expand on your thoughts today.
+                    </Heading>
+                    <br />
+                    <br />
+
+                    <Heading mb="4px" size={'xs'} color="gray.400">
+                      Continue with...
+                    </Heading>
+                    <Box pb="50px">
+                      <IconButton
+                        size="lg"
+                        onClick={() => handleSignIn()}
+                        variant={'primary'}
+                        aria-label="Google Login"
+                        icon={<GoogleLogo />}
+                      />
+                    </Box>
+                  </Flex>
+                </Flex>
               </ModalBody>
             </ModalContent>
           </Modal>
