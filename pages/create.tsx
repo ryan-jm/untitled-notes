@@ -1,7 +1,6 @@
 import 'remirror/styles/all.css';
 
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
-import { ReactSsrExtension } from '@remirror/extension-react-ssr';
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import React from 'react';
@@ -20,7 +19,7 @@ import {
 } from 'remirror/extensions';
 
 import Editor from '../components/Editor/Editor';
-import { HyperlinkExtension } from '../components/Editor/extensions';
+import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
 import NotesList from '../components/NoteList';
 import { storage } from '../firebase/clientApp';
 
@@ -38,8 +37,8 @@ const Create = () => {
       new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
       HyperlinkExtension(),
+      TagExtension(),
       new UnderlineExtension(),
-      new ReactSsrExtension({}),
     ],
     content: '<h1>Untitled...</h1>',
     stringHandler: 'html',
