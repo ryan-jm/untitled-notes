@@ -1,7 +1,8 @@
-import { DownloadIcon } from '@chakra-ui/icons';
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-import { storageRef, storage } from '../firebase/clientApp';
+import { getDownloadURL } from 'firebase/storage';
+import Image from 'next/image';
+
 import File from '../components/File';
+import { storageRef } from '../firebase/clientApp';
 
 export default function Dashboard() {
   function download() {
@@ -22,7 +23,7 @@ export default function Dashboard() {
       <button id="but" onClick={() => download()}>
         Download
       </button>
-      <img src="" id="image" />
+      <Image src="" id="image" />
       <br />
     </h1>
   );
