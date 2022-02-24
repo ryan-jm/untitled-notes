@@ -1,3 +1,13 @@
+import { Heading } from '@chakra-ui/react';
+
+import { useAuth } from '../contexts/AuthContext';
+
 export default function Dashboard() {
-  return <h1>Dash Board</h1>;
+  const { user } = useAuth();
+
+  return (
+    <Heading textAlign="center" size="xl">
+      {user?.displayName ? user.displayName + "'s Dashboard" : ''}
+    </Heading>
+  );
 }

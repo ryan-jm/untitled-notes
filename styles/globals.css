@@ -16,7 +16,7 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-#easy {
+.gradient {
   font-size: 120%;
   background: rgb(120, 121, 241);
   background: linear-gradient(200deg, rgba(120, 121, 241, 1) 0%, rgba(241, 120, 182, 1) 100%);
@@ -29,17 +29,4 @@ body {
   border: none;
   box-shadow: none;
   outline: none;
-}
-
-.remirror-editor {
-  width: 100%;
-  min-width: 250px;
-  height: 45vh;
-  max-height: 45vh;
-  min-height: 45vh;
-  border: none;
-}
-
-.remirror-editor:focus {
-  border: 1px solid;
 }

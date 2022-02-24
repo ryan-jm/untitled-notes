@@ -4469,6 +4469,11 @@ button:active .remirror-menu-pane-shortcut,
   padding: var(--rmr-space-3);
   border-radius: var(--rmr-radius-border);
   outline: none;
+  width: 100%;
+  min-width: 250px;
+  height: 45vh;
+  max-height: 45vh;
+  min-height: 45vh;
 }
 
 .remirror-theme .ProseMirror:active,
