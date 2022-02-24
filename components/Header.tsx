@@ -1,4 +1,3 @@
-import { ChevronRightIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box,
@@ -19,15 +18,15 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
+import { ChevronRightIcon, EditIcon } from '@chakra-ui/icons';
 import { FcGoogle } from 'react-icons/fc';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeSwitch from './DarkModeSwitch';
 
@@ -35,13 +34,11 @@ const Header = () => {
   const { user, login, logout } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user?.accessToken) {
-      router.push('/create');
-    }
-  }, [user?.accessToken, router]);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleSignIn = () => {
+    login().then(() => router.push('/create'));
+  };
 
   return (
     <>
@@ -74,7 +71,7 @@ const Header = () => {
                 <ModalHeader>Please sign in...</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                  <Button onClick={() => login()} variant={'primary'} leftIcon={<FcGoogle />}>
+                  <Button onClick={() => handleSignIn()} variant={'primary'} leftIcon={<FcGoogle />}>
                     Sign in with Google
                   </Button>
                 </ModalBody>
