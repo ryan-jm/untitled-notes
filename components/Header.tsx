@@ -15,11 +15,13 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  DarkMode,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { ReactNode } from 'react';
 import NextLink from 'next/link';
 import { useAuth } from '../contexts/AuthContext';
+import DarkModeSwitch from './DarkModeSwitch';
 
 const Links = [
   { name: 'Home', url: '/' },
@@ -77,6 +79,7 @@ const Header = () => {
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
+            <DarkModeSwitch />
             <Button onClick={goToAuth} variant={'solid'} colorScheme={'teal'} size={'sm'} mr={4} leftIcon={<AddIcon />}>
               {!user?.accessToken ? 'Login' : 'Logout'}
             </Button>

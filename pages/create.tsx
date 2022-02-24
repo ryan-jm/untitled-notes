@@ -1,52 +1,49 @@
 import 'remirror/styles/all.css';
 
-import { RemirrorManager, ExtensionPriority } from '@remirror/core';
-import { CorePreset } from '@remirror/preset-core';
-
-import React, { useState } from 'react';
-
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
-import { Remirror, useRemirror, useRemirrorContext } from '@remirror/react';
-import { getDownloadURL, uploadString, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-
+import { ReactSsrExtension } from '@remirror/extension-react-ssr';
+import { Remirror, useRemirror } from '@remirror/react';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import React from 'react';
 import {
-  BoldExtension,
-  ItalicExtension,
-  UnderlineExtension,
-  StrikeExtension,
-  HeadingExtension,
   BlockquoteExtension,
-  CodeExtension,
-  HistoryExtension,
+  BoldExtension,
   CalloutExtension,
+  CodeExtension,
+  HeadingExtension,
+  HistoryExtension,
   ImageExtension,
+  ItalicExtension,
   ListItemExtension,
+  MarkdownExtension,
+  UnderlineExtension,
 } from 'remirror/extensions';
-import { storage } from '../firebase/clientApp';
 
-import Editor from '../components/Editor';
+import Editor from '../components/Editor/Editor';
+import { HyperlinkExtension } from '../components/Editor/extensions';
+import NotesList from '../components/NoteList';
+import { storage } from '../firebase/clientApp';
 
 const Create = () => {
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
       new ItalicExtension({}),
-      new UnderlineExtension({}),
-      new StrikeExtension({}),
       new CodeExtension({}),
       new HeadingExtension({}),
       new BlockquoteExtension({}),
       new HistoryExtension({}),
-      /* new ImageExtension({uploadHandler: handlerUpload})*/
-      new ImageExtension({ enableResizing: true }),
+      new ImageExtension(),
+      new MarkdownExtension({}),
       new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
+      HyperlinkExtension(),
+      new UnderlineExtension(),
+      new ReactSsrExtension({}),
     ],
+    content: '<h1>Untitled...</h1>',
+    stringHandler: 'html',
   });
-
-  // const handlerUpload = (files:FileWithProgress[]) =>{
-  //   console.log(files,"files");
-  //   return files;
 
   const handleChange = (p) => {
     for (let i = 0; i < p.state.doc.content.content.length; i++) {
@@ -71,13 +68,9 @@ const Create = () => {
     uploadTask.then((snapshot) => {
       const newState = state;
       getDownloadURL(snapshot.ref).then((url) => {
-        // console.log(url, 'url of snapshot');
-
         newState.doc.content.content[i].content.content[j].attrs.src = url;
         setState(newState);
         console.log(newState, 'newstate');
-
-        // console.log(newState.doc.content.content,"lasttt<<<<<<>>>>>>>>>");
       });
     });
   }
@@ -85,7 +78,9 @@ const Create = () => {
   return (
     <Flex justifyContent="center" mt={2} width="100%">
       <Grid width="100%" templateColumns="10% 90%" mx="auto">
-        <GridItem>List</GridItem>
+        <GridItem>
+          <NotesList />
+        </GridItem>
         <GridItem>
           <div className="remirror-theme">
             <Remirror manager={manager} state={state} onChange={handleChange}>
