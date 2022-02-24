@@ -60,8 +60,6 @@ const Create = () => {
 
   function changeHandler(file, i, j, state) {
     if (!file) return;
-    console.log('in side of function');
-
     const storageRef = ref(storage, `/files2/${file.fileName}`);
     const uploadTask = uploadString(storageRef, file.src, 'data_url');
 
@@ -70,7 +68,6 @@ const Create = () => {
       getDownloadURL(snapshot.ref).then((url) => {
         newState.doc.content.content[i].content.content[j].attrs.src = url;
         setState(newState);
-        console.log(newState, 'newstate');
       });
     });
   }
