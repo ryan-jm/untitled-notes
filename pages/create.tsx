@@ -3,7 +3,8 @@ import 'remirror/styles/all.css';
 import { Flex, Grid, GridItem } from '@chakra-ui/react';
 import { ReactSsrExtension } from '@remirror/extension-react-ssr';
 import { Remirror, useRemirror } from '@remirror/react';
-import React, { useMemo } from 'react';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import React from 'react';
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -21,6 +22,7 @@ import {
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension } from '../components/Editor/extensions';
 import NotesList from '../components/NoteList';
+import { storage } from '../firebase/clientApp';
 
 const Create = () => {
   const { manager, state, setState } = useRemirror({
@@ -43,6 +45,36 @@ const Create = () => {
     stringHandler: 'html',
   });
 
+  const handleChange = (p) => {
+    for (let i = 0; i < p.state.doc.content.content.length; i++) {
+      const len = p.state.doc.content.content[i].content.content.length;
+      for (let j = 0; j < len; j++) {
+        if (p.state.doc.content.content[i].content.content[j].attrs.fileName) {
+          const file = p.state.doc.content.content[i].content.content[j].attrs;
+          changeHandler(file, i, j, p.state);
+        }
+      }
+    }
+    setState(p.state);
+  };
+
+  function changeHandler(file, i, j, state) {
+    if (!file) return;
+    console.log('in side of function');
+
+    const storageRef = ref(storage, `/files2/${file.fileName}`);
+    const uploadTask = uploadString(storageRef, file.src, 'data_url');
+
+    uploadTask.then((snapshot) => {
+      const newState = state;
+      getDownloadURL(snapshot.ref).then((url) => {
+        newState.doc.content.content[i].content.content[j].attrs.src = url;
+        setState(newState);
+        console.log(newState, 'newstate');
+      });
+    });
+  }
+
   return (
     <Flex justifyContent="center" mt={2} width="100%">
       <Grid width="100%" templateColumns="10% 90%" mx="auto">
@@ -51,7 +83,7 @@ const Create = () => {
         </GridItem>
         <GridItem>
           <div className="remirror-theme">
-            <Remirror manager={manager} state={state} onChange={({ state }) => setState(state)}>
+            <Remirror manager={manager} state={state} onChange={handleChange}>
               <Editor state={state} manager={manager} />
             </Remirror>
           </div>

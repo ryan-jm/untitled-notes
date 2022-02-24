@@ -83,7 +83,7 @@ const Editor = ({ state, manager }: any) => {
 
   useEffect(() => {
     enforceTitle(state);
-  }, [state]);
+  }, [state, enforceTitle]);
 
   return (
     <>

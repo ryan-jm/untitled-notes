@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { collection, getDocsFromServer, query, where, orderBy, limit } from 'firebase/firestore';
-
 import {
+  Box,
+  Button,
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Button,
-  useDisclosure,
-  Box,
-  Text,
-  Input,
   Heading,
-  HStack,
+  Text,
+  useDisclosure,
 } from '@chakra-ui/react';
+import { collection, getDocsFromServer, limit, orderBy, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase/clientApp';
 
@@ -50,8 +48,7 @@ const NotesList = () => {
         });
       }
     }
-  }, []);
-  console.log('notes: ', notes);
+  }, [notes, router, user.uid, user?.accessToken]);
 
   return (
     <>
