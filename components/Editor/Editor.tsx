@@ -5,8 +5,10 @@ import { addDoc, collection, getDocsFromServer, limit, orderBy, query, Timestamp
 import React, { useEffect } from 'react';
 
 import { useAuth } from '../../contexts/AuthContext';
+import EditorProvider from '../../contexts/EditorContext';
 import { db } from '../../firebase/clientApp';
 import EditorButtons from './EditorButtons';
+import { TagPopupComponent } from './extensions';
 import HyperlinkToolbar from './HyperlinkToolbar';
 
 // FileSaver.js library
@@ -15,6 +17,10 @@ const Editor = ({ state, manager }: any) => {
   const { getJSON, getMarkdown } = useHelpers();
   const { setContent } = useRemirrorContext();
   const commands = useCommands();
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   const handleSave = () => {
     const collectionRef = collection(db, 'notes');
@@ -86,16 +92,16 @@ const Editor = ({ state, manager }: any) => {
   }, [state, enforceTitle]);
 
   return (
-    <>
-      <EditorButtons />
+    <EditorProvider toolbar={<EditorButtons />}>
       <EditorComponent />
       <HyperlinkToolbar />
+      <TagPopupComponent />
       <ButtonGroup isAttached size="sm">
         <Button onClick={handleSave}>Save</Button>
         <Button onClick={localSave}>Save Locally</Button>
         <Button onClick={loadNote}>Load Last Saved Note</Button>
       </ButtonGroup>
-    </>
+    </EditorProvider>
   );
 };
 
