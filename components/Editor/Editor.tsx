@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup } from '@chakra-ui/react';
 import { SuggestState } from '@remirror/pm/suggest';
 import { EditorComponent, useCommands, useHelpers, useRemirrorContext } from '@remirror/react';
 import { saveAs } from 'file-saver';
@@ -20,7 +20,7 @@ const Editor = ({ state }: any) => {
 
   const handleSave = () => {
     const content = getJSON(state);
-    
+
     const title = content.content.filter((node) => node.type === 'heading');
     if (!editing) {
       const newDocRef = doc(collection(db, 'notes'));
@@ -75,13 +75,20 @@ const Editor = ({ state }: any) => {
 
   return (
     <>
-      <EditorButtons />
+      <Box textAlign="center">
+        <EditorButtons />
+      </Box>
       <EditorComponent />
       <HyperlinkToolbar />
-      <ButtonGroup isAttached size="sm">
-        <Button onClick={handleSave}>Save</Button>
-        <Button onClick={localSave}>Save Locally</Button>
-      </ButtonGroup>
+      <Box mt="20px" textAlign="center">
+        <Button onClick={handleSave} size="sm" variant="toolbar">
+          Save
+        </Button>
+        &nbsp;
+        <Button onClick={localSave} size="sm" variant="toolbar">
+          Save Locally
+        </Button>
+      </Box>
     </>
   );
 };

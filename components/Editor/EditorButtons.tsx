@@ -4,8 +4,6 @@ import { Button, ButtonGroup, Menu, MenuButton, MenuList, MenuItem, Tooltip } fr
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
-import 'remirror/styles/all.css';
-
 const BoldButton = () => {
   const commands = useCommands();
 
@@ -98,24 +96,24 @@ const RedoButton = () => {
 const EditorButtons = () => {
   return (
     <>
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <BoldButton />
         <ItalicButton />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <HeadingButtons />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <BlockquoteButton />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <CodeButton />
       </ButtonGroup>
       &nbsp;
-      <ButtonGroup size="sm" isAttached variant="solid">
+      <ButtonGroup size="sm" isAttached variant="toolbar">
         <UndoButton />
         <RedoButton />
       </ButtonGroup>
