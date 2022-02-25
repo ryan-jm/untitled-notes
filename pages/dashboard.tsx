@@ -52,7 +52,7 @@ export default function Dashboard() {
       </Heading>
 
       <Flex wrap={'wrap'} justify={'center'}>
-        {notes.map((note) => {
+        {noteInfo.map((note) => {
           return <NoteCard key={note.title} note={note} />;
         })}
       </Flex>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-import { Box, Heading, Divider, useStyleConfig, IconButton } from '@chakra-ui/react';
+import { Box, Link, Heading, Divider, useStyleConfig, IconButton } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
 
@@ -10,10 +10,11 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNoteContext } from '../contexts/NoteContext';
 
 const NotesList = ({ forceLoad, createNew }: any) => {
-  const [displayName, setDisplayName] = useState('');
   const { notes, setEditing } = useNoteContext();
   const { user } = useAuth();
   const router = useRouter();
+
+  console.log('NOTES --->', notes);
 
   useEffect(() => {
     if (!user?.accessToken) {
@@ -28,27 +29,16 @@ const NotesList = ({ forceLoad, createNew }: any) => {
 
   function populateNotesList() {
     return notes
-      ? notes.map((note) => {
-          if (note.title) {
-            return (
-              <Box isTruncated pt="20px">
-                <Heading isTruncated fontSize="md" onClick={() => handleChange(note)}>
-                  {note.title}{' '}
-                  <IconButton aria-label="Create new note" icon={<AddIcon />} onClick={() => createNew()} />
-                  <Divider />
-                </Heading>
-              </Box>
-            );
-          } else {
-            return (
-              <Box isTruncated pt="20px">
-                <Heading isTruncated fontSize="md">
-                  Untitled
-                  <Divider />
-                </Heading>
-              </Box>
-            );
-          }
+      ? notes.reverse().map((note) => {
+          return (
+            <Box key={note.title} isTruncated pt="20px">
+              <Heading isTruncated fontSize="md">
+                <Link onClick={() => handleChange(note)}>{note.title}</Link>
+
+                <Divider />
+              </Heading>
+            </Box>
+          );
         })
       : undefined;
   }
@@ -63,7 +53,7 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     <NotesListBox isTruncated>
       <Box h="min-content" isTruncated pr="20px" mr="20px">
         <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
-          Your Latest Notes
+          Your Latest Notes <IconButton aria-label="Create new note" icon={<AddIcon />} onClick={() => createNew()} />
         </Heading>
         {populateNotesList()}
       </Box>
