@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 import NoteCard from '../components/NoteCard';
 
+import { useNoteContext } from '../contexts/NoteContext';
+
 const noteInfo = [
   {
     title: 'Note1 Title',
@@ -41,6 +43,7 @@ const noteInfo = [
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { notes } = useNoteContext();
 
   return (
     <>
@@ -49,7 +52,7 @@ export default function Dashboard() {
       </Heading>
 
       <Flex wrap={'wrap'} justify={'center'}>
-        {noteInfo.map((note) => {
+        {notes.map((note) => {
           return <NoteCard key={note.title} note={note} />;
         })}
       </Flex>

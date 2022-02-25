@@ -1,6 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { ReactSsrExtension } from '@remirror/extension-react-ssr';
 import { Remirror, useRemirror } from '@remirror/react';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import React from 'react';
 import {
   BlockquoteExtension,
@@ -15,13 +16,17 @@ import {
   MarkdownExtension,
   UnderlineExtension,
 } from 'remirror/extensions';
+import { collection, doc } from 'firebase/firestore';
 
 import Editor from '../components/Editor/Editor';
 import NotesList from '../components/NoteList';
 import NotesListDrawer from '../components/NoteListDrawer';
 import { HyperlinkExtension } from '../components/Editor/extensions';
+import { db, storage } from '../firebase/clientApp';
+import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
+  const { setEditing } = useNoteContext();
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
@@ -38,7 +43,50 @@ const Create = () => {
       new UnderlineExtension(),
       new ReactSsrExtension({}),
     ],
+    content: '<h1>Untitled...</h1>',
+    stringHandler: 'html',
   });
+
+  const forceLoad = (note) => {
+    const doc = {
+      type: 'doc',
+      content: note.content.content,
+    };
+    manager.view.updateState(manager.createState({ content: doc }));
+  };
+
+  const createNew = () => {
+    const newDocRef = doc(collection(db, 'notes'));
+    setEditing(() => null);
+    manager.view.updateState(manager.createState({ content: '<h1>Untitled</h1>', stringHandler: 'html' }));
+  };
+
+  const handleChange = (p) => {
+    for (let i = 0; i < p.state.doc.content.content.length; i++) {
+      const len = p.state.doc.content.content[i].content.content.length;
+      for (let j = 0; j < len; j++) {
+        if (p.state.doc.content.content[i].content.content[j].attrs.fileName) {
+          const file = p.state.doc.content.content[i].content.content[j].attrs;
+          changeHandler(file, i, j, p.state);
+        }
+      }
+    }
+    setState(p.state);
+  };
+
+  function changeHandler(file, i, j, state) {
+    if (!file) return;
+    const storageRef = ref(storage, `/files2/${file.fileName}`);
+    const uploadTask = uploadString(storageRef, file.src, 'data_url');
+
+    uploadTask.then((snapshot) => {
+      const newState = state;
+      getDownloadURL(snapshot.ref).then((url) => {
+        newState.doc.content.content[i].content.content[j].attrs.src = url;
+        setState(newState);
+      });
+    });
+  }
 
   return (
     <>
@@ -56,11 +104,11 @@ const Create = () => {
           overflow="hidden"
           isTruncated
         >
-          <NotesList />
+          <NotesList forceLoad={forceLoad} createNew={createNew} />
         </Box>
         <Box w="100%" ml="40px" mr="40px">
           <div className="remirror-theme">
-            <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
+            <Remirror manager={manager} state={state} onChange={handleChange}>
               <Editor state={state} manager={manager} />
             </Remirror>
           </div>
