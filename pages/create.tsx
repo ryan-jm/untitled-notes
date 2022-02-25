@@ -18,13 +18,16 @@ import {
   MarkdownExtension,
   UnderlineExtension,
 } from 'remirror/extensions';
+import { collection, doc } from 'firebase/firestore';
 
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension } from '../components/Editor/extensions';
 import NotesList from '../components/NoteList';
-import { storage } from '../firebase/clientApp';
+import { db, storage } from '../firebase/clientApp';
+import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
+  const { setEditing } = useNoteContext();
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
@@ -44,6 +47,20 @@ const Create = () => {
     content: '<h1>Untitled...</h1>',
     stringHandler: 'html',
   });
+
+  const forceLoad = (note) => {
+    const doc = {
+      type: 'doc',
+      content: note.content.content,
+    };
+    manager.view.updateState(manager.createState({ content: doc }));
+  };
+
+  const createNew = () => {
+    const newDocRef = doc(collection(db, 'notes'));
+    setEditing(() => null);
+    manager.view.updateState(manager.createState({ content: '<h1>Untitled</h1>', stringHandler: 'html' }));
+  };
 
   const handleChange = (p) => {
     for (let i = 0; i < p.state.doc.content.content.length; i++) {
@@ -76,7 +93,7 @@ const Create = () => {
     <Flex justifyContent="center" mt={2} width="100%">
       <Grid width="100%" templateColumns="10% 90%" mx="auto">
         <GridItem>
-          <NotesList />
+          <NotesList forceLoad={forceLoad} createNew={createNew} />
         </GridItem>
         <GridItem>
           <div className="remirror-theme">

@@ -8,20 +8,22 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  Flex,
   Heading,
   Text,
   useDisclosure,
+  IconButton,
 } from '@chakra-ui/react';
-import { collection, getDocsFromServer, limit, orderBy, query, where } from 'firebase/firestore';
+import { AddIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase/clientApp';
+import { useNoteContext } from '../contexts/NoteContext';
 
-const NotesList = () => {
+const NotesList = ({ forceLoad, createNew }: any) => {
   const [displayName, setDisplayName] = useState('');
-  const [notes, setNotes] = useState<any>(undefined);
+  const { notes, setEditing } = useNoteContext();
   const { user } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -30,25 +32,13 @@ const NotesList = () => {
   useEffect(() => {
     if (!user?.accessToken) {
       router.push('/auth');
-    } else {
-      if (!notes) {
-        const listUserNotes = query(
-          collection(db, 'notes'),
-          where('user', '==', user.uid),
-          orderBy('created_at', 'desc'),
-          limit(10)
-        );
-        getDocsFromServer(listUserNotes).then((data) => {
-          console.log('data : ', data);
-          const notesArr = [];
-          data.forEach((doc) => {
-            notesArr.push(doc.data());
-          });
-          setNotes(notesArr);
-        });
-      }
     }
-  }, [notes, router, user.uid, user?.accessToken]);
+  }, [notes, router, user?.uid, user?.accessToken]);
+
+  const handleChange = (note) => {
+    setEditing(() => note.noteId);
+    forceLoad(note);
+  };
 
   //drag and droping
 
@@ -91,8 +81,13 @@ const NotesList = () => {
             <DrawerBody>
               {notes
                 ? notes.map((note) => {
-                    if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
-                      return <p>{note.content.content[0].content[0].text}</p>;
+                    if (note.title) {
+                      return (
+                        <Text fontSize="sm" isTruncated onClick={() => handleChange(note)}>
+                          {note.title}
+                          <hr></hr>
+                        </Text>
+                      );
                     } else {
                       return 'untitled';
                     }
@@ -107,19 +102,22 @@ const NotesList = () => {
 
       <Box w="100%" h={80} borderWidth={1} borderRadius="lg" p="3" isTruncated>
         <div>
-          <Heading
-            fontWeight="bold"
-            textTransform="uppercase"
-            fontSize="md"
-            letterSpacing="wide"
-            color="teal.600"
-            pb={3}
-          >
-            Your notes
-          </Heading>
+          <Flex justify="space-between">
+            <Heading
+              fontWeight="bold"
+              textTransform="uppercase"
+              fontSize="md"
+              letterSpacing="wide"
+              color="teal.600"
+              pb={3}
+            >
+              Your notes
+            </Heading>
+            <IconButton aria-label="Create new note" icon={<AddIcon />} onClick={() => createNew()} />
+          </Flex>
           {notes
             ? notes.map((note) => {
-                if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
+                if (note.title) {
                   return (
                     <Text fontSize="sm">
                       {/*isTruncated */}
