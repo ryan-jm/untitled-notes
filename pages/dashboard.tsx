@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import { getDownloadURL } from 'firebase/storage';
-import Image from 'next/image';
 
 import File from '../components/File';
 import { storageRef } from '../firebase/clientApp';
@@ -23,7 +23,7 @@ export default function Dashboard() {
       <button id="but" onClick={() => download()}>
         Download
       </button>
-      <Image src="" id="image" />
+      <img src="" id="image" />
       <br />
     </h1>
   );
