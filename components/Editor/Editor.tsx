@@ -1,4 +1,5 @@
 import { Button, ButtonGroup } from '@chakra-ui/react';
+import { SuggestState } from '@remirror/pm/suggest';
 import { EditorComponent, useCommands, useHelpers, useRemirrorContext } from '@remirror/react';
 import { saveAs } from 'file-saver';
 import { doc, collection, Timestamp, updateDoc, setDoc } from 'firebase/firestore';
@@ -19,6 +20,7 @@ const Editor = ({ state }: any) => {
 
   const handleSave = () => {
     const content = getJSON(state);
+    
     const title = content.content.filter((node) => node.type === 'heading');
     if (!editing) {
       const newDocRef = doc(collection(db, 'notes'));
