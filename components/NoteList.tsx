@@ -50,6 +50,33 @@ const NotesList = () => {
     }
   }, [notes, router, user.uid, user?.accessToken]);
 
+//drag and droping
+
+function dragStart(event) {
+  console.log(event.target.id,"<><>");
+  alert("drag start")
+  // event.dataTransfer.setData("Text", event.target.id);
+}
+
+function dragging(event) {
+  // document.getElementById("demo").innerHTML = "The p element is being dragged";
+  // alert("Dragging")
+  console.log("dragging");
+}
+
+function allowDrop(event) {
+  event.preventDefault();
+  alert("allowdrop")
+}
+
+function drop(event) {
+  event.preventDefault();
+  var data = event.dataTransfer.getData("Text");
+  event.target.appendChild(document.getElementById(data));
+  document.getElementById("demo").innerHTML = "The p element was dropped";
+  alert("drop")
+}
+
   return (
     <>
       <>
@@ -94,8 +121,12 @@ const NotesList = () => {
             ? notes.map((note) => {
                 if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
                   return (
-                    <Text fontSize="sm" isTruncated>
-                      {note.content.content[0].content[0].text}
+                    <Text fontSize="sm" >{  /*isTruncated */}
+                 <div onDrop={drop} onDragOver={allowDrop}>
+                    <p onDragStart={dragStart} onDrag={dragging}  draggable="true">{note.content.content[0].content[0].text}</p>
+                  </div>
+
+                
                       <hr></hr>
                     </Text>
                   );
@@ -109,5 +140,6 @@ const NotesList = () => {
     </>
   );
 };
+
 
 export default NotesList;
