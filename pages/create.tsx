@@ -1,6 +1,4 @@
-import 'remirror/styles/all.css';
-
-import { Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { ReactSsrExtension } from '@remirror/extension-react-ssr';
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
@@ -21,8 +19,9 @@ import {
 import { collection, doc } from 'firebase/firestore';
 
 import Editor from '../components/Editor/Editor';
-import { HyperlinkExtension } from '../components/Editor/extensions';
 import NotesList from '../components/NoteList';
+import NotesListDrawer from '../components/NoteListDrawer';
+import { HyperlinkExtension } from '../components/Editor/extensions';
 import { db, storage } from '../firebase/clientApp';
 import { useNoteContext } from '../contexts/NoteContext';
 
@@ -90,20 +89,32 @@ const Create = () => {
   }
 
   return (
-    <Flex justifyContent="center" mt={2} width="100%">
-      <Grid width="100%" templateColumns="10% 90%" mx="auto">
-        <GridItem>
+    <>
+      <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
+        <NotesListDrawer />
+      </Box>
+      <Flex justify={'center'}>
+        <Box
+          w="250px"
+          minW="250px"
+          h="min-content"
+          ml={'40px'}
+          mt={'47px'}
+          display={{ base: 'none', md: 'flex' }}
+          overflow="hidden"
+          isTruncated
+        >
           <NotesList forceLoad={forceLoad} createNew={createNew} />
-        </GridItem>
-        <GridItem>
+        </Box>
+        <Box w="100%" ml="40px" mr="40px">
           <div className="remirror-theme">
             <Remirror manager={manager} state={state} onChange={handleChange}>
               <Editor state={state} manager={manager} />
             </Remirror>
           </div>
-        </GridItem>
-      </Grid>
-    </Flex>
+        </Box>
+      </Flex>
+    </>
   );
 };
 
