@@ -60,6 +60,19 @@ const Button = {
         boxShadow: '0',
       },
     }),
+    cardButtons: (props) => ({
+      color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
+      bg: props.colorMode === 'dark' ? 'gray.800' : 'gray.200',
+      border: 'none',
+      borderColor: 'iris.100',
+      borderRadius: '5px',
+      _hover: {
+        bg: mode(darken('gray.200', 10), whiten('gray.800', 10))(props),
+      },
+      _focus: {
+        boxShadow: '0',
+      },
+    }),
   },
   // The default `size` or `variant` values
   defaultProps: {

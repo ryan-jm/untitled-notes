@@ -20,7 +20,7 @@ const NotesList = () => {
           collection(db, 'notes'),
           where('user', '==', user.uid),
           orderBy('created_at', 'desc'),
-          limit(5)
+          limit(3)
         );
         getDocsFromServer(listUserNotes).then((data) => {
           console.log('data : ', data);
