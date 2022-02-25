@@ -1,14 +1,12 @@
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { collection, limit, orderBy, query, where } from 'firebase/firestore';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
-import { auth, db } from '../firebase/clientApp';
+import { auth } from '../firebase/clientApp';
 
 interface IAuthContext {
   user: any;
   login?: () => Promise<void>;
   logout?: () => void;
-  getNotes?: () => any[] | undefined;
 }
 
 const initialState = {
