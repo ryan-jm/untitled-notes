@@ -58,7 +58,7 @@ const Create = () => {
     setState(p.state);
   };
 
-  function changeHandler(file,i,j,state) {
+  function changeHandler(file, i, j, state) {
     if (!file) return;
     const storageRef = ref(storage, `/files2/${file.fileName}`);
     const uploadTask = uploadString(storageRef, file.src, 'data_url');
