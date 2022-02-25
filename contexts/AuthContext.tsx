@@ -27,8 +27,6 @@ const AuthProvider = ({ children }: any) => {
       const token = credential?.accessToken;
       const user = res.user;
       setUser(user);
-
-      console.log({ credential, token, user });
     } catch (err) {
       console.log(err);
     }
@@ -37,7 +35,6 @@ const AuthProvider = ({ children }: any) => {
   const logout = () => {
     auth.signOut();
     setUser(null);
-    console.log('Logged out.');
   };
 
   return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;

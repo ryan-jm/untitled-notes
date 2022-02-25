@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import { getDownloadURL } from 'firebase/storage';
-import Image from 'next/image';
 
 import File from '../components/File';
 import { storageRef } from '../firebase/clientApp';

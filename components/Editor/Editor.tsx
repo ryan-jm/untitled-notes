@@ -2,61 +2,46 @@ import { Button, ButtonGroup } from '@chakra-ui/react';
 import { SuggestState } from '@remirror/pm/suggest';
 import { EditorComponent, useCommands, useHelpers, useRemirrorContext } from '@remirror/react';
 import { saveAs } from 'file-saver';
-import { addDoc, collection, getDocsFromServer, limit, orderBy, query, Timestamp, where } from 'firebase/firestore';
+import { doc, collection, Timestamp, updateDoc, setDoc } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 
 import { useAuth } from '../../contexts/AuthContext';
+import { useNoteContext } from '../../contexts/NoteContext';
 import { db } from '../../firebase/clientApp';
 import EditorButtons from './EditorButtons';
 import HyperlinkToolbar from './HyperlinkToolbar';
 
-// FileSaver.js library
-const Editor = ({ state, manager }: any) => {
+const Editor = ({ state }: any) => {
   const { user } = useAuth();
+  const { editing } = useNoteContext();
   const { getJSON, getMarkdown } = useHelpers();
   const { setContent } = useRemirrorContext();
   const commands = useCommands();
 
   const handleSave = () => {
-    const collectionRef = collection(db, 'notes');
     const content = getJSON(state);
-    const title = content.content[0].text;
-    const dbEntry = {
-      created_at: Timestamp.fromDate(new Date(Date.now())),
-      // title,
-      content,
-      user: user.uid,
-    };
-    const doc = {
-      type: 'doc',
-    };
-    addDoc(collectionRef, dbEntry).then(() => {});
-    manager.view.updateState(manager.createState({ content: doc }));
-  };
-
-  const loadNote = async () => {
-    // Currently loads the most recent note, but queries will remain useful for loading a list of all user-added notes.
-    const totalNotes = [];
-    const loadQuery = query(collection(db, 'notes'), where('user', '==', user.uid));
-    const noteSnapshot = await getDocsFromServer(loadQuery);
-
-    // queries the db for the last created note, based on created_at timestamp.
-    const lastNoteQuery = query(
-      collection(db, 'notes'),
-      where('user', '==', user.uid),
-      orderBy('created_at', 'desc'),
-      limit(1)
-    );
-    const getLastNote = await getDocsFromServer(lastNoteQuery);
-    const lastNote = getLastNote.docs[0].data();
-
-    noteSnapshot.forEach((doc) => totalNotes.unshift(doc.data()));
-    const doc = {
-      type: 'doc',
-      content: lastNote.content.content,
-    };
-
-    manager.view.updateState(manager.createState({ content: doc }));
+    
+    const title = content.content.filter((node) => node.type === 'heading');
+    if (!editing) {
+      const newDocRef = doc(collection(db, 'notes'));
+      const dbEntry = {
+        created_at: Timestamp.fromDate(new Date(Date.now())),
+        content,
+        title: title[0].content[0].text,
+        user: user.uid,
+        noteId: newDocRef.id,
+      };
+      setDoc(newDocRef, dbEntry);
+    } else if (editing) {
+      console.log(editing);
+      const noteRef = doc(db, 'notes', editing);
+      const dbUpdate = {
+        content,
+        title: title[0].content[0].text,
+        noteId: editing,
+      };
+      updateDoc(noteRef, dbUpdate);
+    }
   };
 
   const localSave = () => {
@@ -67,7 +52,8 @@ const Editor = ({ state, manager }: any) => {
     saveAs(blob, 'UntitledNote.md');
   };
 
-  const enforceTitle = (state) => {
+  useEffect(() => {
+    // Enforce Title
     let checkState = state;
     const firstNode = checkState?.doc?.content?.content[0];
     const titleEmpty = checkState?.doc?.content?.content.length > 1 && firstNode?.content?.size === 0;
@@ -84,11 +70,8 @@ const Editor = ({ state, manager }: any) => {
       nodeSchema.content[0].type = 'heading';
       setContent(nodeSchema);
     }
-  };
-
-  useEffect(() => {
-    enforceTitle(state);
-  }, [state, enforceTitle]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   return (
     <>
@@ -98,7 +81,6 @@ const Editor = ({ state, manager }: any) => {
       <ButtonGroup isAttached size="sm">
         <Button onClick={handleSave}>Save</Button>
         <Button onClick={localSave}>Save Locally</Button>
-        <Button onClick={loadNote}>Load Last Saved Note</Button>
       </ButtonGroup>
     </>
   );
