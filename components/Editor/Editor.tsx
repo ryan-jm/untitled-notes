@@ -1,4 +1,5 @@
 import { Button, ButtonGroup } from '@chakra-ui/react';
+import { SuggestState } from '@remirror/pm/suggest';
 import { EditorComponent, useCommands, useHelpers, useRemirrorContext } from '@remirror/react';
 import { saveAs } from 'file-saver';
 import { addDoc, collection, getDocsFromServer, limit, orderBy, query, Timestamp, where } from 'firebase/firestore';
@@ -22,11 +23,15 @@ const Editor = ({ state, manager }: any) => {
     const title = content.content[0].text;
     const dbEntry = {
       created_at: Timestamp.fromDate(new Date(Date.now())),
-      title,
+      // title,
       content,
       user: user.uid,
     };
-    addDoc(collectionRef, dbEntry);
+    const doc = {
+      type: 'doc',
+    };
+    addDoc(collectionRef, dbEntry).then(() => {});
+    manager.view.updateState(manager.createState({ content: doc }));
   };
 
   const loadNote = async () => {
