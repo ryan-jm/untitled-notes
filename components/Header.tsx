@@ -30,6 +30,7 @@ import DarkModeSwitch from './DarkModeSwitch';
 
 import Illustration from './svgs/illustration';
 import GoogleLogo from './svgs/google-svgrepo-com';
+import GitHubLogo from './svgs/github';
 
 const Header = () => {
   const { user, login, logout } = useAuth();
@@ -38,8 +39,8 @@ const Header = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSignIn = () => {
-    login().then(() => {
+  const handleSignIn = (type = undefined) => {
+    login(type).then(() => {
       router.push('/create');
       onClose();
     });
@@ -101,6 +102,14 @@ const Header = () => {
                         variant={'primary'}
                         aria-label="Google Login"
                         icon={<GoogleLogo />}
+                      />
+
+                      <IconButton
+                        size="lg"
+                        onClick={() => handleSignIn('Github')}
+                        variant={'primary'}
+                        aria-label="Github Login"
+                        icon={<GitHubLogo />}
                       />
                     </Box>
                   </Flex>
