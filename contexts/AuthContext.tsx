@@ -58,8 +58,10 @@ const AuthProvider = ({ children }: any) => {
   };
 
   const logout = () => {
-    auth.signOut();
-    setUser(null);
+    auth
+      .signOut()
+      .then(() => setUser(null))
+      .then(() => window.location.reload());
   };
 
   return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
