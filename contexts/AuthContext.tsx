@@ -1,11 +1,4 @@
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  setPersistence,
-  browserLocalPersistence,
-  signInWithCredential,
-  getRedirectResult,
-} from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { auth } from '../firebase/clientApp';
