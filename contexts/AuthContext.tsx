@@ -1,5 +1,12 @@
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { createContext, useContext, useState } from 'react';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
+  signInWithCredential,
+  getRedirectResult,
+} from 'firebase/auth';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { auth } from '../firebase/clientApp';
 
@@ -14,17 +21,21 @@ const initialState = {
 };
 
 const provider = new GoogleAuthProvider();
-
 const UserContext = createContext<IAuthContext>(initialState);
 
 const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>(null);
 
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      setUser(() => user);
+    }
+  });
+
   const login = async () => {
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const res = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(res);
-      const token = credential?.accessToken;
       const user = res.user;
       setUser(user);
     } catch (err) {
