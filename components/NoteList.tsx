@@ -1,13 +1,32 @@
 import React, { useEffect } from 'react';
+import {
+  Box,
+  Link,
+  Heading,
+  Divider,
+  useStyleConfig,
+  IconButton,
+  useDisclosure,
+  Circle,
+  HStack,
+  Square,
+  Fade,
+  ScaleFade,
+  Slide,
+  SlideFade,
+  Button,
+} from '@chakra-ui/react';
 
-import { Box, Link, Heading, Divider, useStyleConfig, IconButton } from '@chakra-ui/react';
-
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, DeleteIcon, PhoneIcon } from '@chakra-ui/icons';
 
 import { useRouter } from 'next/router';
 
+import { deleteDoc, doc } from 'firebase/firestore';
+import { log } from 'console';
 import { useAuth } from '../contexts/AuthContext';
 import { useNoteContext } from '../contexts/NoteContext';
+import { db } from '../firebase/clientApp';
+import NoteEntry from './NoteEntry';
 
 const NotesList = ({ forceLoad, createNew }: any) => {
   const { notes, setEditing } = useNoteContext();
@@ -27,42 +46,27 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     forceLoad(note);
   };
 
-  function dragStart(event) {
-    console.log(event.target.id, '<><>');
-    alert('drag start');
-    // event.dataTransfer.setData("Text", event.target.id);
-  }
-
-  function dragging(event) {
-    // document.getElementById("demo").innerHTML = "The p element is being dragged";
-    // alert("Dragging")
-    alert('dragging');
-  }
-
-  function allowDrop(event) {
-    event.preventDefault();
-    alert('allowdrop');
-  }
-
-  function drop(event) {
-    event.preventDefault();
-    var data = event.dataTransfer.getData('Text');
-    event.target.appendChild(document.getElementById(data));
-    document.getElementById('demo').innerHTML = 'The p element was dropped';
-    alert('drop');
+  function deleteNote(id) {
+    const deleteDocument = doc(db, 'notes', id);
+    deleteDoc(deleteDocument);
   }
 
   function populateNotesList() {
+   
     return notes
       ? notes.reverse().map((note) => {
           return (
-            <Box key={note.title} isTruncated pt="20px">
-              <Heading isTruncated fontSize="md">
-                <Link onClick={() => handleChange(note)}>{note.title}</Link>
-
-                <Divider />
-              </Heading>
-            </Box>
+            //Real
+            // <Box key={note.title} isTruncated pt="20px">
+            //   <Heading isTruncated fontSize="md">
+            //     <Link onClick={() => handleChange(note)}><p draggable="true" >{note.title}</p></Link>
+            //     <div className='droptarget' onDrop={drop} onDragOver={allowDrop}></div>
+            //      <Divider />
+            //   </Heading>
+            // </Box>
+            <div key={note.noteId}>
+              <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
+            </div>
           );
         })
       : undefined;
@@ -87,3 +91,37 @@ const NotesList = ({ forceLoad, createNew }: any) => {
 };
 
 export default NotesList;
+{
+  /* <Flex align="center" justify='space-between'>
+      <Button onClick={onToggle}>Click Me</Button>
+      <SlideFade in={isOpen} offsetX='10%' >
+        <Box
+          p='40px'
+          color='white'
+          mt='4'
+          bg='teal.500'
+          rounded='md'
+          shadow='md'
+          
+        >
+hello
+        </Box>
+      </SlideFade>
+    </Flex> */
+}
+
+//box for delete
+// <Box
+// p='5px'
+// color='white'
+// mt='2'
+// bg ='purple.200'
+// rounded='md'
+// shadow='md'
+// >
+// <HStack>
+// <Circle size='40px' bg='red.300' color='white'>
+// <DeleteIcon onClick={() => deleteNote(note.noteId)}/>
+// </Circle>
+// </HStack>
+// </Box>
