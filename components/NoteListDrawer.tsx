@@ -26,25 +26,21 @@ const NotesList = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!user?.accessToken) {
-      router.push('/auth');
-    } else {
-      if (!notes) {
-        const listUserNotes = query(
-          collection(db, 'notes'),
-          where('user', '==', user.uid),
-          orderBy('created_at', 'desc'),
-          limit(5)
-        );
-        getDocsFromServer(listUserNotes).then((data) => {
-          console.log('data : ', data);
-          const notesArr = [];
-          data.forEach((doc) => {
-            notesArr.push(doc.data());
-          });
-          setNotes(notesArr);
+    if (!notes) {
+      const listUserNotes = query(
+        collection(db, 'notes'),
+        where('user', '==', user.uid),
+        orderBy('created_at', 'desc'),
+        limit(5)
+      );
+      getDocsFromServer(listUserNotes).then((data) => {
+        console.log('data : ', data);
+        const notesArr = [];
+        data.forEach((doc) => {
+          notesArr.push(doc.data());
         });
-      }
+        setNotes(notesArr);
+      });
     }
   }, []);
 
