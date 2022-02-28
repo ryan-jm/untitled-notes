@@ -145,12 +145,12 @@ export default function NoteCard({ note }) {
                     <PopoverArrow />
                     <Box textAlign={'center'}>
                       <PopoverBody>
-                        {note.tags ? (
+                        {note.tags.length ? (
                           note.tags.map((tag, index) => {
-                            return <Link key={index}>{tag}&nbsp;</Link>;
+                            return <Link key={index}>{tag.label}&nbsp;</Link>;
                           })
                         ) : (
-                          <p>Tags</p>
+                          <p>None</p>
                         )}
                       </PopoverBody>
                     </Box>
@@ -159,13 +159,7 @@ export default function NoteCard({ note }) {
               </Flex>
 
               <Flex noOfLines={1}>
-                {note.tags ? (
-                  note.tags.map((tag, index) => {
-                    return <Link key={index}>{tag}&nbsp;</Link>;
-                  })
-                ) : (
-                  <p>Tags</p>
-                )}
+                <p>Tags</p>
               </Flex>
             </HStack>
 
