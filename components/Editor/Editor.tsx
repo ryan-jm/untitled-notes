@@ -14,36 +14,34 @@ import HyperlinkToolbar from './HyperlinkToolbar';
 
 const Editor = ({ state }: any) => {
   const { user } = useAuth();
-  const { editing } = useNoteContext();
+  const { editing, checkForTags, currentNote } = useNoteContext();
   const { getJSON, getMarkdown } = useHelpers();
   const { setContent } = useRemirrorContext();
   const commands = useCommands();
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
   const handleSave = () => {
     const content = getJSON(state);
+    const title = content.content.filter((node) => node.type === 'heading')[0];
+    const tags = checkForTags(state.doc, true);
 
-    const title = content.content.filter((node) => node.type === 'heading');
     if (!editing) {
       const newDocRef = doc(collection(db, 'notes'));
       const dbEntry = {
         created_at: Timestamp.fromDate(new Date(Date.now())),
         content,
-        title: title[0].content[0].text,
+        title: title.content[0].text,
         user: user.uid,
         noteId: newDocRef.id,
+        tags,
       };
       setDoc(newDocRef, dbEntry);
     } else if (editing) {
-      console.log(editing);
       const noteRef = doc(db, 'notes', editing);
       const dbUpdate = {
         content,
-        title: title[0].content[0].text,
+        title: title.content[0].text,
         noteId: editing,
+        tags,
       };
       updateDoc(noteRef, dbUpdate);
     }
@@ -51,8 +49,6 @@ const Editor = ({ state }: any) => {
 
   const localSave = () => {
     const inputState = getMarkdown(state);
-    console.log(inputState);
-
     const blob = new Blob([inputState], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, 'UntitledNote.md');
   };
