@@ -1,116 +1,172 @@
-import { useRouter } from 'next/router';
 import {
-  Box,
-  Flex,
   Avatar,
-  HStack,
-  Link,
-  IconButton,
   Button,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Link,
   Menu,
   MenuButton,
-  MenuList,
+  MenuGroup,
   MenuItem,
-  MenuDivider,
+  MenuList,
   useDisclosure,
-  useColorModeValue,
-  Stack,
-  DarkMode,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  IconButton,
+  Box,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
-import { ReactNode } from 'react';
+import { ChevronRightIcon, EditIcon } from '@chakra-ui/icons';
+
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeSwitch from './DarkModeSwitch';
 
-const Links = [
-  { name: 'Home', url: '/' },
-  { name: 'Create New', url: '/create' },
-  { name: 'Dashboard', url: '/dashboard' },
-];
-
-const NavLink = ({ children }: { children: ReactNode }) => (
-  <Link
-    px={2}
-    py={1}
-    rounded={'md'}
-    _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-  >
-    {children}
-  </Link>
-);
+import Illustration from './svgs/illustration';
+import GoogleLogo from './svgs/google-svgrepo-com';
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const { user, login, logout } = useAuth();
   const router = useRouter();
+  const { asPath } = useRouter();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  function goToAuth() {
-    if (!user?.accessToken) router.push('/auth');
-    else logout();
-  }
+  const handleSignIn = () => {
+    login().then(() => {
+      router.push('/create');
+      onClose();
+    });
+  };
 
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <IconButton
-            size={'md'}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
-            onClick={isOpen ? onClose : onOpen}
-          />
-          <HStack spacing={8} alignItems={'center'}>
-            <Box>
-              <h2>Untitled Notes</h2>
-            </Box>
-            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
-              {Links.map((link) => (
-                <NavLink key={link.name}>
-                  <NextLink href={link.url} passHref>
-                    <Link>{link.name}</Link>
-                  </NextLink>
-                </NavLink>
-              ))}
-            </HStack>
-          </HStack>
-          <Flex alignItems={'center'}>
-            <DarkModeSwitch />
-            <Button onClick={goToAuth} variant={'solid'} colorScheme={'teal'} size={'sm'} mr={4} leftIcon={<AddIcon />}>
-              {!user?.accessToken ? 'Login' : 'Logout'}
-            </Button>
-            <Menu>
-              <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0}>
-                <Avatar size={'sm'} src={user?.photoURL} />
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
-                <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
-        </Flex>
+      <Grid templateColumns={'repeat(3, 1fr)'} p={{ base: '20px', md: '40px' }}>
+        <GridItem>
+          <Heading color="text">
+            <NextLink href={'/'} passHref>
+              <Link>
+                <Heading fontSize={{ base: '16px', md: '40px' }}>
+                  <span id="untitled">Untitled Notes</span>
+                </Heading>
+              </Link>
+            </NextLink>
+          </Heading>
+        </GridItem>
 
-        {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link.name}>
-                  <NextLink href={link.url} passHref>
-                    <Link>{link.name}</Link>
-                  </NextLink>
-                </NavLink>
-              ))}
-            </Stack>
-          </Box>
-        ) : null}
-      </Box>
+        <GridItem textAlign={'center'}>
+          {/* Auth Modal, ternary logic to only show button when not logged in */}
+          {!user?.accessToken ? (
+            <Button onClick={onOpen} variant={'primary'} size="md" mr="10px" leftIcon={<ChevronRightIcon />}>
+              Get Started
+            </Button>
+          ) : (
+            ''
+          )}
+
+          <Modal size={'3xl'} isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay backdropFilter="auto" backdropInvert="20%" backdropBlur="5px" />
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                <Flex>
+                  <Flex display={{ base: 'none', md: 'flex' }} p="0">
+                    <Illustration w="400px" h="400px" p="0" />
+                  </Flex>
+                  <Flex textAlign="left" mt="50px" direction={'column'}>
+                    <Heading mb="4px" size={'md'}>
+                      Create Account Or Sign In
+                    </Heading>
+                    <Heading size={'xs'} color="gray.400">
+                      Expand on your thoughts today.
+                    </Heading>
+                    <br />
+                    <br />
+
+                    <Heading mb="4px" size={'xs'} color="gray.400">
+                      Continue with...
+                    </Heading>
+                    <Box pb="50px">
+                      <IconButton
+                        size="lg"
+                        onClick={() => handleSignIn()}
+                        variant={'primary'}
+                        aria-label="Google Login"
+                        icon={<GoogleLogo />}
+                      />
+                    </Box>
+                  </Flex>
+                </Flex>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+          {/* End Auth Modal */}
+
+          {/* Nested ternary logic to only display when user is logged in, also display different center buttons depending on page */}
+          {user?.accessToken ? (
+            asPath === '/create' ? (
+              <NextLink href={'/dashboard'} passHref>
+                <Link>
+                  <Button variant="primary" size="md" leftIcon={<EditIcon />}>
+                    Dashboard
+                  </Button>
+                </Link>
+              </NextLink>
+            ) : (
+              <NextLink href={'/create'} passHref>
+                <Link>
+                  <Button variant="primary" size="md" leftIcon={<EditIcon />}>
+                    Create
+                  </Button>
+                </Link>
+              </NextLink>
+            )
+          ) : (
+            ''
+          )}
+          {/* End center buttons */}
+        </GridItem>
+
+        <GridItem>
+          <Flex direction={'row'} justify={'end'}>
+            {/* Ternary logic to display avatar only when user is logged in */}
+            {user?.accessToken ? (
+              <>
+                <Menu>
+                  <MenuButton ml="10px" mr="10px" as={Button} rounded={'full'} variant={'avatar'}>
+                    <Avatar size={'sm'} src={user?.photoURL} />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuGroup title={user?.displayName}>
+                      <MenuItem
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => {
+                          logout();
+                          router.push('/');
+                        }}
+                      >
+                        <ChevronRightIcon />
+                        Logout
+                      </MenuItem>
+                    </MenuGroup>
+                  </MenuList>
+                </Menu>
+              </>
+            ) : (
+              ''
+            )}
+            {/* End avatar section */}
+
+            <DarkModeSwitch />
+          </Flex>
+        </GridItem>
+      </Grid>
     </>
   );
 };

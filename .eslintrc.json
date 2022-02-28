@@ -5,6 +5,12 @@
   "extends": ["airbnb-base", "plugin:prettier/recommended", "next/core-web-vitals"],
   "plugins": ["prettier"],
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     // disable es6 rules -- start
     "arrow-body-style": "off",
     "arrow-parens": "off",

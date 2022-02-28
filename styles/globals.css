@@ -1,7 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Prompt:wght@500&display=swap');
+
 html,
 body {
   padding: 0;
   margin: 0;
+  height: 100%;
+  width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif;
+}
+
+#untitled:hover {
+  background: rgb(120, 121, 241);
+  background: linear-gradient(10deg, rgba(120, 121, 241, 1) 0%, rgba(241, 120, 182, 1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient {
+  font-size: 120%;
+  background: rgb(120, 121, 241);
+  background: linear-gradient(200deg, rgba(120, 121, 241, 1) 0%, rgba(241, 120, 182, 1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.remirror-theme * {
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
