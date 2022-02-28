@@ -27,7 +27,7 @@ const NotesList = () => {
 
   useEffect(() => {
     if (!user?.accessToken) {
-      router.push('/auth');
+      router.push('/');
     } else {
       if (!notes) {
         const listUserNotes = query(
