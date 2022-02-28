@@ -37,8 +37,9 @@ const AuthProvider = ({ children }: any) => {
   };
 
   const logout = () => {
-    auth.signOut();
-    setUser(null);
+    auth.signOut().then(() => {
+      setUser(() => null);
+    });
   };
 
   return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
