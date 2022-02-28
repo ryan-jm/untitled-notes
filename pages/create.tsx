@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { ReactSsrExtension } from '@remirror/extension-react-ssr';
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -17,6 +17,7 @@ import {
   UnderlineExtension,
 } from 'remirror/extensions';
 import { collection, doc } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 
 import Editor from '../components/Editor/Editor';
 import NotesList from '../components/NoteList';
@@ -46,6 +47,15 @@ const Create = () => {
     content: '<h1>Untitled...</h1>',
     stringHandler: 'html',
   });
+  const { notes } = useNoteContext();
+  const router = useRouter();
+  const noteQuery = router.query.noteId;
+  const filtredNotes = notes.filter((note) => note.noteId === noteQuery);
+  console.log('>>>>>filtred', filtredNotes);
+  // console.log('router>>>>', router.query);
+  useEffect(() => {
+    noteQuery ? forceLoad(filtredNotes[0]) : '';
+  }, []);
 
   const forceLoad = (note) => {
     const doc = {

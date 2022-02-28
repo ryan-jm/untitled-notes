@@ -16,18 +16,26 @@ import {
   PopoverContent,
   PopoverBody,
   PopoverArrow,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button,
 } from '@chakra-ui/react';
 
 import { EditIcon, DeleteIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import { deleteDoc, doc } from 'firebase/firestore';
+import { useState, useRef } from 'react';
 import { db } from '../firebase/clientApp';
 
 export default function NoteCard({ note }) {
-  // const note = note;
-  // console.log('note>>>>>', note.noteId);
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = useRef();
 
-  // const { title, content, created_at, tags } = note.note;
   const router = useRouter();
   const dateTime = new Date(note.created_at.seconds * 1000).toLocaleString('en-GB', { timeZone: 'UTC' });
 
@@ -36,17 +44,13 @@ export default function NoteCard({ note }) {
   nodeContent.shift();
 
   const getNoteBody = nodeContent.map((elem, index) => {
-    console.log('element>>>>');
-
-    // return <p>{elem.content[0].text}</p>;
+    return elem.content && elem.content[0] ? <p>{elem.content[0].text}</p> : '';
   });
   const deleteNote = (id) => {
     const collectionById = doc(db, 'notes', id);
-    deleteDoc(collectionById).then(() => {
-      console.log('id>>>>', id);
-      window.location.reload();
-    });
+    deleteDoc(collectionById);
   };
+  //
 
   return (
     <Center p={6}>
@@ -55,7 +59,7 @@ export default function NoteCard({ note }) {
         w={'270px'}
         h={'350px'}
         bg={useColorModeValue('white', 'gray.800')}
-        boxShadow={'5px 5px 10px #7879F1'}
+        boxShadow={'5px 8px 12px #7879F1'}
         rounded={'md'}
         overflow={'hidden'}
       >
@@ -64,8 +68,9 @@ export default function NoteCard({ note }) {
             <Box p="" position="absolute" left="15px" top="15px">
               <IconButton
                 size="sm"
-                variant={'cardButtons'}
-                icon={<EditIcon onClick={() => router.push('/create')} />}
+                aria-label="Edit note"
+                variant={'cardEditButton'}
+                icon={<EditIcon onClick={() => router.push(`/create?noteId=${note.noteId}`)} />}
               />
             </Box>
             <br />
@@ -73,13 +78,50 @@ export default function NoteCard({ note }) {
             <Box p="" position="absolute" right="15px" top="15px">
               <IconButton
                 size="sm"
-                variant={'cardButtons'}
-                icon={<DeleteIcon onClick={() => deleteNote(note.noteId)} />}
+                aria-label="Delete note"
+                variant={'cardDeleteButton'}
+                icon={<DeleteIcon />}
+                onClick={() => setIsOpen(true)}
               />
             </Box>
+            <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+              <AlertDialogOverlay>
+                <AlertDialogContent>
+                  <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                    Delete Note
+                  </AlertDialogHeader>
 
-            <Stack spacing={0} align={'center'} mb={5}>
-              <Heading mt="20px" pb="15px" fontSize={'2xl'}>
+                  <AlertDialogBody>Are you sure? You can not undo this action afterwards.</AlertDialogBody>
+
+                  <AlertDialogFooter>
+                    <Button ref={cancelRef} onClick={onClose}>
+                      Cancel
+                    </Button>
+                    <Button
+                      variant={'cardDeletePopUpButton'}
+                      ml={3}
+                      onClick={() => {
+                        onClose();
+                        deleteNote(note.noteId);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialogOverlay>
+            </AlertDialog>
+
+            <Stack
+              spacing={0}
+              align={'center'}
+              mb={5}
+              overflow="hidden"
+              whiteSpace={'nowrap'}
+              width="200px"
+              noOfLines={1}
+            >
+              <Heading mt="20px" pb="15px" fontSize={'2xl'} isTruncated>
                 {note.title}
               </Heading>
             </Stack>
@@ -96,7 +138,7 @@ export default function NoteCard({ note }) {
               <Flex>
                 <Popover>
                   <PopoverTrigger>
-                    <IconButton aria-label={'stuff'} size="xs" variant={'cardButtons'} icon={<ChevronDownIcon />} />
+                    <IconButton aria-label={'stuff'} size="xs" variant={'cardTagsButton'} icon={<ChevronDownIcon />} />
                   </PopoverTrigger>
 
                   <PopoverContent w="250px">
