@@ -2,7 +2,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import { ReactSsrExtension } from '@remirror/extension-react-ssr';
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -16,17 +16,18 @@ import {
   MarkdownExtension,
   UnderlineExtension,
 } from 'remirror/extensions';
-import { collection, doc } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 
 import Editor from '../components/Editor/Editor';
 import NotesList from '../components/NoteList';
 import NotesListDrawer from '../components/NoteListDrawer';
 import { HyperlinkExtension } from '../components/Editor/extensions';
-import { db, storage } from '../firebase/clientApp';
+import { storage } from '../firebase/clientApp';
 import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
-  const { setEditing } = useNoteContext();
+  const { notes, setEditing } = useNoteContext();
+
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
@@ -47,7 +48,25 @@ const Create = () => {
     stringHandler: 'html',
   });
 
+  const router = useRouter();
+
+  const noteQuery = router.query.noteId;
+
+  const filtredNotes = notes.filter((note) => note.noteId === noteQuery);
+
+  const [note, setNote] = useState<any>();
+
+  useEffect(() => {
+    setNote(() => filtredNotes[0]);
+
+    if (noteQuery && note) {
+      setEditing(() => note.noteId);
+      forceLoad(note);
+    }
+  }, [note]);
+
   const forceLoad = (note) => {
+    console.log('forceLoaded');
     const doc = {
       type: 'doc',
       content: note.content.content,
@@ -56,7 +75,6 @@ const Create = () => {
   };
 
   const createNew = () => {
-    const newDocRef = doc(collection(db, 'notes'));
     setEditing(() => null);
     manager.view.updateState(manager.createState({ content: '<h1>Untitled</h1>', stringHandler: 'html' }));
   };
@@ -76,12 +94,14 @@ const Create = () => {
 
   function changeHandler(file, i, j, state) {
     if (!file) return;
-    const storageRef = ref(storage, `/files2/${file.fileName}`);
+    const storageRef = ref(storage, `${file.fileName}`);
     const uploadTask = uploadString(storageRef, file.src, 'data_url');
 
     uploadTask.then((snapshot) => {
       const newState = state;
       getDownloadURL(snapshot.ref).then((url) => {
+        console.log('url>>>');
+
         newState.doc.content.content[i].content.content[j].attrs.src = url;
         setState(newState);
       });

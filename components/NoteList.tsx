@@ -1,16 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Box, Link, Heading, Divider, useStyleConfig, IconButton } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
 
-import { useRouter } from 'next/router';
-
-import { useAuth } from '../contexts/AuthContext';
 import { useNoteContext } from '../contexts/NoteContext';
 
 const NotesList = ({ forceLoad, createNew }: any) => {
   const { notes, setEditing } = useNoteContext();
+
   const { user } = useAuth();
   const router = useRouter();
 
@@ -20,18 +18,23 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     }
   }, [notes, router, user?.uid, user?.accessToken]);
 
+
   const handleChange = (note) => {
+    console.log('noteList', note);
+
     setEditing(() => note.noteId);
     forceLoad(note);
   };
 
   function populateNotesList() {
     return notes
-      ? notes.reverse().map((note) => {
+      ? notes.reverse().map((note, index) => {
           return (
-            <Box key={note.title} isTruncated pt="20px">
+            <Box key={index} isTruncated pt="20px">
               <Heading isTruncated fontSize="md">
-                <Link onClick={() => handleChange(note)}>{note.title}</Link>
+                <Link key={note.noteId} onClick={() => handleChange(note)}>
+                  {note.title}
+                </Link>
 
                 <Divider />
               </Heading>
