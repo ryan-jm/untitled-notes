@@ -9,16 +9,6 @@ import { useNoteContext } from '../contexts/NoteContext';
 const NotesList = ({ forceLoad, createNew }: any) => {
   const { notes, setEditing } = useNoteContext();
 
-  const { user } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user?.accessToken) {
-      router.push('/');
-    }
-  }, [notes, router, user?.uid, user?.accessToken]);
-
-
   const handleChange = (note) => {
     console.log('noteList', note);
 
