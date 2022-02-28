@@ -1,8 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
-import { ReactSsrExtension } from '@remirror/extension-react-ssr';
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -19,9 +18,9 @@ import {
 import { useRouter } from 'next/router';
 
 import Editor from '../components/Editor/Editor';
+import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
 import NotesList from '../components/NoteList';
 import NotesListDrawer from '../components/NoteListDrawer';
-import { HyperlinkExtension } from '../components/Editor/extensions';
 import { storage } from '../firebase/clientApp';
 import { useNoteContext } from '../contexts/NoteContext';
 
@@ -41,8 +40,8 @@ const Create = () => {
       new CalloutExtension({ defaultType: 'warn' }),
       new ListItemExtension({ enableCollapsible: true }),
       HyperlinkExtension(),
+      TagExtension(),
       new UnderlineExtension(),
-      new ReactSsrExtension({}),
     ],
     content: '<h1>Untitled...</h1>',
     stringHandler: 'html',
@@ -52,27 +51,30 @@ const Create = () => {
 
   const noteQuery = router.query.noteId;
 
-  const filtredNotes = notes.filter((note) => note.noteId === noteQuery);
+  const filteredNotes = notes.filter((note) => note.noteId === noteQuery);
 
   const [note, setNote] = useState<any>();
 
+  const forceLoad = useCallback(
+    (note) => {
+      console.log('forceLoaded');
+      const doc = {
+        type: 'doc',
+        content: note.content.content,
+      };
+      manager.view.updateState(manager.createState({ content: doc }));
+    },
+    [manager]
+  );
+
   useEffect(() => {
-    setNote(() => filtredNotes[0]);
+    setNote(() => filteredNotes[0]);
 
     if (noteQuery && note) {
       setEditing(() => note.noteId);
       forceLoad(note);
     }
-  }, [note]);
-
-  const forceLoad = (note) => {
-    console.log('forceLoaded');
-    const doc = {
-      type: 'doc',
-      content: note.content.content,
-    };
-    manager.view.updateState(manager.createState({ content: doc }));
-  };
+  }, [filteredNotes, forceLoad, note, noteQuery, setEditing]);
 
   const createNew = () => {
     setEditing(() => null);
@@ -115,8 +117,8 @@ const Create = () => {
       </Box>
       <Flex justify={'center'}>
         <Box
-          w="250px"
-          minW="250px"
+          w="280px"
+          minW="280px"
           h="min-content"
           ml={'40px'}
           mt={'47px'}

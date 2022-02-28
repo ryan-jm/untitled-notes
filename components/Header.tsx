@@ -39,9 +39,8 @@ const Header = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSignIn = (type = undefined) => {
+  const handleSignIn = (type?: string) => {
     login(type).then(() => {
-      router.push('/create');
       onClose();
     });
   };

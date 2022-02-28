@@ -4,8 +4,9 @@ import {
   signInWithPopup,
   setPersistence,
   browserLocalPersistence,
+  AuthProvider,
 } from 'firebase/auth';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { auth } from '../firebase/clientApp';
 
@@ -19,10 +20,6 @@ const initialState = {
   user: null,
 };
 
-const provider = new GoogleAuthProvider();
-
-const providerGithub = new GithubAuthProvider();
-
 const UserContext = createContext<IAuthContext>(initialState);
 
 const AuthProvider = ({ children }: any) => {
@@ -34,23 +31,20 @@ const AuthProvider = ({ children }: any) => {
     }
   });
 
-  const login = async (type) => {
+  const login = async (type?: string) => {
     try {
       await setPersistence(auth, browserLocalPersistence);
+      let provider: AuthProvider;
 
-      let res = await signInWithPopup(auth, provider);
-      let credential = GoogleAuthProvider.credentialFromResult(res);
-
-      if (type === 'Github') {
-        res = await signInWithPopup(auth, providerGithub);
-        credential = GithubAuthProvider.credentialFromResult(res);
+      switch (type) {
+        default:
+          provider = new GoogleAuthProvider();
+        case 'Github':
+          provider = new GithubAuthProvider();
       }
 
-      const token = credential?.accessToken;
+      let res = await signInWithPopup(auth, provider);
       const user = res.user;
-
-      console.log('USER --->', user);
-
       setUser(user);
     } catch (err) {
       console.log(err);
