@@ -1,4 +1,10 @@
-import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
+} from 'firebase/auth';
 import { createContext, useContext, useState } from 'react';
 
 import { auth } from '../firebase/clientApp';
@@ -22,8 +28,16 @@ const UserContext = createContext<IAuthContext>(initialState);
 const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>(null);
 
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      setUser(() => user);
+    }
+  });
+
   const login = async (type) => {
     try {
+      await setPersistence(auth, browserLocalPersistence);
+
       let res = await signInWithPopup(auth, provider);
       let credential = GoogleAuthProvider.credentialFromResult(res);
 

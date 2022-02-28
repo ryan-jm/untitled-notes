@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { collection, getDocsFromServer, query, where, orderBy, limit } from 'firebase/firestore';
+import React from 'react';
 
 import {
   Drawer,
@@ -14,35 +13,13 @@ import {
   Heading,
   Divider,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase/clientApp';
+
+import { useNoteContext } from '../contexts/NoteContext';
 
 const NotesList = () => {
-  const { user } = useAuth();
-  const [notes, setNotes] = useState<any>(undefined);
+  const { notes, setEditing } = useNoteContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!notes) {
-      const listUserNotes = query(
-        collection(db, 'notes'),
-        where('user', '==', user.uid),
-        orderBy('created_at', 'desc'),
-        limit(5)
-      );
-      getDocsFromServer(listUserNotes).then((data) => {
-        console.log('data : ', data);
-        const notesArr = [];
-        data.forEach((doc) => {
-          notesArr.push(doc.data());
-        });
-        setNotes(notesArr);
-      });
-    }
-  }, []);
 
   function populateNotesList() {
     return notes

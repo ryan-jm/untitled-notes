@@ -4433,7 +4433,7 @@ button:active .remirror-menu-pane-shortcut,
 .remirror-theme h4,
 .remirror-theme h5,
 .remirror-theme h6 {
-  color: var(--rmr-color-text);
+  color: var(--chakra-colors-current);
   font-family: var(--rmr-font-family-heading);
   line-height: var(--rmr-line-height-heading);
   font-weight: var(--rmr-font-weight-heading);
