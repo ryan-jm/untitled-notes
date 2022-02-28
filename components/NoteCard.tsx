@@ -32,18 +32,18 @@ export default function NoteCard(note) {
         w={'270px'}
         h={'350px'}
         bg={useColorModeValue('white', 'gray.800')}
-        boxShadow={'5px 5px 10px #7879F1'}
+        boxShadow={'5px 8px 12px #7879F1'}
         rounded={'md'}
         overflow={'hidden'}
       >
         <Grid h="100%" templateColumns="1" templateRows={'repeat(4, 1fr)'} p={4} position="relative">
           <GridItem>
             <Box p="" position="absolute" left="15px" top="15px">
-              <IconButton size="sm" variant={'cardButtons'} icon={<EditIcon />} />
+              <IconButton aria-label="Edit note" size="sm" variant={'cardEditButton'} icon={<EditIcon />} />
             </Box>
 
             <Box p="" position="absolute" right="15px" top="15px">
-              <IconButton size="sm" variant={'cardButtons'} icon={<DeleteIcon />} />
+              <IconButton aria-label="Delete note" size="sm" variant={'cardDeleteButton'} icon={<DeleteIcon />} />
             </Box>
 
             <Stack spacing={0} align={'center'} mb={5}>
@@ -64,7 +64,7 @@ export default function NoteCard(note) {
               <Flex>
                 <Popover>
                   <PopoverTrigger>
-                    <IconButton aria-label={'stuff'} size="xs" variant={'cardButtons'} icon={<ChevronDownIcon />} />
+                    <IconButton aria-label={'stuff'} size="xs" variant={'cardTagsButton'} icon={<ChevronDownIcon />} />
                   </PopoverTrigger>
 
                   <PopoverContent w="250px">

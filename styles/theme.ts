@@ -60,14 +60,39 @@ const Button = {
         boxShadow: '0',
       },
     }),
-    cardButtons: (props) => ({
+    cardEditButton: (props) => ({
       color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
-      bg: props.colorMode === 'dark' ? 'gray.800' : 'gray.200',
+      bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
       border: 'none',
       borderColor: 'iris.100',
       borderRadius: '5px',
       _hover: {
-        bg: mode(darken('gray.200', 10), whiten('gray.800', 10))(props),
+        bg: '#7879F1',
+      },
+      _focus: {
+        boxShadow: '0',
+      },
+    }),
+    cardDeleteButton: (props) => ({
+      color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
+      bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
+      border: 'none',
+      borderColor: 'iris.100',
+      borderRadius: '5px',
+      _hover: {
+        bg: mode(darken('red.200', 10), whiten('red.800', 10))(props),
+      },
+      _focus: {
+        boxShadow: '0',
+      },
+    }),
+    cardTagsButton: (props) => ({
+      color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
+      bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
+      border: 'none',
+      borderColor: 'iris.100',
+      _hover: {
+        bg: mode(darken('gray.200', 10), whiten('gray.700', 10))(props),
       },
       _focus: {
         boxShadow: '0',
