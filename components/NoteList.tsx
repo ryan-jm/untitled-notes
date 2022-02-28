@@ -14,11 +14,9 @@ const NotesList = ({ forceLoad, createNew }: any) => {
   const { user } = useAuth();
   const router = useRouter();
 
-  console.log('NOTES --->', notes);
-
   useEffect(() => {
     if (!user?.accessToken) {
-      router.push('/auth');
+      router.push('/');
     }
   }, [notes, router, user?.uid, user?.accessToken]);
 
