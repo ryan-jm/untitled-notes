@@ -51,7 +51,14 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     <NotesListBox isTruncated>
       <Box h="min-content" isTruncated pr="20px" mr="20px">
         <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
-          Your Latest Notes <IconButton aria-label="Create new note" icon={<AddIcon />} onClick={() => createNew()} />
+          Your Latest Notes{' '}
+          <IconButton
+            size="sm"
+            variant="ghost"
+            aria-label="Create new note"
+            icon={<AddIcon />}
+            onClick={() => createNew()}
+          />
         </Heading>
         {populateNotesList()}
       </Box>

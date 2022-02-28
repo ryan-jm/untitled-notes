@@ -94,8 +94,8 @@ const Create = () => {
       </Box>
       <Flex justify={'center'}>
         <Box
-          w="250px"
-          minW="250px"
+          w="280px"
+          minW="280px"
           h="min-content"
           ml={'40px'}
           mt={'47px'}
