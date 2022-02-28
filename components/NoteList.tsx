@@ -14,7 +14,7 @@ const NotesList = ({ forceLoad, createNew }: any) => {
   const { user } = useAuth();
   const router = useRouter();
 
-  console.log('NOTES --->', notes);
+  // console.log('NOTES --->', notes);
 
   useEffect(() => {
     if (!user?.accessToken) {
@@ -29,9 +29,9 @@ const NotesList = ({ forceLoad, createNew }: any) => {
 
   function populateNotesList() {
     return notes
-      ? notes.reverse().map((note) => {
+      ? notes.reverse().map((note, index) => {
           return (
-            <Box key={note.title} isTruncated pt="20px">
+            <Box key={index} isTruncated pt="20px">
               <Heading isTruncated fontSize="md">
                 <Link onClick={() => handleChange(note)}>{note.title}</Link>
 

@@ -82,6 +82,8 @@ const Create = () => {
     uploadTask.then((snapshot) => {
       const newState = state;
       getDownloadURL(snapshot.ref).then((url) => {
+        console.log('url>>>');
+
         newState.doc.content.content[i].content.content[j].attrs.src = url;
         setState(newState);
       });

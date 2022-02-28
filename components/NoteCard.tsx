@@ -19,11 +19,34 @@ import {
 } from '@chakra-ui/react';
 
 import { EditIcon, DeleteIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase/clientApp';
 
-export default function NoteCard(note) {
-  const { title, content, created_at, tags } = note.note;
+export default function NoteCard({ note }) {
+  // const note = note;
+  // console.log('note>>>>>', note.noteId);
 
-  console.log(tags);
+  // const { title, content, created_at, tags } = note.note;
+  const router = useRouter();
+  const dateTime = new Date(note.created_at.seconds * 1000).toLocaleString('en-GB', { timeZone: 'UTC' });
+
+  // array with every node note.content.content
+  const nodeContent = [...note.content.content];
+  nodeContent.shift();
+
+  const getNoteBody = nodeContent.map((elem, index) => {
+    console.log('element>>>>');
+
+    // return <p>{elem.content[0].text}</p>;
+  });
+  const deleteNote = (id) => {
+    const collectionById = doc(db, 'notes', id);
+    deleteDoc(collectionById).then(() => {
+      console.log('id>>>>', id);
+      window.location.reload();
+    });
+  };
 
   return (
     <Center p={6}>
@@ -39,23 +62,32 @@ export default function NoteCard(note) {
         <Grid h="100%" templateColumns="1" templateRows={'repeat(4, 1fr)'} p={4} position="relative">
           <GridItem>
             <Box p="" position="absolute" left="15px" top="15px">
-              <IconButton size="sm" variant={'cardButtons'} icon={<EditIcon />} />
+              <IconButton
+                size="sm"
+                variant={'cardButtons'}
+                icon={<EditIcon onClick={() => router.push('/create')} />}
+              />
             </Box>
+            <br />
 
             <Box p="" position="absolute" right="15px" top="15px">
-              <IconButton size="sm" variant={'cardButtons'} icon={<DeleteIcon />} />
+              <IconButton
+                size="sm"
+                variant={'cardButtons'}
+                icon={<DeleteIcon onClick={() => deleteNote(note.noteId)} />}
+              />
             </Box>
 
             <Stack spacing={0} align={'center'} mb={5}>
               <Heading mt="20px" pb="15px" fontSize={'2xl'}>
-                {title}
+                {note.title}
               </Heading>
             </Stack>
           </GridItem>
 
           <GridItem>
             <Text noOfLines={4} color={'gray.500'}>
-              {content}
+              {getNoteBody}
             </Text>
           </GridItem>
 
@@ -71,9 +103,13 @@ export default function NoteCard(note) {
                     <PopoverArrow />
                     <Box textAlign={'center'}>
                       <PopoverBody>
-                        {tags.map((tag) => {
-                          return <Link key={tag}>{tag}&nbsp;</Link>;
-                        })}
+                        {note.tags ? (
+                          note.tags.map((tag, index) => {
+                            return <Link key={index}>{tag}&nbsp;</Link>;
+                          })
+                        ) : (
+                          <p>Tags</p>
+                        )}
                       </PopoverBody>
                     </Box>
                   </PopoverContent>
@@ -81,14 +117,18 @@ export default function NoteCard(note) {
               </Flex>
 
               <Flex noOfLines={1}>
-                {tags.map((tag) => {
-                  return <Link key={tag}>{tag}&nbsp;</Link>;
-                })}
+                {note.tags ? (
+                  note.tags.map((tag, index) => {
+                    return <Link key={index}>{tag}&nbsp;</Link>;
+                  })
+                ) : (
+                  <p>Tags</p>
+                )}
               </Flex>
             </HStack>
 
             <Grid pt="10px" noOfLines={3} templateColumns="">
-              <Text fontSize={'sm'}>Date: {created_at}</Text>
+              <Text fontSize={'sm'}>Date: {dateTime}</Text>
             </Grid>
           </GridItem>
         </Grid>
