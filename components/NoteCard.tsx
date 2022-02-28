@@ -50,7 +50,6 @@ export default function NoteCard({ note }) {
     const collectionById = doc(db, 'notes', id);
     deleteDoc(collectionById);
   };
-  //
 
   return (
     <Center p={6}>
@@ -70,7 +69,8 @@ export default function NoteCard({ note }) {
                 size="sm"
                 aria-label="Edit note"
                 variant={'cardEditButton'}
-                icon={<EditIcon onClick={() => router.push(`/create?noteId=${note.noteId}`)} />}
+                icon={<EditIcon />}
+                onClick={() => router.push(`/create?noteId=${note.noteId}`)}
               />
             </Box>
             <br />
