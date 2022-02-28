@@ -1,8 +1,9 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { MentionAtomNodeAttributes, MentionAtomPopupComponent, MentionAtomState } from '@remirror/react';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LinkExtension, MentionAtomExtension } from 'remirror/extensions';
 
-import { useEditorContext } from '../../../contexts/EditorContext';
+import { useNoteContext } from '@/contexts/NoteContext';
 
 interface ITagExtensionComponentProps<UserData extends MentionAtomNodeAttributes = MentionAtomNodeAttributes> {
   users?: UserData[];
@@ -19,6 +20,7 @@ export const HyperlinkExtension = () => {
 };
 
 export const TagExtension = () => {
+  const { updateTags, currentNote } = useNoteContext();
   const extension = new MentionAtomExtension({
     matchers: [
       { name: 'at', char: '@', appendText: ' ' },
@@ -27,9 +29,15 @@ export const TagExtension = () => {
   });
 
   const handleNewTag = (event, createTag) => {
+    console.log(event);
     if (event.exitReason === 'move-end') {
       createTag({ id: `tag-${event.query.full}`, label: event.text.full });
+      updateTags([{ id: `tag-${event.query.full}`, label: event.text.full, noteRef: currentNote?.noteId }], 'add');
     }
+
+    // if (event.exitReason === 'invalid-exit-split') {
+
+    // }
   };
 
   extension.addHandler('onChange', handleNewTag);
@@ -37,13 +45,15 @@ export const TagExtension = () => {
 };
 
 export const TagPopupComponent = ({ users }: ITagExtensionComponentProps) => {
-  const { tags } = useEditorContext();
+  const { tags } = useNoteContext();
   const [state, setState] = useState<MentionAtomState | null>();
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-  const tagItems = useMemo(() => (tags ?? []).map((tag) => ({ id: tag, label: `#${tag}` })), [tags]);
+  const tagItems = useMemo(() => {
+    const ids = (tags ?? []).map((tag) => tag.id);
+    const uniqueTags = (tags ?? []).filter((tag, index) => !ids.includes(tag.id, index + 1));
+    return uniqueTags.map((tag) => ({ id: `${tag.id}`, label: `${tag.label}` }));
+  }, [tags]);
+
   const items = useMemo(() => {
     if (!state) {
       return [];
@@ -61,5 +71,3 @@ export const TagPopupComponent = ({ users }: ITagExtensionComponentProps) => {
 
   return <MentionAtomPopupComponent onChange={setState} items={items} />;
 };
-
-export default null;
