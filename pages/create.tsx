@@ -1,4 +1,6 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Heading, useStyleConfig, IconButton, Flex } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -27,7 +29,7 @@ import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
   const { user } = useAuth();
-  const { notes, setEditing } = useNoteContext();
+  const { notes, tags, setEditing } = useNoteContext();
   const [note, setNote] = useState<any>();
   const [loadedNote, setLoadedNote] = useState(false);
   const router = useRouter();
@@ -50,6 +52,38 @@ const Create = () => {
     content: '<h1>Untitled...</h1>',
     stringHandler: 'html',
   });
+
+  //tag filtering section
+  const [tagFilter, setTagFilter] = useState('');
+  const [taggedNotes, setTaggedNotes] = useState([]);
+  const [tagsArray, setTagsArray] = useState([]);
+
+  function generateUniqueTagList() {
+    const filterTags = new Set(tags.filter((tag) => tag.noteRef !== undefined).map((tag) => tag.label));
+
+    const filterTagsArray = Array.from(filterTags);
+
+    return filterTagsArray;
+  }
+
+  useEffect(() => {
+    setTagsArray(() => generateUniqueTagList());
+
+    if (!tagFilter) {
+      setTaggedNotes(notes);
+    } else if (tagFilter) {
+      setTaggedNotes(() => getFilteredNotes());
+    }
+  }, [tagFilter, notes]);
+
+  function getFilteredNotes() {
+    const filterNotes = notes.filter((note) => {
+      return note.tags.some((elem: any) => elem.label === tagFilter);
+    });
+
+    return filterNotes;
+  }
+  // end tag filtering section
 
   const noteQuery = router.query.noteId;
 
@@ -119,7 +153,24 @@ const Create = () => {
   return (
     <>
       <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
-        <NotesListDrawer forceLoad={forceLoad} />
+        {
+          <>
+            <NotesListDrawer
+              // @ts-ignore
+              tagsArray={tagsArray}
+              taggedNotes={taggedNotes}
+              setTagFilter={setTagFilter}
+              forceLoad={forceLoad}
+            />
+            <IconButton
+              size="sm"
+              variant="ghost"
+              aria-label="Create new note"
+              icon={<AddIcon />}
+              onClick={() => createNew()}
+            />
+          </>
+        }
       </Box>
       <Flex justify={'center'}>
         <Box
@@ -132,7 +183,13 @@ const Create = () => {
           overflow="hidden"
           isTruncated
         >
-          <NotesList forceLoad={forceLoad} createNew={createNew} />
+          <NotesList
+            forceLoad={forceLoad}
+            createNew={createNew}
+            tagsArray={tagsArray}
+            taggedNotes={taggedNotes}
+            setTagFilter={setTagFilter}
+          />
         </Box>
         <Box w="100%" ml="40px" mr="40px">
           <div className="remirror-theme">

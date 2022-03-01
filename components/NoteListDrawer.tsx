@@ -1,6 +1,4 @@
 import React from 'react';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase/clientApp';
 import {
   Drawer,
   DrawerBody,
@@ -10,16 +8,19 @@ import {
   DrawerCloseButton,
   Button,
   useDisclosure,
-  Box,
   Heading,
-  Divider,
 } from '@chakra-ui/react';
+
+import TagSearch from '@/components/TagSearch';
+
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase/clientApp';
 
 import { useNoteContext } from '../contexts/NoteContext';
 import NoteEntry from './NoteEntry';
 
-const NotesListDrawer = ({forceLoad}) => {
-  const { notes, setEditing } = useNoteContext();
+const NotesListDrawer = ({ forceLoad, tagsArray, taggedNotes, setTagFilter }) => {
+  const { setEditing } = useNoteContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
   const handleChange = (note) => {
@@ -31,9 +32,10 @@ const NotesListDrawer = ({forceLoad}) => {
     const deleteDocument = doc(db, 'notes', id);
     deleteDoc(deleteDocument);
   }
+
   function populateNotesList(): JSX.Element[] {
-    return notes
-      ? notes.reverse().map((note, index) => {
+    return taggedNotes
+      ? taggedNotes.reverse().map((note, index) => {
           return (
             <div key={note.noteId}>
               <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
@@ -53,12 +55,12 @@ const NotesListDrawer = ({forceLoad}) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader pb="0">
+            <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} />
             <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
               Your Latest Notes
             </Heading>
           </DrawerHeader>
           <DrawerBody>{populateNotesList()}</DrawerBody>
-      {/* <DrawerBody>body</DrawerBody> */}
         </DrawerContent>
       </Drawer>
     </>

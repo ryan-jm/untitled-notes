@@ -29,7 +29,6 @@ export const TagExtension = () => {
   });
 
   const handleNewTag = (event, createTag) => {
-    console.log(event);
     if (event.exitReason === 'move-end') {
       createTag({ id: `tag-${event.query.full}`, label: event.text.full });
       updateTags([{ id: `tag-${event.query.full}`, label: event.text.full, noteRef: currentNote?.noteId }], 'add');
