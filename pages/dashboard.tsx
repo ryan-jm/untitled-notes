@@ -31,12 +31,8 @@ export default function Dashboard() {
     setTagsArray(() => generateUniqueTagList());
 
     if (!tagFilter) {
-      console.log('false');
-
       setTaggedNotes(notes);
     } else if (tagFilter) {
-      console.log('true');
-
       setTaggedNotes(() => getFilteredNotes());
     }
   }, [tagFilter, notes]);

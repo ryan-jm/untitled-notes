@@ -9,7 +9,7 @@ export default function TagSearch(props) {
         key={tag}
         onClick={handleTag}
         m="3px"
-        variant={'cardTagsButton'}
+        variant={'dashboardTagsButton'}
         size={'sm'}
         w={'min-content'}
         value={tag}
@@ -25,13 +25,12 @@ export default function TagSearch(props) {
 
   return (
     <>
-      <Heading size={'sm'}>Tag filter: </Heading>
       <Flex justifyContent={'center'} flexDirection={'row'} flexWrap={'wrap'}>
         <Button
           key={'all'}
           onClick={() => setTagFilter(() => '')}
           m="3px"
-          variant={'cardTagsButton'}
+          variant={'dashboardTagsButton'}
           size={'sm'}
           w={'min-content'}
         >
