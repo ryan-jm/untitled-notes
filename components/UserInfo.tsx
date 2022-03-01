@@ -1,4 +1,4 @@
-import { Center } from '@chakra-ui/react';
+import { Center, Heading } from '@chakra-ui/react';
 
 import { useNoteContext } from '../contexts/NoteContext';
 
@@ -7,7 +7,7 @@ export default function UserInfo() {
 
   return (
     <Center>
-      <p>Total Notes: {notes.length}</p>
+      <Heading size="sm">Total Notes: {notes.length}</Heading>
     </Center>
   );
 }

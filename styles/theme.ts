@@ -111,6 +111,19 @@ const Button = {
         boxShadow: '0',
       },
     }),
+    dashboardTagsButton: (props) => ({
+      color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
+      bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
+      border: 'none',
+      borderColor: 'iris.100',
+      _hover: {
+        bg: mode(darken('gray.200', 10), whiten('gray.700', 10))(props),
+      },
+      _focus: {
+        boxShadow: '0',
+      },
+      _active: {},
+    }),
   },
   // The default `size` or `variant` values
   defaultProps: {
