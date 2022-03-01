@@ -9,7 +9,6 @@ const File = () => {
   // const [file , setFile] = useState(null);
   const [progress, setProgress] = useState(0);
 
-  // console.log(file);
   function submitHandler(event) {
     event.preventDefault();
     const file = event.target[0].files[0];
@@ -17,8 +16,6 @@ const File = () => {
   }
 
   function changeHandler(file) {
-    console.log(file, '<><>');
-
     if (!file) return;
     const storageRef = ref(storage, `/files/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
