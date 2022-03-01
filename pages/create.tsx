@@ -17,6 +17,7 @@ import {
 } from 'remirror/extensions';
 import { useRouter } from 'next/router';
 
+import { useAuth } from '@/contexts/AuthContext';
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
 import NotesList from '../components/NoteList';
@@ -25,8 +26,11 @@ import { storage } from '../firebase/clientApp';
 import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
+  const { user } = useAuth();
   const { notes, setEditing } = useNoteContext();
-
+  const [note, setNote] = useState<any>();
+  const [loadedNote, setLoadedNote] = useState(false);
+  const router = useRouter();
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
@@ -47,15 +51,9 @@ const Create = () => {
     stringHandler: 'html',
   });
 
-  const router = useRouter();
-
   const noteQuery = router.query.noteId;
 
   const filteredNotes = notes.filter((note) => note.noteId === noteQuery);
-
-  const [note, setNote] = useState<any>();
-
-  const [loadedNote, setLoadedNote] = useState(false);
 
   const forceLoad = useCallback(
     (note) => {
@@ -111,10 +109,17 @@ const Create = () => {
     });
   }
 
+  /* Redirect if no user state is found, i.e. user is unauthenticated or has refreshed. */
+  useEffect(() => {
+    if (!user) router.push('/');
+  }, [router, user]);
+
+  if (!user) return <p>Redirecting...</p>;
+
   return (
     <>
       <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
-        <NotesListDrawer />
+        <NotesListDrawer forceLoad={forceLoad} />
       </Box>
       <Flex justify={'center'}>
         <Box
