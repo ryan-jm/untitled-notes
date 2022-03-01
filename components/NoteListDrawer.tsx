@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase/clientApp';
 import {
   Drawer,
   DrawerBody,
@@ -15,34 +16,29 @@ import {
 } from '@chakra-ui/react';
 
 import { useNoteContext } from '../contexts/NoteContext';
+import NoteEntry from './NoteEntry';
 
-const NotesList = () => {
+const NotesListDrawer = ({forceLoad}) => {
   const { notes, setEditing } = useNoteContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
+  const handleChange = (note) => {
+    setEditing(() => note.noteId);
+    forceLoad(note);
+  };
 
-  function populateNotesList() {
+  function deleteNote(id) {
+    const deleteDocument = doc(db, 'notes', id);
+    deleteDoc(deleteDocument);
+  }
+  function populateNotesList(): JSX.Element[] {
     return notes
-      ? notes.map((note) => {
-          if (note.title) {
-            return (
-              <Box isTruncated pt="20px">
-                <Heading isTruncated fontSize="md">
-                  {note.title}
-                  <Divider />
-                </Heading>
-              </Box>
-            );
-          } else {
-            return (
-              <Box isTruncated pt="20px">
-                <Heading isTruncated fontSize="md">
-                  Untitled
-                  <Divider />
-                </Heading>
-              </Box>
-            );
-          }
+      ? notes.reverse().map((note, index) => {
+          return (
+            <div key={note.noteId}>
+              <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
+            </div>
+          );
         })
       : undefined;
   }
@@ -62,10 +58,11 @@ const NotesList = () => {
             </Heading>
           </DrawerHeader>
           <DrawerBody>{populateNotesList()}</DrawerBody>
+      {/* <DrawerBody>body</DrawerBody> */}
         </DrawerContent>
       </Drawer>
     </>
   );
 };
 
-export default NotesList;
+export default NotesListDrawer;

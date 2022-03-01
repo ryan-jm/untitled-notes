@@ -7,7 +7,7 @@ const NoteEntry = ({ handleChange, note, deleteNote }) => {
   return (
     <div>
       <Flex align="center" justify="space-between">
-        <Button onClick={() => handleChange(note)} onDrag={onToggle} draggable="true">
+        <Button onClick={() => handleChange(note)} onTouchMove={onToggle} onTouchEnd={onToggle} onDrag={onToggle} draggable="true">
           {note.title}
         </Button>
         <SlideFade in={isOpen} offsetX="15%">

@@ -114,7 +114,7 @@ const Create = () => {
   return (
     <>
       <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
-        <NotesListDrawer />
+        <NotesListDrawer forceLoad={forceLoad} />
       </Box>
       <Flex justify={'center'}>
         <Box
