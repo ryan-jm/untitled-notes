@@ -1,28 +1,16 @@
 import React, { useEffect } from 'react';
 import {
   Box,
-  Link,
   Heading,
-  Divider,
   useStyleConfig,
   IconButton,
-  useDisclosure,
-  Circle,
-  HStack,
-  Square,
-  Fade,
-  ScaleFade,
-  Slide,
-  SlideFade,
-  Button,
 } from '@chakra-ui/react';
 
-import { AddIcon, DeleteIcon, PhoneIcon } from '@chakra-ui/icons';
+import { AddIcon} from '@chakra-ui/icons';
 
 import { useRouter } from 'next/router';
 
 import { deleteDoc, doc } from 'firebase/firestore';
-import { log } from 'console';
 import { useAuth } from '../contexts/AuthContext';
 import { useNoteContext } from '../contexts/NoteContext';
 import { db } from '../firebase/clientApp';
@@ -52,18 +40,9 @@ const NotesList = ({ forceLoad, createNew }: any) => {
   }
 
   function populateNotesList() {
-   
     return notes
       ? notes.reverse().map((note) => {
           return (
-            //Real
-            // <Box key={note.title} isTruncated pt="20px">
-            //   <Heading isTruncated fontSize="md">
-            //     <Link onClick={() => handleChange(note)}><p draggable="true" >{note.title}</p></Link>
-            //     <div className='droptarget' onDrop={drop} onDragOver={allowDrop}></div>
-            //      <Divider />
-            //   </Heading>
-            // </Box>
             <div key={note.noteId}>
               <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
             </div>
@@ -91,37 +70,3 @@ const NotesList = ({ forceLoad, createNew }: any) => {
 };
 
 export default NotesList;
-{
-  /* <Flex align="center" justify='space-between'>
-      <Button onClick={onToggle}>Click Me</Button>
-      <SlideFade in={isOpen} offsetX='10%' >
-        <Box
-          p='40px'
-          color='white'
-          mt='4'
-          bg='teal.500'
-          rounded='md'
-          shadow='md'
-          
-        >
-hello
-        </Box>
-      </SlideFade>
-    </Flex> */
-}
-
-//box for delete
-// <Box
-// p='5px'
-// color='white'
-// mt='2'
-// bg ='purple.200'
-// rounded='md'
-// shadow='md'
-// >
-// <HStack>
-// <Circle size='40px' bg='red.300' color='white'>
-// <DeleteIcon onClick={() => deleteNote(note.noteId)}/>
-// </Circle>
-// </HStack>
-// </Box>
