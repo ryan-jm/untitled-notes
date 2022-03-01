@@ -82,11 +82,9 @@ const NoteProvider = ({ children }: any) => {
         setTags((prev) => [...prev, ...tags]);
         break;
       case 'edit':
-        console.log(note.noteId);
         const newTags = tags.filter((tag) => {
           return tag.noteRef === note.noteId;
         });
-        console.log(newTags, 'newTags');
         setTags((prev) => [...prev.filter((tag) => tag.noteRef !== note.noteId), ...newTags]);
         break;
     }
@@ -96,10 +94,7 @@ const NoteProvider = ({ children }: any) => {
     (note: INote | any, edit?: boolean) => {
       const foundTags = [];
 
-      console.log(note, 'note received');
-
       note.content.content.forEach((node) => {
-        console.log(node);
         if (node.content?.length) {
           node.content
             .filter((nestedNode: Partial<RemirrorJSON>) => nestedNode.type === 'mentionAtom')

@@ -39,8 +39,10 @@ const AuthProvider = ({ children }: any) => {
       switch (type) {
         default:
           provider = new GoogleAuthProvider();
+          break;
         case 'Github':
           provider = new GithubAuthProvider();
+          break;
       }
 
       let res = await signInWithPopup(auth, provider);
