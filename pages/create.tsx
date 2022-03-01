@@ -55,9 +55,10 @@ const Create = () => {
 
   const [note, setNote] = useState<any>();
 
+  const [loadedNote, setLoadedNote] = useState(false);
+
   const forceLoad = useCallback(
     (note) => {
-      console.log('forceLoaded');
       const doc = {
         type: 'doc',
         content: note.content.content,
@@ -69,12 +70,14 @@ const Create = () => {
 
   useEffect(() => {
     setNote(() => filteredNotes[0]);
-
     if (noteQuery && note) {
-      setEditing(() => note.noteId);
-      forceLoad(note);
+      if (loadedNote === false) {
+        setEditing(() => note.noteId);
+        forceLoad(note);
+        setLoadedNote(true);
+      }
     }
-  }, [filteredNotes, forceLoad, note, noteQuery, setEditing]);
+  }, [filteredNotes, forceLoad, loadedNote, note, noteQuery, setEditing]);
 
   const createNew = () => {
     setEditing(() => null);
@@ -102,8 +105,6 @@ const Create = () => {
     uploadTask.then((snapshot) => {
       const newState = state;
       getDownloadURL(snapshot.ref).then((url) => {
-        console.log('url>>>');
-
         newState.doc.content.content[i].content.content[j].attrs.src = url;
         setState(newState);
       });

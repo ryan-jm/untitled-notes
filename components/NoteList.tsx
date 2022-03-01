@@ -15,8 +15,6 @@ const NotesList = ({ forceLoad, createNew }: any) => {
   const { notes, setEditing } = useNoteContext();
 
   const handleChange = (note) => {
-    console.log('noteList', note);
-
     setEditing(() => note.noteId);
     forceLoad(note);
   };

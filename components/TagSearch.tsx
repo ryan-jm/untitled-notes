@@ -3,5 +3,5 @@ export default function TagSearch() {
 
   function createTag(tag) {}
 
-  return <></>;
+  return <>TAAAGS</>;
 }
