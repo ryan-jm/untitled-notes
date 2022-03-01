@@ -24,11 +24,11 @@ const NotesList = () => {
   function populateNotesList() {
     return notes
       ? notes.map((note) => {
-          if (note.content.content[0].content && note.content.content[0].content[0]?.text) {
+          if (note.title) {
             return (
               <Box isTruncated pt="20px">
                 <Heading isTruncated fontSize="md">
-                  {note.content.content[0].content[0].text}
+                  {note.title}
                   <Divider />
                 </Heading>
               </Box>
