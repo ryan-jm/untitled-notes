@@ -34,7 +34,7 @@ export default function TagSearch(props) {
           size={'sm'}
           w={'min-content'}
         >
-          No Filter
+          All Tags
         </Button>
         {tagsArray.map((tag) => createTag(tag))}
       </Flex>

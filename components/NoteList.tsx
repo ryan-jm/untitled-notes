@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Heading, useStyleConfig, IconButton } from '@chakra-ui/react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Box, Heading, useStyleConfig, IconButton, Flex } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
 
@@ -76,6 +76,9 @@ const NotesList = ({ forceLoad, createNew }: any) => {
   return (
     <NotesListBox isTruncated>
       <Box h="min-content" isTruncated pr="20px" mr="20px">
+        <Flex justifyContent={'left'}>
+          <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} />
+        </Flex>
         <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
           Your Latest Notes
           <IconButton
@@ -86,7 +89,6 @@ const NotesList = ({ forceLoad, createNew }: any) => {
             onClick={() => createNew()}
           />
         </Heading>
-        <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} />
 
         {populateNotesList()}
       </Box>

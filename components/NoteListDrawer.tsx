@@ -1,6 +1,4 @@
 import React from 'react';
-import { deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase/clientApp';
 import {
   Drawer,
   DrawerBody,
@@ -15,10 +13,13 @@ import {
   Divider,
 } from '@chakra-ui/react';
 
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase/clientApp';
+
 import { useNoteContext } from '../contexts/NoteContext';
 import NoteEntry from './NoteEntry';
 
-const NotesListDrawer = ({forceLoad}) => {
+const NotesListDrawer = ({ forceLoad }) => {
   const { notes, setEditing } = useNoteContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -58,7 +59,7 @@ const NotesListDrawer = ({forceLoad}) => {
             </Heading>
           </DrawerHeader>
           <DrawerBody>{populateNotesList()}</DrawerBody>
-      {/* <DrawerBody>body</DrawerBody> */}
+          {/* <DrawerBody>body</DrawerBody> */}
         </DrawerContent>
       </Drawer>
     </>
