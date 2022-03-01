@@ -1,12 +1,7 @@
 import React, { useEffect } from 'react';
-import {
-  Box,
-  Heading,
-  useStyleConfig,
-  IconButton,
-} from '@chakra-ui/react';
+import { Box, Heading, useStyleConfig, IconButton } from '@chakra-ui/react';
 
-import { AddIcon} from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 
 import { useRouter } from 'next/router';
 
