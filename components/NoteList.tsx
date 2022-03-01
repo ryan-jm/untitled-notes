@@ -1,10 +1,15 @@
-import React from 'react';
-
-import { Box, Link, Heading, Divider, useStyleConfig, IconButton } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
+import { Box, Heading, useStyleConfig, IconButton } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
 
+import { useRouter } from 'next/router';
+
+import { deleteDoc, doc } from 'firebase/firestore';
+import { useAuth } from '../contexts/AuthContext';
 import { useNoteContext } from '../contexts/NoteContext';
+import { db } from '../firebase/clientApp';
+import NoteEntry from './NoteEntry';
 
 const NotesList = ({ forceLoad, createNew }: any) => {
   const { notes, setEditing } = useNoteContext();
@@ -16,19 +21,18 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     forceLoad(note);
   };
 
+  function deleteNote(id) {
+    const deleteDocument = doc(db, 'notes', id);
+    deleteDoc(deleteDocument);
+  }
+
   function populateNotesList() {
     return notes
       ? notes.reverse().map((note, index) => {
           return (
-            <Box key={index} isTruncated pt="20px">
-              <Heading isTruncated fontSize="md">
-                <Link key={note.noteId} onClick={() => handleChange(note)}>
-                  {note.title}
-                </Link>
-
-                <Divider />
-              </Heading>
-            </Box>
+            <div key={note.noteId}>
+              <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
+            </div>
           );
         })
       : undefined;
