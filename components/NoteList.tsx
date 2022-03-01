@@ -13,18 +13,10 @@ import NoteEntry from './NoteEntry';
 
 const NotesList = ({ forceLoad, createNew }: any) => {
   const { notes, setEditing } = useNoteContext();
-  const { user } = useAuth();
-  const router = useRouter();
-
-  console.log('NOTES --->', notes);
-
-  useEffect(() => {
-    if (!user?.accessToken) {
-      router.push('/auth');
-    }
-  }, [notes, router, user?.uid, user?.accessToken]);
 
   const handleChange = (note) => {
+    console.log('noteList', note);
+
     setEditing(() => note.noteId);
     forceLoad(note);
   };
@@ -36,7 +28,7 @@ const NotesList = ({ forceLoad, createNew }: any) => {
 
   function populateNotesList() {
     return notes
-      ? notes.reverse().map((note) => {
+      ? notes.reverse().map((note, index) => {
           return (
             <div key={note.noteId}>
               <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
@@ -56,7 +48,14 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     <NotesListBox isTruncated>
       <Box h="min-content" isTruncated pr="20px" mr="20px">
         <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
-          Your Latest Notes <IconButton aria-label="Create new note" icon={<AddIcon />} onClick={() => createNew()} />
+          Your Latest Notes{' '}
+          <IconButton
+            size="sm"
+            variant="ghost"
+            aria-label="Create new note"
+            icon={<AddIcon />}
+            onClick={() => createNew()}
+          />
         </Heading>
         {populateNotesList()}
       </Box>

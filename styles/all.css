@@ -26,7 +26,7 @@
   border: 1px solid var(--rmr-color-border);
   cursor: pointer;
   white-space: nowrap;
-  color: var(--rmr-color-text);
+  color: var(--chakra-colors-current);
   background-color: var(--rmr-color-background);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
@@ -77,7 +77,7 @@
 
 [aria-activedescendant='*']:focus .remirror-composite[aria-selected='true'],
 [aria-activedescendant='*']:focus ~ * .remirror-composite[aria-selected='true'] {
-  color: var(--rmr-color-text);
+  color: var(--chakra-colors-current);
   background-color: var(--rmr-color-background);
 }
 
@@ -91,7 +91,7 @@
   max-height: calc(100vh - 56px);
   outline: 0;
   border: 1px solid var(--rmr-color-border);
-  color: var(--rmr-color-text);
+  color: var(--chakra-colors-current);
   z-index: 999;
 }
 
@@ -131,7 +131,7 @@ input[type='radio'] + .remirror-form-label {
 
 .remirror-form-group {
   display: block;
-  color: var(--rmr-color-text);
+  color: var(--chakra-colors-current);
   border: 1px solid var(--rmr-color-border);
   border-radius: var(--rmr-radius-border);
   padding: 0.5rem 1rem 1rem;
@@ -406,7 +406,7 @@ button:active .remirror-menu-pane-shortcut,
   box-sizing: border-box;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   font-family: var(--rmr-font-family-default);
-  color: var(--rmr-color-text);
+  color: var(--chakra-colors-current);
   background-color: var(--rmr-color-background);
   /* border: 1px solid var(--rmr-color-border); */
 }
@@ -3695,7 +3695,7 @@ button:active .remirror-menu-pane-shortcut,
 }
 
 .remirror-suggest-atom {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--chakra-colors-current);
 }
 
 .remirror-mention-atom-popup-item {
@@ -4433,7 +4433,7 @@ button:active .remirror-menu-pane-shortcut,
 .remirror-theme h4,
 .remirror-theme h5,
 .remirror-theme h6 {
-  color: var(--rmr-color-text);
+  color: var(--chakra-colors-current);
   font-family: var(--rmr-font-family-heading);
   line-height: var(--rmr-line-height-heading);
   font-weight: var(--rmr-font-weight-heading);

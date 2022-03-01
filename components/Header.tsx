@@ -30,6 +30,7 @@ import DarkModeSwitch from './DarkModeSwitch';
 
 import Illustration from './svgs/illustration';
 import GoogleLogo from './svgs/google-svgrepo-com';
+import GitHubLogo from './svgs/github';
 
 const Header = () => {
   const { user, login, logout } = useAuth();
@@ -38,12 +39,13 @@ const Header = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleSignIn = () => {
-    login().then(() => {
-      router.push('/create');
+  const handleSignIn = (type?: string) => {
+    login(type).then(() => {
       onClose();
     });
   };
+
+  const noteQuery = router.query.noteId;
 
   return (
     <>
@@ -100,6 +102,14 @@ const Header = () => {
                         aria-label="Google Login"
                         icon={<GoogleLogo />}
                       />
+
+                      <IconButton
+                        size="lg"
+                        onClick={() => handleSignIn('Github')}
+                        variant={'primary'}
+                        aria-label="Github Login"
+                        icon={<GitHubLogo />}
+                      />
                     </Box>
                   </Flex>
                 </Flex>
@@ -110,7 +120,7 @@ const Header = () => {
 
           {/* Nested ternary logic to only display when user is logged in, also display different center buttons depending on page */}
           {user?.accessToken ? (
-            asPath === '/create' ? (
+            asPath === '/create' || asPath === `/create?noteId=${noteQuery}` ? (
               <NextLink href={'/dashboard'} passHref>
                 <Link>
                   <Button variant="primary" size="md" leftIcon={<EditIcon />}>

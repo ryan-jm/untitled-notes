@@ -1,11 +1,18 @@
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { createContext, useContext, useState } from 'react';
+import {
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
+  AuthProvider,
+} from 'firebase/auth';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { auth } from '../firebase/clientApp';
 
 interface IAuthContext {
   user: any;
-  login?: () => Promise<void>;
+  login?: (type) => Promise<void>;
   logout?: () => void;
 }
 
@@ -13,18 +20,30 @@ const initialState = {
   user: null,
 };
 
-const provider = new GoogleAuthProvider();
-
 const UserContext = createContext<IAuthContext>(initialState);
 
 const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>(null);
 
-  const login = async () => {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      setUser(() => user);
+    }
+  });
+
+  const login = async (type?: string) => {
     try {
-      const res = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(res);
-      const token = credential?.accessToken;
+      await setPersistence(auth, browserLocalPersistence);
+      let provider: AuthProvider;
+
+      switch (type) {
+        default:
+          provider = new GoogleAuthProvider();
+        case 'Github':
+          provider = new GithubAuthProvider();
+      }
+
+      let res = await signInWithPopup(auth, provider);
       const user = res.user;
       setUser(user);
     } catch (err) {
@@ -33,8 +52,10 @@ const AuthProvider = ({ children }: any) => {
   };
 
   const logout = () => {
-    auth.signOut();
-    setUser(null);
+    auth
+      .signOut()
+      .then(() => setUser(null))
+      .then(() => window.location.reload());
   };
 
   return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;
