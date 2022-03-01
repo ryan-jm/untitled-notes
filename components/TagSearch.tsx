@@ -1,4 +1,4 @@
-import { Flex, Button, Heading } from '@chakra-ui/react';
+import { Flex, Button } from '@chakra-ui/react';
 
 export default function TagSearch(props) {
   const { tagsArray, setTagFilter } = props;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { Box, Heading, useStyleConfig, IconButton, Flex } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
@@ -10,40 +10,8 @@ import { useNoteContext } from '../contexts/NoteContext';
 import { db } from '../firebase/clientApp';
 import NoteEntry from './NoteEntry';
 
-const NotesList = ({ forceLoad, createNew }: any) => {
-  const { notes, tags, setEditing } = useNoteContext();
-
-  //for filtering the Note card list
-  const [tagFilter, setTagFilter] = useState('');
-  const [taggedNotes, setTaggedNotes] = useState([]);
-
-  const [tagsArray, setTagsArray] = useState([]);
-
-  function generateUniqueTagList() {
-    const filterTags = new Set(tags.filter((tag) => tag.noteRef !== undefined).map((tag) => tag.label));
-
-    const filterTagsArray = Array.from(filterTags);
-
-    return filterTagsArray;
-  }
-
-  useEffect(() => {
-    setTagsArray(() => generateUniqueTagList());
-
-    if (!tagFilter) {
-      setTaggedNotes(notes);
-    } else if (tagFilter) {
-      setTaggedNotes(() => getFilteredNotes());
-    }
-  }, [tagFilter, notes]);
-
-  function getFilteredNotes() {
-    const filterNotes = notes.filter((note) => {
-      return note.tags.some((elem: any) => elem.label === tagFilter);
-    });
-
-    return filterNotes;
-  }
+const NotesList = ({ tagsArray, taggedNotes, setTagFilter, forceLoad, createNew }: any) => {
+  const { setEditing } = useNoteContext();
 
   const handleChange = (note) => {
     setEditing(() => note.noteId);
@@ -77,7 +45,7 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     <NotesListBox isTruncated>
       <Box h="min-content" isTruncated pr="20px" mr="20px">
         <Flex justifyContent={'left'}>
-          <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} />
+          {tagsArray ? <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} /> : ''}
         </Flex>
         <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
           Your Latest Notes

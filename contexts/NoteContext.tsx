@@ -160,20 +160,12 @@ const NoteProvider = ({ children }: any) => {
   }, [user?.uid]);
 
   useEffect(() => {
-    console.log(tags);
-  }, [tags]);
-
-  useEffect(() => {
     if (editing !== currentNote?.noteId) {
       const newCurrentNote = state.filter((note) => note.noteId == editing);
       setCurrentNote(newCurrentNote[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editing]);
-
-  useEffect(() => {
-    console.log(currentNote, '<- current note');
-  }, [currentNote]);
 
   useEffect(() => {
     if (disconnect && !user?.uid) {
