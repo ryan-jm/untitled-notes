@@ -44,8 +44,9 @@ export default function NoteCard({ note }) {
   nodeContent.shift();
 
   const getNoteBody = nodeContent.map((elem, index) => {
-    return elem.content && elem.content[0] ? <p>{elem.content[0].text}</p> : '';
+    return elem.content && elem.content[0] ? <p key={index}>{elem.content[0].text}</p> : '';
   });
+
   const deleteNote = (id) => {
     const collectionById = doc(db, 'notes', id);
     deleteDoc(collectionById);
