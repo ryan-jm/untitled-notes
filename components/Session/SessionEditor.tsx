@@ -12,7 +12,6 @@ import {
   ListItemExtension,
   MarkdownExtension,
   PlaceholderExtension,
-  TrailingNodeExtension,
   UnderlineExtension,
   YjsExtension,
 } from 'remirror/extensions';
