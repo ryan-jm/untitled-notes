@@ -33,7 +33,8 @@
     "react-firebaseui": "^6.0.0",
     "react-icons": "^4.3.1",
     "remirror": "^1.0.66",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "y-websocket": "^1.3.18"
   },
   "devDependencies": {
     "eslint": "^8.9.0",

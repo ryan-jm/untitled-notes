@@ -1,5 +1,5 @@
 import { useAttrs, useChainedCommands, useCurrentSelection, useUpdateReason } from '@remirror/react';
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createMarkPositioner } from 'remirror/extensions';
 
 import useLinkShortcut from './useLinkShortcut';
@@ -20,7 +20,7 @@ const useFloatingLinkState = () => {
 
   const updateReason = useUpdateReason();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!isEditing) {
       return;
     }
