@@ -1,51 +1,79 @@
-import { Remirror, useRemirror } from '@remirror/react';
-import React from 'react';
-import {
-  BlockquoteExtension,
-  BoldExtension,
-  CalloutExtension,
-  CodeExtension,
-  HeadingExtension,
-  HistoryExtension,
-  ImageExtension,
-  ItalicExtension,
-  ListItemExtension,
-  MarkdownExtension,
-  PlaceholderExtension,
-  UnderlineExtension,
-  YjsExtension,
-} from 'remirror/extensions';
-import Editor from '../Editor/Editor';
-import { HyperlinkExtension, TagExtension } from '../Editor/extensions';
+import { Box, Button, ButtonGroup } from '@chakra-ui/react';
+import { SuggestState } from '@remirror/pm/suggest';
+import { EditorComponent, useCommands, useHelpers, useRemirrorContext } from '@remirror/react';
+import { saveAs } from 'file-saver';
+import { doc, collection, Timestamp, updateDoc, setDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 
-const SessionEditor = ({ provider }: any) => {
-  const { manager, state, setState } = useRemirror({
-    extensions: () => [
-      new BoldExtension({}),
-      new ItalicExtension({}),
-      new CodeExtension({}),
-      new HeadingExtension({}),
-      new BlockquoteExtension({}),
-      new HistoryExtension({}),
-      new ImageExtension(),
-      new MarkdownExtension({}),
-      new CalloutExtension({ defaultType: 'warn' }),
-      new ListItemExtension({ enableCollapsible: true }),
-      HyperlinkExtension(),
-      TagExtension(),
-      new UnderlineExtension(),
-      new PlaceholderExtension({ placeholder: 'Open second tab and start to type...' }),
-      new YjsExtension({ getProvider: () => provider }),
-    ],
-    core: { excludeExtensions: ['history'] },
-  });
+import { useAuth } from '@/contexts/AuthContext';
+import { useNoteContext } from '@/contexts/NoteContext';
+import EditorButtons from '@/components/Editor/EditorButtons';
+import { TagPopupComponent } from '@/components/Editor/extensions';
+import HyperlinkToolbar from '@/components/Editor/HyperlinkToolbar';
+import { db } from '../../firebase/clientApp';
+
+const SessionEditor = ({ state, owner, id }: any) => {
+  const { checkForTags } = useNoteContext();
+  const { getJSON } = useHelpers();
+  const { setContent } = useRemirrorContext();
+  const commands = useCommands();
+  const [isOwner, setIsOwner] = useState(owner);
+
+  const handleSave = () => {
+    const content = getJSON(state);
+    const title = content.content.filter((node) => node.type === 'heading')[0];
+    const tags = checkForTags(state.doc, true);
+
+    const noteRef = doc(db, 'notes', id);
+    const dbUpdate = {
+      content,
+      title: title.content[0].text,
+      noteId: id,
+      tags,
+    };
+    updateDoc(noteRef, dbUpdate);
+  };
+
+  useEffect(() => {
+    // Enforce Title
+    if (!isOwner) return;
+    let checkState = state;
+    const firstNode = checkState?.doc?.content?.content[0];
+    const titleEmpty = checkState?.doc?.content?.content.length > 1 && firstNode?.content?.size === 0;
+    if (firstNode?.type.name !== 'heading') {
+      /* If no H1 is found at the first node, replace the first node with a H1 node */
+      commands.toggleHeading({ level: 1 });
+    }
+
+    if (titleEmpty) {
+      /* H1 is present on first node but has no text; will clone state schema and apply a default 'Untitled' title */
+      console.log(titleEmpty);
+      checkState = state.applyTransaction(state.tr.insertText('Untitled...', 0, 1)).state;
+      const nodeSchema = getJSON(checkState);
+      nodeSchema.content[0].type = 'heading';
+      setContent(nodeSchema);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, isOwner]);
 
   return (
-    <div className="remirror-theme">
-      <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
-        <Editor state={state} manager={manager} />
-      </Remirror>
-    </div>
+    <>
+      <Box textAlign="center">
+        <EditorButtons session={true} />
+      </Box>
+      <EditorComponent />
+      <TagPopupComponent />
+      <HyperlinkToolbar />
+      <Box mt="20px" textAlign="center">
+        {isOwner ? (
+          <Button onClick={handleSave} size="sm" variant="toolbar">
+            Save
+          </Button>
+        ) : (
+          <></>
+        )}
+      </Box>
+    </>
   );
 };
 
