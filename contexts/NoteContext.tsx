@@ -160,7 +160,7 @@ const NoteProvider = ({ children }: any) => {
   }, [user?.uid]);
 
   useEffect(() => {
-    if (editing !== currentNote?.noteId) {
+    if (editing !== currentNote?.noteId || (editing && !currentNote)) {
       const newCurrentNote = state.filter((note) => note.noteId == editing);
       setCurrentNote(newCurrentNote[0]);
     }
@@ -176,7 +176,7 @@ const NoteProvider = ({ children }: any) => {
 
   return (
     <NoteContext.Provider
-      value={{ notes: state, setNotes: dispatch, editing, setEditing, tags, updateTags, checkForTags }}
+      value={{ notes: state, setNotes: dispatch, editing, setEditing, tags, updateTags, checkForTags, currentNote }}
     >
       {children}
     </NoteContext.Provider>

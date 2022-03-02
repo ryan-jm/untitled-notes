@@ -20,6 +20,7 @@ import {
 import { useRouter } from 'next/router';
 import { useAuth } from '@/contexts/AuthContext';
 
+import CreateSessionModal from '@/components/Session/CreateSessionModal';
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
 
@@ -29,6 +30,8 @@ import { storage } from '../firebase/clientApp';
 import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const { user } = useAuth();
   const { notes, tags, setEditing } = useNoteContext();
   const [note, setNote] = useState<any>();
@@ -75,6 +78,7 @@ const Create = () => {
     } else if (tagFilter) {
       setTaggedNotes(() => getFilteredNotes());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tagFilter, notes]);
 
   function getFilteredNotes() {
@@ -195,11 +199,12 @@ const Create = () => {
         <Box w="100%" ml="40px" mr="40px">
           <div className="remirror-theme">
             <Remirror manager={manager} state={state} onChange={handleChange}>
-              <Editor state={state} manager={manager} />
+              <Editor state={state} manager={manager} setShowModal={setShowModal} />
             </Remirror>
           </div>
         </Box>
       </Flex>
+      {showModal ? <CreateSessionModal isOpen={showModal} setShowModal={setShowModal} /> : <></>}
     </>
   );
 };

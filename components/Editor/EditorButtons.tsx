@@ -1,8 +1,20 @@
 import { useCommands } from '@remirror/react';
-
-import { Button, ButtonGroup, Menu, MenuButton, MenuList, MenuItem, Tooltip } from '@chakra-ui/react';
-
+import {
+  Button,
+  ButtonGroup,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Tooltip,
+  IconButton,
+  Flex,
+  HStack,
+} from '@chakra-ui/react';
+import { useNoteContext } from '@/contexts/NoteContext';
 import { ChevronDownIcon } from '@chakra-ui/icons';
+import { BiUndo, BiRedo, BiBroadcast } from 'react-icons/bi';
+import { useEffect, useState } from 'react';
 
 const BoldButton = () => {
   const commands = useCommands();
@@ -74,10 +86,13 @@ const UndoButton = () => {
   const commands = useCommands();
   return (
     <Tooltip label="Undo | Ctrl + Z">
-      <Button onMouseDown={(event) => event.preventDefault()} onClick={() => commands.undo()}>
-        {/* <ChevronLeftIcon /> */}
-        &lt; Undo
-      </Button>
+      <IconButton
+        aria-label="Undo"
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.undo()}
+        icon={<BiUndo />}
+      />
+      {/* <ChevronLeftIcon /> */}
     </Tooltip>
   );
 };
@@ -86,38 +101,72 @@ const RedoButton = () => {
   const commands = useCommands();
   return (
     <Tooltip label="Redo | Ctrl + Shift + Z">
-      <Button onMouseDown={(event) => event.preventDefault()} onClick={() => commands.redo()}>
-        Redo &gt;
-      </Button>
+      <IconButton
+        aria-label="Redo"
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={() => commands.redo()}
+        icon={<BiRedo />}
+      />
     </Tooltip>
   );
 };
 
-const EditorButtons = () => {
+const CollaborateButton = (props) => {
+  const { currentNote } = useNoteContext();
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (currentNote?.noteId && disabled) {
+      setDisabled(false);
+    }
+  }, [currentNote, disabled]);
+
   return (
-    <>
-      <ButtonGroup size="sm" isAttached variant="toolbar">
-        <BoldButton />
-        <ItalicButton />
-      </ButtonGroup>
-      &nbsp;
-      <ButtonGroup size="sm" isAttached variant="toolbar">
-        <HeadingButtons />
-      </ButtonGroup>
-      &nbsp;
-      <ButtonGroup size="sm" isAttached variant="toolbar">
-        <BlockquoteButton />
-      </ButtonGroup>
-      &nbsp;
-      <ButtonGroup size="sm" isAttached variant="toolbar">
-        <CodeButton />
-      </ButtonGroup>
-      &nbsp;
-      <ButtonGroup size="sm" isAttached variant="toolbar">
-        <UndoButton />
-        <RedoButton />
-      </ButtonGroup>
-    </>
+    <Tooltip label="Create live session and collaborate with friends">
+      <IconButton
+        disabled={disabled}
+        aria-label="Create Live Collaboration Session"
+        icon={<BiBroadcast />}
+        onClick={() => props.setShowModal(true)}
+      />
+    </Tooltip>
+  );
+};
+
+const EditorButtons = (props) => {
+  return (
+    <Flex align="center" justify="center">
+      <HStack spacing={2}>
+        <ButtonGroup size="sm" isAttached variant="toolbar">
+          <BoldButton />
+          <ItalicButton />
+        </ButtonGroup>
+
+        <ButtonGroup size="sm" isAttached variant="toolbar">
+          <HeadingButtons />
+        </ButtonGroup>
+
+        <ButtonGroup size="sm" isAttached variant="toolbar">
+          <BlockquoteButton />
+        </ButtonGroup>
+
+        <ButtonGroup size="sm" isAttached variant="toolbar">
+          <CodeButton />
+        </ButtonGroup>
+
+        <ButtonGroup size="sm" isAttached variant="toolbar">
+          <UndoButton />
+          <RedoButton />
+        </ButtonGroup>
+        {!props.session ? (
+          <ButtonGroup size="sm" variant="toolbar">
+            <CollaborateButton {...props} />
+          </ButtonGroup>
+        ) : (
+          <></>
+        )}
+      </HStack>
+    </Flex>
   );
 };
 

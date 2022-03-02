@@ -1,5 +1,5 @@
 import { useExtension } from '@remirror/react';
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { LinkExtension, ShortcutHandlerProps } from 'remirror/extensions';
 
 const useLinkShortcut = () => {
