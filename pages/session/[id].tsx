@@ -24,13 +24,6 @@ const SessionPage = (props) => {
   const { user } = useAuth();
   const [owner, setOwner] = useState(false);
 
-  // const getProvider = useWebRtcProvider({ name: displayName, color: color }, props.id);
-
-  useEffect(() => {
-    if (!user) {
-      router.push('/');
-    }
-  }, [user, router]);
   useEffect(() => {
     const checkForSession = async () => {
       const sessionRef = doc(db, 'sessions', props.id);
@@ -60,18 +53,18 @@ const SessionPage = (props) => {
           }
         })
         .catch(() => {
-          // Session doesn't exist. Redirect?
+          router.push('/');
         });
     }
 
     if (!provider && !isLoading) {
-      const wRtc = new WebrtcProvider(props.id, new Y.Doc());
+      const wRtc = new WebrtcProvider(`untitled-notes-session-${props.id}`, new Y.Doc());
       const awareness = wRtc.awareness;
       awareness.setLocalStateField('user', { name: displayName, color: color });
+      wRtc.on('chat-message', console.log);
       setProvider(() => wRtc);
     }
-    console.log(provider);
-  }, [props.id, provider, isLoading, user, displayName, color, notes]);
+  }, [props.id, provider, isLoading, user, displayName, color, notes, router]);
 
   const handleComplete = useCallback(
     (info) => {

@@ -1,3 +1,4 @@
+import { Button } from '@chakra-ui/react';
 import { Remirror, useRemirror } from '@remirror/react';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
@@ -38,11 +39,6 @@ const Session = ({ provider, initialContent, owner, id }: any) => {
 
   useObservableListener('peers', handlePeersChange, provider);
 
-  const getInitialContent = useCallback(() => {
-    if (owner && initialContent) return initialContent;
-    return undefined;
-  }, [initialContent, owner]);
-
   const createExtensions = useCallback(
     () => [
       new AnnotationExtension(),
@@ -67,7 +63,7 @@ const Session = ({ provider, initialContent, owner, id }: any) => {
   const { manager, state, setState } = useRemirror({
     extensions: createExtensions,
     core: { excludeExtensions: ['history'] },
-    content: getInitialContent(),
+    content: owner ? initialContent : undefined,
   });
 
   return (

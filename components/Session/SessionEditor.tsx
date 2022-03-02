@@ -12,7 +12,7 @@ import { TagPopupComponent } from '@/components/Editor/extensions';
 import HyperlinkToolbar from '@/components/Editor/HyperlinkToolbar';
 import { db } from '../../firebase/clientApp';
 
-const SessionEditor = ({ state, owner, id }: any) => {
+const SessionEditor = ({ state, owner, id, forceLoad }: any) => {
   const { checkForTags } = useNoteContext();
   const { getJSON } = useHelpers();
   const { setContent } = useRemirrorContext();
