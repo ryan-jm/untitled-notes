@@ -1,6 +1,5 @@
-import { Box, Heading, useStyleConfig, IconButton, Flex } from '@chakra-ui/react';
+import { Box, Heading, useStyleConfig, IconButton, Flex, Center } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,11 +16,13 @@ import {
   MarkdownExtension,
   UnderlineExtension,
 } from 'remirror/extensions';
-import { useRouter } from 'next/router';
 
+import { useRouter } from 'next/router';
 import { useAuth } from '@/contexts/AuthContext';
+
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
+
 import NotesList from '../components/NoteList';
 import NotesListDrawer from '../components/NoteListDrawer';
 import { storage } from '../firebase/clientApp';
