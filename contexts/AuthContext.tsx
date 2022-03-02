@@ -27,6 +27,7 @@ const AuthProvider = ({ children }: any) => {
 
   auth.onAuthStateChanged((user) => {
     if (user) {
+      user['session'] = null;
       setUser(() => user);
     }
   });
@@ -47,6 +48,7 @@ const AuthProvider = ({ children }: any) => {
 
       let res = await signInWithPopup(auth, provider);
       const user = res.user;
+      user['session'] = null;
       setUser(user);
     } catch (err) {
       console.log(err);
