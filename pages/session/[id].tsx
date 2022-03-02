@@ -8,11 +8,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNoteContext } from '@/contexts/NoteContext';
 import { doc, getDoc } from 'firebase/firestore';
 
-import { useWebRtcProvider } from '@/components/Session/hooks';
+import { useRouter } from 'next/router';
 import { db } from '../../firebase/clientApp';
 
 const SessionPage = (props) => {
   const { notes } = useNoteContext();
+  const router = useRouter();
   const [provider, setProvider] = useState(null);
   const [displayName, setDisplayName] = useState(null);
   const [initialContent, setInitialContent] = useState('');
@@ -25,6 +26,11 @@ const SessionPage = (props) => {
 
   // const getProvider = useWebRtcProvider({ name: displayName, color: color }, props.id);
 
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, [user, router]);
   useEffect(() => {
     const checkForSession = async () => {
       const sessionRef = doc(db, 'sessions', props.id);
