@@ -164,16 +164,12 @@ const NoteProvider = ({ children }: any) => {
   }, [tags]);
 
   useEffect(() => {
-    if (editing !== currentNote?.noteId) {
+    if (editing !== currentNote?.noteId || (editing && !currentNote)) {
       const newCurrentNote = state.filter((note) => note.noteId == editing);
       setCurrentNote(newCurrentNote[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editing]);
-
-  useEffect(() => {
-    console.log(currentNote, '<- current note');
-  }, [currentNote]);
 
   useEffect(() => {
     if (disconnect && !user?.uid) {
@@ -184,7 +180,7 @@ const NoteProvider = ({ children }: any) => {
 
   return (
     <NoteContext.Provider
-      value={{ notes: state, setNotes: dispatch, editing, setEditing, tags, updateTags, checkForTags }}
+      value={{ notes: state, setNotes: dispatch, editing, setEditing, tags, updateTags, checkForTags, currentNote }}
     >
       {children}
     </NoteContext.Provider>
