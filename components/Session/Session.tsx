@@ -1,4 +1,3 @@
-import { useAuth } from '@/contexts/AuthContext';
 import { Remirror, useRemirror } from '@remirror/react';
 import React, { useEffect, useState, useCallback } from 'react';
 import {
@@ -39,9 +38,14 @@ const Session = ({ provider, initialContent, owner, id }: any) => {
 
   useObservableListener('peers', handlePeersChange, provider);
 
+  const getInitialContent = useCallback(() => {
+    if (owner && initialContent) return initialContent;
+    return undefined;
+  }, [initialContent, owner]);
+
   const createExtensions = useCallback(
     () => [
-      new AnnotationExtension({}),
+      new AnnotationExtension(),
       new BoldExtension({}),
       new ItalicExtension({}),
       new CodeExtension({}),
@@ -63,21 +67,12 @@ const Session = ({ provider, initialContent, owner, id }: any) => {
   const { manager, state, setState } = useRemirror({
     extensions: createExtensions,
     core: { excludeExtensions: ['history'] },
-    content: initialContent,
+    content: getInitialContent(),
   });
-
-  const handleChange = useCallback(
-    ({ state, tr }) => {
-      if (tr?.docChanged) {
-        setState(state);
-      }
-    },
-    [setState]
-  );
 
   return (
     <div className="remirror-theme">
-      <Remirror manager={manager} state={state} onChange={handleChange}>
+      <Remirror manager={manager} state={state} onChange={(p) => setState(p.state)}>
         <SessionEditor owner={isOwner} manager={manager} id={id} />
       </Remirror>
     </div>
