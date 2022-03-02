@@ -17,6 +17,7 @@ import {
 } from 'remirror/extensions';
 import { useRouter } from 'next/router';
 
+import CreateSessionModal from '@/components/Session/CreateSessionModal';
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
 import NotesList from '../components/NoteList';
@@ -25,7 +26,8 @@ import { storage } from '../firebase/clientApp';
 import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
-  const { notes, setEditing } = useNoteContext();
+  const { notes, setEditing, currentNote } = useNoteContext();
+  const [showModal, setShowModal] = useState(false);
 
   const { manager, state, setState } = useRemirror({
     extensions: () => [
@@ -132,11 +134,12 @@ const Create = () => {
         <Box w="100%" ml="40px" mr="40px">
           <div className="remirror-theme">
             <Remirror manager={manager} state={state} onChange={handleChange}>
-              <Editor state={state} manager={manager} />
+              <Editor state={state} manager={manager} setShowModal={setShowModal} />
             </Remirror>
           </div>
         </Box>
       </Flex>
+      {showModal ? <CreateSessionModal isOpen={showModal} setShowModal={setShowModal} /> : <></>}
     </>
   );
 };
