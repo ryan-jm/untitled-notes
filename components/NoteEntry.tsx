@@ -1,5 +1,5 @@
+/* eslint-disable react/display-name */
 import {
-  Box,
   Flex,
   AlertDialog,
   AlertDialogBody,
@@ -11,7 +11,9 @@ import {
   IconButton,
   Text,
 } from '@chakra-ui/react';
+
 import { DeleteIcon } from '@chakra-ui/icons';
+
 import { useRef, useState } from 'react';
 
 const NoteEntry = ({ handleChange, note, deleteNote }) => {
@@ -20,49 +22,47 @@ const NoteEntry = ({ handleChange, note, deleteNote }) => {
   const cancelRef = useRef();
 
   return (
-    <div>
-      <Flex justify={'space-between'}>
-        <Button mb="5px" variant={'notelistTitleButton'} size="sm" w="150px" onClick={() => handleChange(note)}>
-          <Text isTruncated>{note.title}</Text>
-        </Button>
+    <Flex justify={'space-between'}>
+      <Button mb="5px" variant={'notelistTitleButton'} size="sm" w="150px" onClick={() => handleChange(note)}>
+        <Text isTruncated>{note.title}</Text>
+      </Button>
 
-        <IconButton
-          size="sm"
-          aria-label="Delete note"
-          variant={'cardDeleteButton'}
-          icon={<DeleteIcon />}
-          onClick={() => setIsOpen(true)}
-        />
+      <IconButton
+        size="sm"
+        aria-label="Delete note"
+        variant={'cardDeleteButton'}
+        icon={<DeleteIcon />}
+        onClick={() => setIsOpen(true)}
+      />
 
-        <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Delete Note
-              </AlertDialogHeader>
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Note
+            </AlertDialogHeader>
 
-              <AlertDialogBody>Are you sure? You can not undo this action afterwards.</AlertDialogBody>
+            <AlertDialogBody>Are you sure? You can not undo this action afterwards.</AlertDialogBody>
 
-              <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button
-                  variant={'cardDeletePopUpButton'}
-                  ml={3}
-                  onClick={() => {
-                    onClose();
-                    deleteNote(note.noteId);
-                  }}
-                >
-                  Delete
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
-      </Flex>
-    </div>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                variant={'cardDeletePopUpButton'}
+                ml={3}
+                onClick={() => {
+                  onClose();
+                  deleteNote(note.noteId);
+                }}
+              >
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </Flex>
   );
 };
 

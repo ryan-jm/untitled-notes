@@ -25,6 +25,7 @@ import { ChevronRightIcon, EditIcon } from '@chakra-ui/icons';
 
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+import { motion } from 'framer-motion';
 
 import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
@@ -47,11 +48,18 @@ const Header = () => {
       onClose();
     });
   };
+
+  function checkDisplayName() {
+    if (/\s/g.test(user?.displayName)) return true;
+  }
+
+  console.log(user);
+
   useEffect(() => {
     user?.accessToken
       ? toast({
           title: 'Success',
-          description: `You are logged in as ${user?.displayName.split(' ')[0]}`,
+          description: `You are logged in as ${checkDisplayName() ? user?.displayName.split(' ')[0] : user?.email}`,
           status: 'success',
           duration: 3000,
           isClosable: true,
@@ -62,19 +70,23 @@ const Header = () => {
 
   const noteQuery = router.query.noteId;
 
+  const MotionBox = motion(Box);
+
   return (
     <>
       <Grid templateColumns={'repeat(3, 1fr)'} p={{ base: '20px', md: '40px' }}>
         <GridItem>
-          <Heading color="text">
-            <NextLink href={'/'} passHref>
-              <Link>
-                <Heading fontSize={{ base: '16px', md: '40px' }}>
-                  <span id="untitled">Untitled Notes</span>
-                </Heading>
-              </Link>
-            </NextLink>
-          </Heading>
+          <MotionBox whileHover={{ skew: [0, -10, 10, 0], scale: [1, 1.05, 1] }}>
+            <Heading color="text">
+              <NextLink href={'/'} passHref>
+                <Link>
+                  <Heading fontSize={{ base: '16px', md: '40px' }}>
+                    <span id="untitled">Untitled Notes</span>
+                  </Heading>
+                </Link>
+              </NextLink>
+            </Heading>
+          </MotionBox>
         </GridItem>
 
         <GridItem textAlign={'center'}>

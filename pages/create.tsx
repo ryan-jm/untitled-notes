@@ -20,7 +20,6 @@ import {
 import { useRouter } from 'next/router';
 import { useAuth } from '@/contexts/AuthContext';
 
-import Loading from '@/components/Loading';
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
 
@@ -54,12 +53,6 @@ const Create = () => {
     content: '<h1>Untitled...</h1>',
     stringHandler: 'html',
   });
-  // Loading Component DEMO
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 500);
-  }, []);
-  //end loading component DEMO
 
   //tag filtering section
   const [tagFilter, setTagFilter] = useState('');
@@ -160,61 +153,53 @@ const Create = () => {
 
   return (
     <>
-      {!loading ? (
-        <>
-          <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
-            {
-              <>
-                <NotesListDrawer
-                  // @ts-ignore
-                  tagsArray={tagsArray}
-                  taggedNotes={taggedNotes}
-                  setTagFilter={setTagFilter}
-                  forceLoad={forceLoad}
-                />
-                <IconButton
-                  size="sm"
-                  variant="ghost"
-                  aria-label="Create new note"
-                  icon={<AddIcon />}
-                  onClick={() => createNew()}
-                />
-              </>
-            }
-          </Box>
-          <Flex justify={'center'}>
-            <Box
-              w="280px"
-              minW="280px"
-              h="min-content"
-              ml={'40px'}
-              mt={'47px'}
-              display={{ base: 'none', md: 'flex' }}
-              overflow="hidden"
-              isTruncated
-            >
-              <NotesList
-                forceLoad={forceLoad}
-                createNew={createNew}
-                tagsArray={tagsArray}
-                taggedNotes={taggedNotes}
-                setTagFilter={setTagFilter}
-              />
-            </Box>
-            <Box w="100%" ml="40px" mr="40px">
-              <div className="remirror-theme">
-                <Remirror manager={manager} state={state} onChange={handleChange}>
-                  <Editor state={state} manager={manager} />
-                </Remirror>
-              </div>
-            </Box>
-          </Flex>
-        </>
-      ) : (
-        <Center>
-          <Loading />
-        </Center>
-      )}
+      <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
+        {
+          <>
+            <NotesListDrawer
+              // @ts-ignore
+              tagsArray={tagsArray}
+              taggedNotes={taggedNotes}
+              setTagFilter={setTagFilter}
+              forceLoad={forceLoad}
+            />
+            <IconButton
+              size="sm"
+              variant="ghost"
+              aria-label="Create new note"
+              icon={<AddIcon />}
+              onClick={() => createNew()}
+            />
+          </>
+        }
+      </Box>
+      <Flex justify={'center'}>
+        <Box
+          w="280px"
+          minW="280px"
+          h="min-content"
+          ml={'40px'}
+          mt={'47px'}
+          display={{ base: 'none', md: 'flex' }}
+          overflow="hidden"
+          isTruncated
+        >
+          <NotesList
+            forceLoad={forceLoad}
+            createNew={createNew}
+            tagsArray={tagsArray}
+            taggedNotes={taggedNotes}
+            setTagFilter={setTagFilter}
+          />
+        </Box>
+        <Box w="100%" ml="40px" mr="40px">
+          <div className="remirror-theme">
+            <Remirror manager={manager} state={state} onChange={handleChange}>
+              <Editor state={state} manager={manager} />
+            </Remirror>
+          </div>
+        </Box>
+      </Flex>
     </>
   );
 };

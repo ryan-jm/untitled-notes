@@ -23,18 +23,6 @@ const NotesList = ({ tagsArray, taggedNotes, setTagFilter, forceLoad, createNew 
     deleteDoc(deleteDocument);
   }
 
-  function populateNotesList() {
-    return taggedNotes
-      ? taggedNotes.reverse().map((note, index) => {
-          return (
-            <div key={note.noteId}>
-              <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
-            </div>
-          );
-        })
-      : undefined;
-  }
-
   function NotesListBox(props) {
     const { size, variant, ...rest } = props;
     const styles = useStyleConfig('NotesListBox', { size, variant });
@@ -58,7 +46,18 @@ const NotesList = ({ tagsArray, taggedNotes, setTagFilter, forceLoad, createNew 
           />
         </Heading>
 
-        {populateNotesList()}
+        {taggedNotes
+          ? taggedNotes.reverse().map((note, index) => {
+              return (
+                <div key={note.noteId}>
+                  {
+                    // @ts-ignore
+                    <NoteEntry key={note.noteId} handleChange={handleChange} note={note} deleteNote={deleteNote} />
+                  }
+                </div>
+              );
+            })
+          : undefined}
       </Box>
     </NotesListBox>
   );

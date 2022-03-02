@@ -51,7 +51,7 @@ const Button = {
     toolbar: (props) => ({
       color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
       bg: props.colorMode === 'dark' ? 'gray.800' : 'gray.200',
-      border: 'none',
+      border: '1px',
       borderColor: 'iris.100',
       _hover: {
         bg: mode(darken('gray.200', 10), whiten('gray.800', 10))(props),
