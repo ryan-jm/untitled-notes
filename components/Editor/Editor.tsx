@@ -3,18 +3,19 @@ import { SuggestState } from '@remirror/pm/suggest';
 import { EditorComponent, useCommands, useHelpers, useRemirrorContext } from '@remirror/react';
 import { saveAs } from 'file-saver';
 import { doc, collection, Timestamp, updateDoc, setDoc } from 'firebase/firestore';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { useNoteContext } from '../../contexts/NoteContext';
 import { db } from '../../firebase/clientApp';
+import CreateSessionModal from '../Session/CreateSessionModal';
 import EditorButtons from './EditorButtons';
 import { TagPopupComponent } from './extensions';
 import HyperlinkToolbar from './HyperlinkToolbar';
 
-const Editor = ({ state }: any) => {
+const Editor = ({ state, setShowModal }: any) => {
   const { user } = useAuth();
-  const { editing, checkForTags, currentNote } = useNoteContext();
+  const { editing, checkForTags } = useNoteContext();
   const { getJSON, getMarkdown } = useHelpers();
   const { setContent } = useRemirrorContext();
   const commands = useCommands();
@@ -77,7 +78,7 @@ const Editor = ({ state }: any) => {
   return (
     <>
       <Box textAlign="center">
-        <EditorButtons />
+        <EditorButtons setShowModal={setShowModal} />
       </Box>
       <EditorComponent />
       <TagPopupComponent />
