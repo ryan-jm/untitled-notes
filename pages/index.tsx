@@ -1,4 +1,4 @@
-import { Flex, Box, Center, Heading, Button, Text, Tooltip } from '@chakra-ui/react';
+import { Flex, Box, Center, Heading, Button, Text, Tooltip, Spinner } from '@chakra-ui/react';
 
 export default function Home() {
   return (

@@ -28,7 +28,7 @@ import {
 import { EditIcon, DeleteIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { db } from '../firebase/clientApp';
 
 export default function NoteCard({ note }) {

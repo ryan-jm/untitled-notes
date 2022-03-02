@@ -44,7 +44,7 @@ const NotesList = ({ tagsArray, taggedNotes, setTagFilter, forceLoad, createNew 
   return (
     <NotesListBox isTruncated>
       <Box h="min-content" isTruncated pr="20px" mr="20px">
-        <Flex justifyContent={'left'}>
+        <Flex justifyContent={'left'} textAlign={'left'}>
           {tagsArray ? <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} /> : ''}
         </Flex>
         <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">

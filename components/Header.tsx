@@ -19,12 +19,14 @@ import {
   ModalCloseButton,
   IconButton,
   Box,
+  useToast,
 } from '@chakra-ui/react';
 import { ChevronRightIcon, EditIcon } from '@chakra-ui/icons';
 
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 
+import { useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import DarkModeSwitch from './DarkModeSwitch';
 
@@ -36,6 +38,7 @@ const Header = () => {
   const { user, login, logout } = useAuth();
   const router = useRouter();
   const { asPath } = useRouter();
+  const toast = useToast();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -44,6 +47,18 @@ const Header = () => {
       onClose();
     });
   };
+  useEffect(() => {
+    user?.accessToken
+      ? toast({
+          title: 'Success',
+          description: `You are logged in as ${user?.displayName.split(' ')[0]}`,
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+      : '';
+  }, [user?.accessToken]);
+  console.log(user);
 
   const noteQuery = router.query.noteId;
 
