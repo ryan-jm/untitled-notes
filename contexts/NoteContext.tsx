@@ -160,10 +160,6 @@ const NoteProvider = ({ children }: any) => {
   }, [user?.uid]);
 
   useEffect(() => {
-    console.log(tags);
-  }, [tags]);
-
-  useEffect(() => {
     if (editing !== currentNote?.noteId || (editing && !currentNote)) {
       const newCurrentNote = state.filter((note) => note.noteId == editing);
       setCurrentNote(newCurrentNote[0]);

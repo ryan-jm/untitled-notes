@@ -1,7 +1,43 @@
-export default function TagSearch() {
-  const tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5'];
+import { Flex, Button } from '@chakra-ui/react';
 
-  function createTag(tag) {}
+export default function TagSearch(props) {
+  const { tagsArray, setTagFilter } = props;
 
-  return <>TAAAGS</>;
+  function createTag(tag) {
+    return (
+      <Button
+        key={tag}
+        onClick={handleTag}
+        m="3px"
+        variant={'dashboardTagsButton'}
+        size={'sm'}
+        w={'min-content'}
+        value={tag}
+      >
+        {tag}
+      </Button>
+    );
+  }
+
+  function handleTag(event) {
+    setTagFilter(() => event.target.value);
+  }
+
+  return (
+    <>
+      <Flex justifyContent={'center'} flexDirection={'row'} flexWrap={'wrap'}>
+        <Button
+          key={'all'}
+          onClick={() => setTagFilter(() => '')}
+          m="3px"
+          variant={'dashboardTagsButton'}
+          size={'sm'}
+          w={'min-content'}
+        >
+          All Tags
+        </Button>
+        {tagsArray.map((tag) => createTag(tag))}
+      </Flex>
+    </>
+  );
 }

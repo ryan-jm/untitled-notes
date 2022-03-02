@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react';
-import { Box, Heading, useStyleConfig, IconButton } from '@chakra-ui/react';
+import React from 'react';
+import { Box, Heading, useStyleConfig, IconButton, Flex } from '@chakra-ui/react';
 
 import { AddIcon } from '@chakra-ui/icons';
 
-import { useRouter } from 'next/router';
+import TagSearch from '@/components/TagSearch';
 
 import { deleteDoc, doc } from 'firebase/firestore';
-import { useAuth } from '../contexts/AuthContext';
 import { useNoteContext } from '../contexts/NoteContext';
 import { db } from '../firebase/clientApp';
 import NoteEntry from './NoteEntry';
 
-const NotesList = ({ forceLoad, createNew }: any) => {
-  const { notes, setEditing } = useNoteContext();
+const NotesList = ({ tagsArray, taggedNotes, setTagFilter, forceLoad, createNew }: any) => {
+  const { setEditing } = useNoteContext();
 
   const handleChange = (note) => {
     setEditing(() => note.noteId);
@@ -24,18 +23,6 @@ const NotesList = ({ forceLoad, createNew }: any) => {
     deleteDoc(deleteDocument);
   }
 
-  function populateNotesList() {
-    return notes
-      ? notes.reverse().map((note, index) => {
-          return (
-            <div key={note.noteId}>
-              <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
-            </div>
-          );
-        })
-      : undefined;
-  }
-
   function NotesListBox(props) {
     const { size, variant, ...rest } = props;
     const styles = useStyleConfig('NotesListBox', { size, variant });
@@ -45,8 +32,11 @@ const NotesList = ({ forceLoad, createNew }: any) => {
   return (
     <NotesListBox isTruncated>
       <Box h="min-content" isTruncated pr="20px" mr="20px">
+        <Flex justifyContent={'left'} textAlign={'left'}>
+          {tagsArray ? <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} /> : ''}
+        </Flex>
         <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
-          Your Latest Notes{' '}
+          Your Latest Notes
           <IconButton
             size="sm"
             variant="ghost"
@@ -55,7 +45,19 @@ const NotesList = ({ forceLoad, createNew }: any) => {
             onClick={() => createNew()}
           />
         </Heading>
-        {populateNotesList()}
+
+        {taggedNotes
+          ? taggedNotes.reverse().map((note, index) => {
+              return (
+                <div key={note.noteId}>
+                  {
+                    // @ts-ignore
+                    <NoteEntry key={note.noteId} handleChange={handleChange} note={note} deleteNote={deleteNote} />
+                  }
+                </div>
+              );
+            })
+          : undefined}
       </Box>
     </NotesListBox>
   );

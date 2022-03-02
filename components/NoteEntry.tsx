@@ -1,26 +1,68 @@
+/* eslint-disable react/display-name */
+import {
+  Flex,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button,
+  IconButton,
+  Text,
+} from '@chakra-ui/react';
+
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Box, HStack, Circle, useDisclosure, Flex, SlideFade } from '@chakra-ui/react';
-import { Button } from '@remirror/react';
+
+import { useRef, useState } from 'react';
 
 const NoteEntry = ({ handleChange, note, deleteNote }) => {
-  const { isOpen, onToggle } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = useRef();
+
   return (
-    <div>
-      <Flex align="center" justify="space-between">
-        <Button onClick={() => handleChange(note)} onDrag={onToggle} draggable="true">
-          {note.title}
-        </Button>
-        <SlideFade in={isOpen} offsetX="15%">
-          <Box p="5px" color="white" mt="2" bg="purple.200" rounded="md" shadow="md">
-            <HStack>
-              <Circle size="40px" bg="red.300" color="white">
-                <DeleteIcon onClick={() => deleteNote(note.noteId)} />
-              </Circle>
-            </HStack>
-          </Box>
-        </SlideFade>
-      </Flex>
-    </div>
+    <Flex justify={'space-between'}>
+      <Button mb="5px" variant={'notelistTitleButton'} size="sm" w="150px" onClick={() => handleChange(note)}>
+        <Text isTruncated>{note.title}</Text>
+      </Button>
+
+      <IconButton
+        size="sm"
+        aria-label="Delete note"
+        variant={'cardDeleteButton'}
+        icon={<DeleteIcon />}
+        onClick={() => setIsOpen(true)}
+      />
+
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Note
+            </AlertDialogHeader>
+
+            <AlertDialogBody>Are you sure? You can not undo this action afterwards.</AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                variant={'cardDeletePopUpButton'}
+                ml={3}
+                onClick={() => {
+                  onClose();
+                  deleteNote(note.noteId);
+                }}
+              >
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </Flex>
   );
 };
 

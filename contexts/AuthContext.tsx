@@ -6,7 +6,9 @@ import {
   browserLocalPersistence,
   AuthProvider,
 } from 'firebase/auth';
-import { createContext, useContext, useState } from 'react';
+import { Router, useRouter } from 'next/router';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useToast } from '@chakra-ui/react';
 
 import { auth } from '../firebase/clientApp';
 
@@ -32,6 +34,8 @@ const AuthProvider = ({ children }: any) => {
     }
   });
 
+  const toast = useToast();
+  const router = useRouter();
   const login = async (type?: string) => {
     try {
       await setPersistence(auth, browserLocalPersistence);
@@ -59,7 +63,17 @@ const AuthProvider = ({ children }: any) => {
     auth
       .signOut()
       .then(() => setUser(null))
-      .then(() => window.location.reload());
+      .then(() => {
+        toast({
+          title: 'Logged out',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      })
+      .then(() => {
+        router.push('/');
+      });
   };
 
   return <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>;

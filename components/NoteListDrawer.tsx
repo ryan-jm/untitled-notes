@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Drawer,
   DrawerBody,
@@ -9,40 +8,39 @@ import {
   DrawerCloseButton,
   Button,
   useDisclosure,
-  Box,
   Heading,
-  Divider,
 } from '@chakra-ui/react';
 
-import { useNoteContext } from '../contexts/NoteContext';
+import TagSearch from '@/components/TagSearch';
 
-const NotesList = () => {
-  const { notes, setEditing } = useNoteContext();
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase/clientApp';
+
+import { useNoteContext } from '../contexts/NoteContext';
+import NoteEntry from './NoteEntry';
+
+const NotesListDrawer = ({ forceLoad, tagsArray, taggedNotes, setTagFilter }) => {
+  const { setEditing } = useNoteContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
+  const handleChange = (note) => {
+    setEditing(() => note.noteId);
+    forceLoad(note);
+  };
 
-  function populateNotesList() {
-    return notes
-      ? notes.map((note) => {
-          if (note.title) {
-            return (
-              <Box isTruncated pt="20px">
-                <Heading isTruncated fontSize="md">
-                  {note.title}
-                  <Divider />
-                </Heading>
-              </Box>
-            );
-          } else {
-            return (
-              <Box isTruncated pt="20px">
-                <Heading isTruncated fontSize="md">
-                  Untitled
-                  <Divider />
-                </Heading>
-              </Box>
-            );
-          }
+  function deleteNote(id) {
+    const deleteDocument = doc(db, 'notes', id);
+    deleteDoc(deleteDocument);
+  }
+
+  function populateNotesList(): JSX.Element[] {
+    return taggedNotes
+      ? taggedNotes.reverse().map((note, index) => {
+          return (
+            <div key={note.noteId}>
+              <NoteEntry handleChange={handleChange} note={note} deleteNote={deleteNote} />
+            </div>
+          );
         })
       : undefined;
   }
@@ -57,6 +55,7 @@ const NotesList = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader pb="0">
+            <TagSearch tagsArray={tagsArray} setTagFilter={setTagFilter} />
             <Heading isTruncated fontWeight="bold" textTransform="uppercase" fontSize="md" color="iris.100" p="0">
               Your Latest Notes
             </Heading>
@@ -68,4 +67,4 @@ const NotesList = () => {
   );
 };
 
-export default NotesList;
+export default NotesListDrawer;

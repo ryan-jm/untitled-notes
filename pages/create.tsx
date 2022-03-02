@@ -1,4 +1,5 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Heading, useStyleConfig, IconButton, Flex, Center } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import { Remirror, useRemirror } from '@remirror/react';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -15,20 +16,27 @@ import {
   MarkdownExtension,
   UnderlineExtension,
 } from 'remirror/extensions';
+
 import { useRouter } from 'next/router';
+import { useAuth } from '@/contexts/AuthContext';
 
 import CreateSessionModal from '@/components/Session/CreateSessionModal';
 import Editor from '../components/Editor/Editor';
 import { HyperlinkExtension, TagExtension } from '../components/Editor/extensions';
+
 import NotesList from '../components/NoteList';
 import NotesListDrawer from '../components/NoteListDrawer';
 import { storage } from '../firebase/clientApp';
 import { useNoteContext } from '../contexts/NoteContext';
 
 const Create = () => {
-  const { notes, setEditing, currentNote } = useNoteContext();
   const [showModal, setShowModal] = useState(false);
 
+  const { user } = useAuth();
+  const { notes, tags, setEditing } = useNoteContext();
+  const [note, setNote] = useState<any>();
+  const [loadedNote, setLoadedNote] = useState(false);
+  const router = useRouter();
   const { manager, state, setState } = useRemirror({
     extensions: () => [
       new BoldExtension({}),
@@ -49,15 +57,42 @@ const Create = () => {
     stringHandler: 'html',
   });
 
-  const router = useRouter();
+  //tag filtering section
+  const [tagFilter, setTagFilter] = useState('');
+  const [taggedNotes, setTaggedNotes] = useState([]);
+  const [tagsArray, setTagsArray] = useState([]);
+
+  function generateUniqueTagList() {
+    const filterTags = new Set(tags.filter((tag) => tag.noteRef !== undefined).map((tag) => tag.label));
+
+    const filterTagsArray = Array.from(filterTags);
+
+    return filterTagsArray;
+  }
+
+  useEffect(() => {
+    setTagsArray(() => generateUniqueTagList());
+
+    if (!tagFilter) {
+      setTaggedNotes(notes);
+    } else if (tagFilter) {
+      setTaggedNotes(() => getFilteredNotes());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tagFilter, notes]);
+
+  function getFilteredNotes() {
+    const filterNotes = notes.filter((note) => {
+      return note.tags.some((elem: any) => elem.label === tagFilter);
+    });
+
+    return filterNotes;
+  }
+  // end tag filtering section
 
   const noteQuery = router.query.noteId;
 
   const filteredNotes = notes.filter((note) => note.noteId === noteQuery);
-
-  const [note, setNote] = useState<any>();
-
-  const [loadedNote, setLoadedNote] = useState(false);
 
   const forceLoad = useCallback(
     (note) => {
@@ -113,10 +148,34 @@ const Create = () => {
     });
   }
 
+  /* Redirect if no user state is found, i.e. user is unauthenticated or has refreshed. */
+  useEffect(() => {
+    if (!user) router.push('/');
+  }, [router, user]);
+
+  if (!user) return <p>Redirecting...</p>;
+
   return (
     <>
       <Box display={{ md: 'none' }} margin="20px" textAlign={'center'}>
-        <NotesListDrawer />
+        {
+          <>
+            <NotesListDrawer
+              // @ts-ignore
+              tagsArray={tagsArray}
+              taggedNotes={taggedNotes}
+              setTagFilter={setTagFilter}
+              forceLoad={forceLoad}
+            />
+            <IconButton
+              size="sm"
+              variant="ghost"
+              aria-label="Create new note"
+              icon={<AddIcon />}
+              onClick={() => createNew()}
+            />
+          </>
+        }
       </Box>
       <Flex justify={'center'}>
         <Box
@@ -129,7 +188,13 @@ const Create = () => {
           overflow="hidden"
           isTruncated
         >
-          <NotesList forceLoad={forceLoad} createNew={createNew} />
+          <NotesList
+            forceLoad={forceLoad}
+            createNew={createNew}
+            tagsArray={tagsArray}
+            taggedNotes={taggedNotes}
+            setTagFilter={setTagFilter}
+          />
         </Box>
         <Box w="100%" ml="40px" mr="40px">
           <div className="remirror-theme">

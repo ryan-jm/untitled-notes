@@ -51,7 +51,7 @@ const Button = {
     toolbar: (props) => ({
       color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
       bg: props.colorMode === 'dark' ? 'gray.800' : 'gray.200',
-      border: 'none',
+      border: '1px',
       borderColor: 'iris.100',
       _hover: {
         bg: mode(darken('gray.200', 10), whiten('gray.800', 10))(props),
@@ -110,6 +110,38 @@ const Button = {
       _focus: {
         boxShadow: '0',
       },
+    }),
+    dashboardTagsButton: (props) => ({
+      color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
+      bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
+      border: 'none',
+      borderColor: 'iris.100',
+      textAlign: 'left',
+      borderRadius: '5px',
+
+      _hover: {
+        bg: mode(darken('gray.200', 10), whiten('gray.700', 10))(props),
+      },
+      _focus: {
+        boxShadow: '0',
+      },
+      _active: {},
+    }),
+    notelistTitleButton: (props) => ({
+      color: props.colorMode === 'dark' ? 'gray.200' : 'gray.800',
+      bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
+      border: 'none',
+      borderColor: 'iris.100',
+      textAlign: 'left',
+      justifyContent: 'left',
+      borderRadius: '5px',
+      _hover: {
+        bg: mode(darken('gray.200', 10), whiten('gray.700', 10))(props),
+      },
+      _focus: {
+        boxShadow: '0',
+      },
+      _active: {},
     }),
   },
   // The default `size` or `variant` values

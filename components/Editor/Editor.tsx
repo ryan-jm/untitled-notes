@@ -66,7 +66,6 @@ const Editor = ({ state, setShowModal }: any) => {
 
     if (titleEmpty) {
       /* H1 is present on first node but has no text; will clone state schema and apply a default 'Untitled' title */
-      console.log(titleEmpty);
       checkState = state.applyTransaction(state.tr.insertText('Untitled...', 0, 1)).state;
       const nodeSchema = getJSON(checkState);
       nodeSchema.content[0].type = 'heading';

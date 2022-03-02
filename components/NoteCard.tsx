@@ -25,150 +25,173 @@ import {
   Button,
 } from '@chakra-ui/react';
 
+import { motion } from 'framer-motion';
+
 import { EditIcon, DeleteIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 import { deleteDoc, doc } from 'firebase/firestore';
-import { useState, useRef } from 'react';
+import { useState, useRef, memo } from 'react';
 import { db } from '../firebase/clientApp';
 
-export default function NoteCard({ note }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const onClose = () => setIsOpen(false);
-  const cancelRef = useRef();
+// eslint-disable-next-line react/display-name
+const NoteCard = memo(
+  (props) => {
+    // @ts-ignore
+    const { note } = props;
 
-  const router = useRouter();
-  const dateTime = new Date(note.created_at.seconds * 1000).toLocaleString('en-GB', { timeZone: 'UTC' });
+    console.log(props);
+    console.log(note);
 
-  // array with every node note.content.content
-  const nodeContent = [...note.content.content];
-  nodeContent.shift();
+    const [isOpen, setIsOpen] = useState(false);
+    const onClose = () => setIsOpen(false);
+    const cancelRef = useRef();
 
-  const getNoteBody = nodeContent.map((elem, index) => {
-    return elem.content && elem.content[0] ? <p>{elem.content[0].text}</p> : '';
-  });
-  const deleteNote = (id) => {
-    const collectionById = doc(db, 'notes', id);
-    deleteDoc(collectionById);
-  };
+    const router = useRouter();
+    const dateTime = new Date(note.created_at.seconds * 1000).toLocaleString('en-GB', { timeZone: 'UTC' });
 
-  return (
-    <Center p={6}>
-      <Box
-        maxW={'270px'}
-        w={'270px'}
-        h={'350px'}
-        bg={useColorModeValue('white', 'gray.800')}
-        boxShadow={'5px 8px 12px #7879F1'}
-        rounded={'md'}
-        overflow={'hidden'}
-      >
-        <Grid h="100%" templateColumns="1" templateRows={'repeat(4, 1fr)'} p={4} position="relative">
-          <GridItem>
-            <Box p="" position="absolute" left="15px" top="15px">
-              <IconButton
-                size="sm"
-                aria-label="Edit note"
-                variant={'cardEditButton'}
-                icon={<EditIcon />}
-                onClick={() => router.push(`/create?noteId=${note.noteId}`)}
-              />
-            </Box>
-            <br />
+    // array with every node note.content.content
+    const nodeContent = [...note.content.content];
+    nodeContent.shift();
 
-            <Box p="" position="absolute" right="15px" top="15px">
-              <IconButton
-                size="sm"
-                aria-label="Delete note"
-                variant={'cardDeleteButton'}
-                icon={<DeleteIcon />}
-                onClick={() => setIsOpen(true)}
-              />
-            </Box>
-            <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
-              <AlertDialogOverlay>
-                <AlertDialogContent>
-                  <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                    Delete Note
-                  </AlertDialogHeader>
+    const getNoteBody = nodeContent.map((elem, index) => {
+      return elem.content && elem.content[0] ? <p key={index}>{elem.content[0].text}</p> : '';
+    });
 
-                  <AlertDialogBody>Are you sure? You can not undo this action afterwards.</AlertDialogBody>
+    const deleteNote = (id) => {
+      const collectionById = doc(db, 'notes', id);
+      deleteDoc(collectionById);
+    };
 
-                  <AlertDialogFooter>
-                    <Button ref={cancelRef} onClick={onClose}>
-                      Cancel
-                    </Button>
-                    <Button
-                      variant={'cardDeletePopUpButton'}
-                      ml={3}
-                      onClick={() => {
-                        onClose();
-                        deleteNote(note.noteId);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialogOverlay>
-            </AlertDialog>
+    const MotionCenter = motion(Center);
 
-            <Stack
-              spacing={0}
-              align={'center'}
-              mb={5}
-              overflow="hidden"
-              whiteSpace={'nowrap'}
-              width="200px"
-              noOfLines={1}
-            >
-              <Heading mt="20px" pb="15px" fontSize={'2xl'} isTruncated>
-                {note.title}
-              </Heading>
-            </Stack>
-          </GridItem>
+    return (
+      <MotionCenter p={6} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0 }} layout>
+        <Box
+          maxW={'270px'}
+          w={'270px'}
+          h={'350px'}
+          bg={useColorModeValue('white', 'gray.800')}
+          boxShadow={'5px 8px 12px #7879F1'}
+          rounded={'md'}
+          overflow={'hidden'}
+        >
+          <Grid h="100%" templateColumns="1" templateRows={'repeat(4, 1fr)'} p={4} position="relative">
+            <GridItem>
+              <Box p="" position="absolute" left="15px" top="15px">
+                <IconButton
+                  size="sm"
+                  aria-label="Edit note"
+                  variant={'cardEditButton'}
+                  icon={<EditIcon />}
+                  onClick={() => router.push(`/create?noteId=${note.noteId}`)}
+                />
+              </Box>
+              <br />
 
-          <GridItem>
-            <Text noOfLines={4} color={'gray.500'}>
-              {getNoteBody}
-            </Text>
-          </GridItem>
+              <Box p="" position="absolute" right="15px" top="15px">
+                <IconButton
+                  size="sm"
+                  aria-label="Delete note"
+                  variant={'cardDeleteButton'}
+                  icon={<DeleteIcon />}
+                  onClick={() => setIsOpen(true)}
+                />
+              </Box>
+              <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
+                <AlertDialogOverlay>
+                  <AlertDialogContent>
+                    <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                      Delete Note
+                    </AlertDialogHeader>
 
-          <GridItem w="230px" rowStart={4}>
-            <HStack>
-              <Flex>
-                <Popover>
-                  <PopoverTrigger>
-                    <IconButton aria-label={'stuff'} size="xs" variant={'cardTagsButton'} icon={<ChevronDownIcon />} />
-                  </PopoverTrigger>
+                    <AlertDialogBody>Are you sure? You can not undo this action afterwards.</AlertDialogBody>
 
-                  <PopoverContent w="250px">
-                    <PopoverArrow />
-                    <Box textAlign={'center'}>
-                      <PopoverBody>
-                        {note.tags.length ? (
-                          note.tags.map((tag, index) => {
-                            return <Link key={index}>{tag.label}&nbsp;</Link>;
-                          })
-                        ) : (
-                          <p>None</p>
-                        )}
-                      </PopoverBody>
-                    </Box>
-                  </PopoverContent>
-                </Popover>
-              </Flex>
+                    <AlertDialogFooter>
+                      <Button ref={cancelRef} onClick={onClose}>
+                        Cancel
+                      </Button>
+                      <Button
+                        variant={'cardDeletePopUpButton'}
+                        ml={3}
+                        onClick={() => {
+                          onClose();
+                          deleteNote(note.noteId);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialogOverlay>
+              </AlertDialog>
 
-              <Flex noOfLines={1}>
-                <p>Tags</p>
-              </Flex>
-            </HStack>
+              <Stack
+                spacing={0}
+                align={'center'}
+                mb={5}
+                overflow="hidden"
+                whiteSpace={'nowrap'}
+                width="200px"
+                noOfLines={1}
+              >
+                <Heading mt="20px" pb="15px" fontSize={'2xl'} isTruncated>
+                  {note.title}
+                </Heading>
+              </Stack>
+            </GridItem>
 
-            <Grid pt="10px" noOfLines={3} templateColumns="">
-              <Text fontSize={'sm'}>Date: {dateTime}</Text>
-            </Grid>
-          </GridItem>
-        </Grid>
-      </Box>
-    </Center>
-  );
-}
+            <GridItem>
+              <Text noOfLines={4} color={'gray.500'}>
+                {getNoteBody}
+              </Text>
+            </GridItem>
+
+            <GridItem w="230px" rowStart={4}>
+              <HStack>
+                <Flex>
+                  <Popover>
+                    <PopoverTrigger>
+                      <IconButton
+                        aria-label={'stuff'}
+                        size="xs"
+                        variant={'cardTagsButton'}
+                        icon={<ChevronDownIcon />}
+                      />
+                    </PopoverTrigger>
+
+                    <PopoverContent w="250px">
+                      <PopoverArrow />
+                      <Box textAlign={'center'}>
+                        <PopoverBody>
+                          {note.tags.length ? (
+                            note.tags.map((tag, index) => {
+                              return <Link key={index}>{tag.label}&nbsp;</Link>;
+                            })
+                          ) : (
+                            <p>None</p>
+                          )}
+                        </PopoverBody>
+                      </Box>
+                    </PopoverContent>
+                  </Popover>
+                </Flex>
+
+                <Flex noOfLines={1}>
+                  <p>Tags</p>
+                </Flex>
+              </HStack>
+
+              <Grid pt="10px" noOfLines={3} templateColumns="">
+                <Text fontSize={'sm'}>Date: {dateTime}</Text>
+              </Grid>
+            </GridItem>
+          </Grid>
+        </Box>
+      </MotionCenter>
+    );
+  },
+  //@ts-ignore
+  (next, prev) => next.note === prev.note
+);
+
+export default NoteCard;
