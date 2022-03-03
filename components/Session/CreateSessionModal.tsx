@@ -50,7 +50,7 @@ const CreateSessionModal = ({ isOpen, setShowModal }) => {
         owner: user.uid,
         owner_display_name: displayName,
         owner_color: colorValue,
-        note: currentNote,
+        note: currentNote.content,
         password: password,
         created_at: Timestamp.fromDate(new Date(Date.now())),
       };
