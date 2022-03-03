@@ -147,7 +147,7 @@ const Header = () => {
 
           {/* Nested ternary logic to only display when user is logged in, also display different center buttons depending on page */}
           {user?.accessToken ? (
-            asPath === '/create' || asPath === `/create?noteId=${noteQuery}` ? (
+            asPath.startsWith('/create') || asPath.startsWith(`/session`) ? (
               <NextLink href={'/dashboard'} passHref>
                 <Link>
                   <Button variant="primary" size="md" leftIcon={<EditIcon />}>
