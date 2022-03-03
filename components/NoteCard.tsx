@@ -39,9 +39,6 @@ const NoteCard = memo(
     // @ts-ignore
     const { note } = props;
 
-    console.log(props);
-    console.log(note);
-
     const [isOpen, setIsOpen] = useState(false);
     const onClose = () => setIsOpen(false);
     const cancelRef = useRef();
@@ -165,7 +162,7 @@ const NoteCard = memo(
                         <PopoverBody>
                           {note.tags.length ? (
                             note.tags.map((tag, index) => {
-                              return <Link key={index}>{tag.label}&nbsp;</Link>;
+                              return <Link key={index}>{tag.label.substring(1)}&nbsp;</Link>;
                             })
                           ) : (
                             <p>None</p>

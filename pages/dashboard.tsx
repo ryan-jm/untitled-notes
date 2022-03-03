@@ -22,7 +22,16 @@ export default function Dashboard() {
   const [tagsArray, setTagsArray] = useState([]);
 
   function generateUniqueTagList() {
-    const filterTags = new Set(tags.filter((tag) => tag.noteRef !== undefined).map((tag) => tag.label));
+    const filterTags = new Set(
+      tags
+        .filter((tag) => tag.noteRef !== undefined)
+        .map((tag) => {
+          const niceTag = tag;
+          console.log(tag.label.substring(1));
+
+          return tag.label.substring(1);
+        })
+    );
 
     const filterTagsArray = Array.from(filterTags);
 
@@ -41,7 +50,7 @@ export default function Dashboard() {
 
   function getFilteredNotes() {
     const filterNotes = notes.filter((note) => {
-      return note.tags.some((elem: any) => elem.label === tagFilter);
+      return note.tags.some((elem: any) => elem.label.substring(1) === tagFilter);
     });
 
     return filterNotes;

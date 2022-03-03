@@ -63,7 +63,7 @@ const Create = () => {
   const [tagsArray, setTagsArray] = useState([]);
 
   function generateUniqueTagList() {
-    const filterTags = new Set(tags.filter((tag) => tag.noteRef !== undefined).map((tag) => tag.label));
+    const filterTags = new Set(tags.filter((tag) => tag.noteRef !== undefined).map((tag) => tag.label.substring(1)));
 
     const filterTagsArray = Array.from(filterTags);
 
@@ -83,7 +83,7 @@ const Create = () => {
 
   function getFilteredNotes() {
     const filterNotes = notes.filter((note) => {
-      return note.tags.some((elem: any) => elem.label === tagFilter);
+      return note.tags.some((elem: any) => elem.label.substring(1) === tagFilter);
     });
 
     return filterNotes;
