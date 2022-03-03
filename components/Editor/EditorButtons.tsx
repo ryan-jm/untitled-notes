@@ -73,15 +73,6 @@ const BlockquoteButton = () => {
   );
 };
 
-const CodeButton = () => {
-  const commands = useCommands();
-  return (
-    <Button onMouseDown={(event) => event.preventDefault()} onClick={() => commands.toggleCode()}>
-      Code
-    </Button>
-  );
-};
-
 const UndoButton = () => {
   const commands = useCommands();
   return (
@@ -148,10 +139,6 @@ const EditorButtons = (props) => {
 
         <ButtonGroup size="sm" isAttached variant="toolbar">
           <BlockquoteButton />
-        </ButtonGroup>
-
-        <ButtonGroup size="sm" isAttached variant="toolbar">
-          <CodeButton />
         </ButtonGroup>
 
         <ButtonGroup size="sm" isAttached variant="toolbar">

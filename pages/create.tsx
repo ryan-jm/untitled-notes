@@ -6,8 +6,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   BlockquoteExtension,
   BoldExtension,
+  CodeBlockExtension,
   CalloutExtension,
-  CodeExtension,
   HeadingExtension,
   HistoryExtension,
   ImageExtension,
@@ -41,7 +41,7 @@ const Create = () => {
     extensions: () => [
       new BoldExtension({}),
       new ItalicExtension({}),
-      new CodeExtension({}),
+      new CodeBlockExtension({}),
       new HeadingExtension({}),
       new BlockquoteExtension({}),
       new HistoryExtension({}),
