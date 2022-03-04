@@ -1,34 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">Untitled Notes</h1>
+
+<p align="center">A Notetaking Application with Realtime Markdown and Collaborative Features</p>
+<p align="center">
+<br /><a href="https://untitled-notes.vercel.app/">Explore</a>
+
+## Table Of Contents
+
+- [Table Of Contents](#table-of-contents)
+- [Overview](#overview)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites:](#prerequisites)
+  - [Installation:](#installation)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+## Overview
+
+Untitled Notes features a realtime markdown editor with a multitude of features within; including live collaboration sessions with friends utilising WebRTC and YJS. This application was built during the last three weeks of the Northcoders bootcamp. It was built in Nextjs, with Firebase as a backend and TypeScript as the main language. We decided to use eslint, prettier, and Husky to enforce a style guide with pre-commit hooks.
+
+## Built With
+
+<img src="https://img.shields.io/badge/TypeScript-1D1E23?style=for-the-badge&logo=typescript&logoColor=2D79C7" alt="TypeScript"/> <img src="https://img.shields.io/badge/Next.js-FFFFFF?style=for-the-badge&logo=next%2Ejs&logoColor=000000" alt="Next.js" /> <img src="https://img.shields.io/badge/Chakra UI-319795?style=for-the-badge&logo=chakra%20ui&logoColor=FFF" alt="Chakra UI" /> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=black" alt="Firebase"> <img src="https://img.shields.io/badge/WebRTC-FFFFFF?style=for-the-badge&logo=WebRTC&logoColor=333333" alt="Firebase">
 
 ## Getting Started
 
-First, run the development server:
+The website is hosted on Vercel, if you'd like to view it [click here](https://untitled-notes.vercel.app/) to view and interact with it through your browser (Firefox recommended for the larger range of support for the WebRTC API). Alternatively, you can follow the steps below to have it operating locally on your machine.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+### Prerequisites:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Fork and clone the repository on your machine.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Make sure you have [Node >v14.x](https://nodejs.org/en/) and the latest version of [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) installed.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+- Have a [Firebase](https://firebase.google.com/) account set up with a project that has Firestore and Firebase Authentication enabled.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Installation:
 
-## Learn More
+- `cd` into the cloned repo and run `npm install` to install the dependencies.
+- Create a `.env.local` file in the root folder with the following structure:
 
-To learn more about Next.js, take a look at the following resources:
+  ```
+  NEXT_PUBLIC_FIREBASE_API_KEY=
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+  NEXT_PUBLIC_FIREBASE_APP_ID=
+  NEXT_PUBLIC_ABLY_API_KEY=
+  ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Once all dependencies are installed, you can use the command `npm run dev` to begin hosting a local development server for the website to be hosted upon.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This API is released under the terms of MIT License.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Acknowledgements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Thanks to the whole team at [Northcoders](https://northcoders.com/) for providing such an incredible learning environment.
