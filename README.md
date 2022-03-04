@@ -1,9 +1,12 @@
 <h1 align="center">Untitled Notes</h1>
 
 <p align="center">A Notetaking Application with Realtime Markdown and Collaborative Features</p>
-<p align="center">
-<br /><a href="https://untitled-notes.vercel.app/">Explore</a>
 
+  
+![splash](splashscreen.png)
+
+<p align="center"><a href="https://untitled-notes.vercel.app/">Explore</a></p>
+  
 ## Table Of Contents
 
 - [Table Of Contents](#table-of-contents)
