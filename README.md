@@ -1,7 +1,7 @@
 <h1 align="center">Untitled Notes</h1>
 
 <p align="center">A Notetaking Application with Realtime Markdown and Collaborative Features</p>
-<p align="center"><img src="https://raw.githubusercontent.com/ryan-jm/untitled-notes/main/splashscreen.png" alt="Preview Image" width="200">
+<p align="center">
 <br /><a href="https://untitled-notes.vercel.app/">Explore</a>
 
 ## Table Of Contents
